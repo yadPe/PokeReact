@@ -1,6 +1,6 @@
 import React from "react";
 
-function Page1() {
+const Home = () => {
     return (
         <div>
             <h2>Bienvenue sur la Page 1 !</h2>
@@ -8,4 +8,4 @@ function Page1() {
     );
 }
 
-export default Page1;
+export default Home;
