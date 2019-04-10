@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
+import Character from './Character';
 
 class Map extends Component {
   theme = {
@@ -45,9 +46,10 @@ class Map extends Component {
       return (
         <div style={this.theme}>
           {this.state.map.map((row, index) => (
-            <MapRow data={row} index={index} key={index} />
+            <MapRow data={row} index={index} key={index} />            
           ))}
-
+          <Character />
+          
         </div>
       );
     }
