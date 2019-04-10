@@ -3,8 +3,8 @@ import MapRow from './MapRow';
 
 class Map extends Component {
   theme = {
-    width: '416px',
-    height: '416px',
+    width: '832px',
+    height: '832px',
     overflow: 'hidden',
     border: '4px solid black',
     margin: '0 auto',
@@ -30,7 +30,7 @@ class Map extends Component {
       for (let i = 0; i < 13; i += 1) {
         makeArrays.push(new Array(13).fill(0));
         for (let h = 0; h < 13; h += 1) {
-          makeArrays[i][h] = (Math.floor(Math.random() * 100));
+          makeArrays[i][h] = (Math.floor(Math.random() * 99));
         }
       }
       this.setState({
