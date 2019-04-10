@@ -23,6 +23,7 @@ class MapRow extends Component {
           {this.props.data.map((tile, index) => (
             <MapTile data={tile} key={index} index={index} />
           ))}
+          
         </div>
       );
     }
