@@ -1,11 +1,20 @@
-import React from "react";
+import React, { Component } from 'react';
+import './Pokedex.css';
+import PokeList from './PokeList';
 
-function Page2() {
-    return (
-        <div>
-            <h2>Bienvenue sur la Page 2 !</h2>
-        </div>
-    );
+class Pokedex extends Component {
+    constructor() {
+        super();
+        this.state = {};
+    }
+
+    render() {
+        return (
+            <div className="Pokedex">
+                <PokeList />
+            </div>
+        );
+    }
 }
 
-export default Page2;
+export default Pokedex;
