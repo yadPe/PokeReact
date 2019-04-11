@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
+import Character from './Character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 

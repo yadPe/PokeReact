@@ -24,6 +24,7 @@ class MapRow extends Component {
           {data.map((tile, i) => (
             <MapTile data={tile} key={`tile-${i}`} index={i} />
           ))}
+          
         </div>
       );
     }
