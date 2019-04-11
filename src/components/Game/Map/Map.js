@@ -30,7 +30,7 @@ class Map extends Component {
       for (let i = 0; i < 13; i += 1) {
         makeArrays.push(new Array(13).fill(0));
         for (let h = 0; h < 13; h += 1) {
-          makeArrays[i][h] = (Math.floor(Math.random() * 99));
+          makeArrays[i][h] = (Math.floor(Math.random() * 118));
         }
       }
       this.setState({
@@ -42,10 +42,11 @@ class Map extends Component {
 
 
     render() {
+      const { map } = this.state;
       return (
         <div style={this.theme}>
-          {this.state.map.map((row, index) => (
-            <MapRow data={row} index={index} key={index} />
+          {map.map((row, i) => (
+            <MapRow data={row} index={i} key={i} />
           ))}
 
         </div>
