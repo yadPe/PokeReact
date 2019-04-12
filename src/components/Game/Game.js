@@ -13,7 +13,7 @@ class Game extends Component {
     return (
       <div className="gameContainer">
         <button type="button">Play Now !</button>
-        <Map />
+        <Map/>
       </div>
     );
   }
