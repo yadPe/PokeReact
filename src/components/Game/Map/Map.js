@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import MapRow from './MapRow';
 import Character from './Character';
 
+const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
+
 class Map extends Component {
   theme = {
-    width: '416px',
-    height: '416px',
+    width: '832px',
+    height: '832px',
     overflow: 'hidden',
     border: '4px solid black',
     margin: '0 auto',
@@ -17,42 +19,40 @@ class Map extends Component {
 
     this.state = {
       map: [],
+      mapView : [],
     };
   }
 
+  loadMap = async mapUri => {
+    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({map: [...resJson]}))
+    this.makeMap(this.state.map, 11, 18, 13, 13)
+  };
 
-  componentDidMount() {
-    this.makeMap();
+  makeMap = (matrix, offsetX, offsetY, width, height) => {
+    if (offsetX + width > matrix[0].length) return
+    if (offsetY + height > matrix.length) return
+    let subMatrix = [];
+    for (let i = offsetY; i < height+offsetY; i += 1){
+      const index = subMatrix.push(matrix[i]) -1
+      subMatrix[index] = subMatrix[index].slice(offsetX, offsetX+width)
+    }
+    this.setState({mapView: [...subMatrix]})
   }
 
+  componentWillMount() {
+    this.loadMap(reqMaps('./001.txt', true))
+  }
 
-    makeMap = () => {
-      const makeArrays = [];
-      for (let i = 0; i < 13; i += 1) {
-        makeArrays.push(new Array(13).fill(0));
-        for (let h = 0; h < 13; h += 1) {
-          makeArrays[i][h] = (Math.floor(Math.random() * 100));
-        }
-      }
-      this.setState({
-
-        map: [...makeArrays],
-
-      });
-    }
-
-
-    render() {
-      return (
-        <div style={this.theme}>
-          {this.state.map.map((row, index) => (
-            <MapRow data={row} index={index} key={index} />            
-          ))}
-          <Character />
-          
-        </div>
-      );
-    }
+  render() {
+    const { mapView } = this.state;
+    return (
+      <div style={this.theme}>
+        {mapView.map((row, i) => (
+          <MapRow data={row} index={i} key={`row-${i}`} />
+        ))}
+      </div>
+    );
+  }
 }
 
 export default Map;

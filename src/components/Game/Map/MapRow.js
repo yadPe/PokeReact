@@ -4,7 +4,7 @@ import MapTile from './MapTile';
 class MapRow extends Component {
     theme = {
 
-      height: '32px',
+      height: '64px',
       margin: 0,
       padding: 0,
     }
@@ -18,10 +18,11 @@ class MapRow extends Component {
 
 
     render() {
+      const { data, index } = this.props;
       return (
-        <div className={`row${this.props.index}`} style={this.theme}>
-          {this.props.data.map((tile, index) => (
-            <MapTile data={tile} key={index} index={index} />
+        <div className={`row row-${index}`} style={this.theme}>
+          {data.map((tile, i) => (
+            <MapTile data={tile} key={`tile-${i}`} index={i} />
           ))}
           
         </div>
