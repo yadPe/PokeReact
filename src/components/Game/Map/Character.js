@@ -11,8 +11,7 @@ const Character = () => (
     position: 'absolute',
     justifyContent: 'center',
   }}
-  >
-  </div>
+  />
 
 );
 
