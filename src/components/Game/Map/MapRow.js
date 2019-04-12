@@ -12,7 +12,6 @@ class MapRow extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        row: [],
       };
     }
 
