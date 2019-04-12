@@ -32,8 +32,10 @@ class Map extends Component {
       margin: '0 auto',
       textAlign: 'center',
     };
-  }
 
+    this.renderCounter = 0;
+    this.loaded = false;
+  }
 
   componentWillMount() {
     this.init();
@@ -65,9 +67,11 @@ class Map extends Component {
     const { map } = this.state;
     let { viewY, viewX } = this.state;
     const step = 1;
+    let change;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       for (let j = 0; j < this.asyncKeys.length; j += 1) {
         if (Object.values(this.keys)[i] === this.asyncKeys[j]) {
+          change = true;
           if (this.asyncKeys[j] === 38) {
             viewY -= step;
           }
@@ -83,6 +87,7 @@ class Map extends Component {
         }
       }
     }
+    if (!change) return
     this.setState({
       viewY,
       viewX,
@@ -100,6 +105,7 @@ class Map extends Component {
         break;
       }
     }
+
   }
 
   keyReleased = (e) => {
@@ -121,6 +127,7 @@ class Map extends Component {
     await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
       map: [...resJson],
     }));
+    this.loaded = true;
     const { viewY, viewX, map } = this.state;
     this.updateViewMap(map, viewX, viewY, 13, 13);
   };
@@ -138,11 +145,13 @@ class Map extends Component {
 
   render() {
     const { mapView } = this.state;
+    this.renderCounter++
     return (
       <div style={this.theme}>
-        {mapView.map((row, i) => (
+        <h3 style={{position: 'fixed', bottom: 10, right: 10}}>{`Render No ${this.renderCounter}`}</h3>
+        {this.loaded ? mapView.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
-        ))}
+        )): <h1 style={{margin: '50% auto'}}>LOADING..</h1>}
       </div>
     );
   }
