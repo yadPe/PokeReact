@@ -19,28 +19,31 @@ class Map extends Component {
 
     this.state = {
       map: [],
-      mapView : [],
+      mapView: [],
     };
   }
 
-  loadMap = async mapUri => {
-    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({map: [...resJson]}))
-    this.makeMap(this.state.map, 11, 18, 13, 13)
+
+  componentWillMount() {
+    this.loadMap(reqMaps('./001.txt', true));
+  }
+
+  loadMap = async (mapUri) => {
+    await fetch(mapUri).then(res => res.json()).then(
+      resJson => this.setState({ map: [...resJson] }),
+    );
+    this.makeMap(this.state.map, 11, 18, 13, 13);
   };
 
   makeMap = (matrix, offsetX, offsetY, width, height) => {
-    if (offsetX + width > matrix[0].length) return
-    if (offsetY + height > matrix.length) return
-    let subMatrix = [];
-    for (let i = offsetY; i < height+offsetY; i += 1){
-      const index = subMatrix.push(matrix[i]) -1
-      subMatrix[index] = subMatrix[index].slice(offsetX, offsetX+width)
+    if (offsetX + width > matrix[0].length) return;
+    if (offsetY + height > matrix.length) return;
+    const subMatrix = [];
+    for (let i = offsetY; i < height + offsetY; i += 1) {
+      const index = subMatrix.push(matrix[i]) - 1;
+      subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
-    this.setState({mapView: [...subMatrix]})
-  }
-
-  componentWillMount() {
-    this.loadMap(reqMaps('./001.txt', true))
+    this.setState({ mapView: [...subMatrix] });
   }
 
   render() {
