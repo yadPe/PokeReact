@@ -62,35 +62,32 @@ class Map extends Component {
   }
 
   run = () => {
-    const { viewY, viewX, map } = this.state;
+    const { map } = this.state;
+    let { viewY, viewX } = this.state;
     const step = 1;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       for (let j = 0; j < this.asyncKeys.length; j += 1) {
         if (Object.values(this.keys)[i] === this.asyncKeys[j]) {
           if (this.asyncKeys[j] === 38) {
-            this.setState({
-              viewY: viewY + -step,
-            });
+            viewY -= step;
           }
           if (this.asyncKeys[j] === 40) {
-            this.setState({
-              viewY: viewY + step,
-            });
+            viewY += step;
           }
           if (this.asyncKeys[j] === 37) {
-            this.setState({
-              viewX: viewX + -step,
-            });
+            viewX -= step;
           }
           if (this.asyncKeys[j] === 39) {
-            this.setState({
-              viewX: viewX + step,
-            });
+            viewX += step;
           }
-          this.updateViewMap(map, viewX, viewY, 13, 13);
         }
       }
     }
+    this.setState({
+      viewY,
+      viewX,
+    },
+    () => this.updateViewMap(map, viewX, viewY, 13, 13));
   }
 
   keyPressed = (e) => {
