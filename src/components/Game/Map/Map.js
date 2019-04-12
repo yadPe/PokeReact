@@ -13,8 +13,8 @@ class Map extends Component {
     this.state = {
       map: [],
       mapView: [],
-      viewX: 18,
-      viewY: 11,
+      viewX: 11,
+      viewY: 17,
     };
 
     this.keys = {
