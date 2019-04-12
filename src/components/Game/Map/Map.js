@@ -32,6 +32,8 @@ class Map extends Component {
     await fetch(mapUri).then(res => res.json()).then(
       resJson => this.setState({ map: [...resJson] }),
     );
+    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
+      map: [...resJson] }));
     this.makeMap(this.state.map, 11, 18, 13, 13);
   };
 
