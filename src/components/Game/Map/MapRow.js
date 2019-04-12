@@ -21,9 +21,9 @@ class MapRow extends Component {
       return (
         <div className={`row row-${index}`} style={this.theme}>
           {data.map((tile, i) => (
-            <MapTile data={tile} key={`tile-${i}`} index={i} />
+            <MapTile data={tile} key={`tile-${i + 1}`} index={i} />
           ))}
-          
+
         </div>
       );
     }

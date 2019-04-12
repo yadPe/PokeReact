@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
-import Character from './Character';
+
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 
@@ -14,15 +14,15 @@ class Map extends Component {
       map: [],
       mapView: [],
       viewX: 18,
-      viewY: 11
+      viewY: 11,
     };
 
     this.keys = {
       keyUp: 38,
       keyDown: 40,
       keyLeft: 37,
-      keyRight: 39
-    }
+      keyRight: 39,
+    };
 
     this.theme = {
       width: '832px',
@@ -31,26 +31,26 @@ class Map extends Component {
       border: '4px solid black',
       margin: '0 auto',
       textAlign: 'center',
-    }
+    };
   }
 
 
   componentWillMount() {
-    this.init()
+    this.init();
   }
 
   componentWillUnmount() {
-    this.end()
+    this.end();
   }
 
   init = () => {
     this.loadMap(reqMaps('./001.txt', true));
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
-      this.asyncKeys.push(false)
+      this.asyncKeys.push(false);
     }
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
-    this.running = setInterval(this.run, 1000 / 30)
+    this.running = setInterval(this.run, 1000 / 30);
   }
 
   end = () => {
@@ -62,34 +62,34 @@ class Map extends Component {
   }
 
   run = () => {
+    const { viewY, viewX, map } = this.state;
     const step = 1;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       for (let j = 0; j < this.asyncKeys.length; j += 1) {
         if (Object.values(this.keys)[i] === this.asyncKeys[j]) {
           if (this.asyncKeys[j] === 38) {
             this.setState({
-              viewY: this.state.viewY + -step,
-            })
+              viewY: viewY + -step,
+            });
           }
           if (this.asyncKeys[j] === 40) {
             this.setState({
-              viewY: this.state.viewY + step,
-            })
+              viewY: viewY + step,
+            });
           }
           if (this.asyncKeys[j] === 37) {
             this.setState({
-              viewX: this.state.viewX + -step,
-            })
+              viewX: viewX + -step,
+            });
           }
           if (this.asyncKeys[j] === 39) {
             this.setState({
-              viewX: this.state.viewX + step,
-            })
+              viewX: viewX + step,
+            });
           }
-          this.updateViewMap(this.state.map, this.state.viewX, this.state.viewY, 13, 13);
+          this.updateViewMap(map, viewX, viewY, 13, 13);
         }
       }
-
     }
   }
 
@@ -100,7 +100,7 @@ class Map extends Component {
     for (let i = 0; i < size; i += 1) {
       if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
-        break
+        break;
       }
     }
   }
@@ -112,16 +112,20 @@ class Map extends Component {
     for (let i = 0; i < size; i += 1) {
       if (Object.values(this.keys)[i] === keys && this.asyncKeys[i]) {
         this.asyncKeys[i] = false;
-        break
+        break;
       }
     }
   }
 
   loadMap = async (mapUri) => {
+    await fetch(mapUri).then(res => res.json()).then(
+      resJson => this.setState({ map: [...resJson] }),
+    );
     await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
-      map: [...resJson]
+      map: [...resJson],
     }));
-    this.updateViewMap(this.state.map, this.state.viewX, this.state.viewY, 13, 13);
+    const { viewY, viewX, map } = this.state;
+    this.updateViewMap(map, viewX, viewY, 13, 13);
   };
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
@@ -140,7 +144,7 @@ class Map extends Component {
     return (
       <div style={this.theme}>
         {mapView.map((row, i) => (
-          <MapRow data={row} index={i} key={`row-${i}`} />
+          <MapRow data={row} index={i} key={`row-${i + 1}`} />
         ))}
       </div>
     );

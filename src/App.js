@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Route, Switch, BrowserRouter, Link, NavLink,
+  Route, Switch, BrowserRouter, NavLink,
 } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Game from './components/Game/Game';
@@ -11,12 +11,12 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state={}
+    this.state = {};
   }
 
   render() {
     return (
-      <div className="App" >
+      <div className="App">
         <div>
           <BrowserRouter>
 
@@ -27,7 +27,17 @@ class App extends Component {
             </Switch>
             <NavLink to="/play">
               {' '}
-              <button style={{ backgroundColor: 'red', border: '5px solid black', height: '200px', width: '600px',fontSize : '10vh', marginTop: '20%' }} type="button"> Play  </button>
+              <button
+                style={{
+                  backgroundColor: 'red', border: '5px solid black', height: '200px', width: '600px', fontSize: '10vh', marginTop: '20%',
+                }}
+                type="button"
+              >
+                {' '}
+Play
+                {' '}
+
+              </button>
               {' '}
             </NavLink>
           </BrowserRouter>
