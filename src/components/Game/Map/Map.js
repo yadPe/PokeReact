@@ -105,7 +105,6 @@ class Map extends Component {
         break;
       }
     }
-
   }
 
   keyReleased = (e) => {
@@ -121,9 +120,6 @@ class Map extends Component {
   }
 
   loadMap = async (mapUri) => {
-    await fetch(mapUri).then(res => res.json()).then(
-      resJson => this.setState({ map: [...resJson] }),
-    );
     await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
       map: [...resJson],
     }));
