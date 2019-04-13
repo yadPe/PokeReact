@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
 
-
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
+const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
 
 class Map extends Component {
   asyncKeys = [];
@@ -34,7 +34,9 @@ class Map extends Component {
     };
 
     this.renderCounter = 0;
+    this.loopCounter = 0;
     this.loaded = false;
+    this.tiles = [];
   }
 
   componentWillMount() {
@@ -45,8 +47,9 @@ class Map extends Component {
     this.end();
   }
 
-  init = () => {
-    this.loadMap(reqMaps('./001.txt', true));
+  init = async () => {
+    await this.loadMap(reqMaps('./001.txt', true));
+    await this.loadTiles(reqTiles.keys());
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       this.asyncKeys.push(false);
     }
@@ -58,12 +61,16 @@ class Map extends Component {
   end = () => {
     document.body.removeEventListener('keydown', this.keyPressed);
     document.body.removeEventListener('keyup', this.keyReleased);
-    this.asyncKeys = null;
     clearInterval(this.running);
+    this.asyncKeys = null;
     this.running = null;
+    this.renderCounter = null;
+    this.loaded = null;
+    this.tiles = null;
   }
 
   run = () => {
+    this.loopCounter++
     const { map } = this.state;
     let { viewY, viewX } = this.state;
     const step = 1;
@@ -92,7 +99,7 @@ class Map extends Component {
       viewY,
       viewX,
     },
-    () => this.updateViewMap(map, viewX, viewY, 13, 13));
+      () => this.updateViewMap(map, viewX, viewY, 13, 13));
   }
 
   keyPressed = (e) => {
@@ -128,6 +135,20 @@ class Map extends Component {
     this.updateViewMap(map, viewX, viewY, 13, 13);
   };
 
+  loadTiles = (tilesKeys) => {
+    this.tiles = tilesKeys.sort((a, b) => {
+      return a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght);
+    })
+    const style = document.createElement("style");
+    style.type = 'text/css';
+    let css = ''
+    for (let i = 0; i< this.tiles.length; i += 1){
+      css += `.tile-${i} {background-image: url(${reqTiles(this.tiles[i], true)})}\n`
+    }
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+  }
+
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
     if (offsetX + width > matrix[0].length) return;
     if (offsetY + height > matrix.length) return;
@@ -144,10 +165,10 @@ class Map extends Component {
     this.renderCounter++
     return (
       <div style={this.theme}>
-        <h3 style={{position: 'fixed', bottom: 10, right: 10}}>{`Render No ${this.renderCounter}`}</h3>
+        <h3 style={{ position: 'fixed', bottom: 10, right: 10 }}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>
         {this.loaded ? mapView.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
-        )): <h1 style={{margin: '50% auto'}}>LOADING..</h1>}
+        )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
       </div>
     );
   }

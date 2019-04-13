@@ -3,7 +3,6 @@ import MapTile from './MapTile';
 
 class MapRow extends Component {
     theme = {
-
       height: '64px',
       margin: 0,
       padding: 0,
