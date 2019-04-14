@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import MapTile from './MapTile';
+import Tile from './Tiles/Tile';
+import Tile3D from './Tiles/Tile3D';
 
 class MapRow extends Component {
     theme = {
@@ -14,15 +15,12 @@ class MapRow extends Component {
       };
     }
 
-
     render() {
       const { data, index } = this.props;
+      const tilesSet = data.map((tiles, i) => (tiles.length > 1 ? <Tile3D data={tiles} key={`tile-${i + 1}`} index={i} /> : <Tile data={tiles} key={`tile-${i + 1}`} index={i} />));
       return (
         <div className={`row row-${index}`} style={this.theme}>
-          {data.map((tile, i) => (
-            <MapTile data={tile} key={`tile-${i + 1}`} index={i} />
-          ))}
-
+          {tilesSet}
         </div>
       );
     }
