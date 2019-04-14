@@ -5,14 +5,13 @@ const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
 
 class Map extends Component {
-  asyncKeys = [];
-
+  
   constructor(props) {
     super(props);
 
     this.state = {
       map: [],
-      mapView: [],
+      view: [],
       viewX: 11,
       viewY: 17,
     };
@@ -36,7 +35,7 @@ class Map extends Component {
     this.renderCounter = 0;
     this.loopCounter = 0;
     this.loaded = false;
-    this.tiles = [];
+    this.asyncKeys = [];
   }
 
   componentWillMount() {
@@ -66,7 +65,6 @@ class Map extends Component {
     this.running = null;
     this.renderCounter = null;
     this.loaded = null;
-    this.tiles = null;
   }
 
   run = () => {
@@ -79,17 +77,21 @@ class Map extends Component {
       for (let j = 0; j < this.asyncKeys.length; j += 1) {
         if (Object.values(this.keys)[i] === this.asyncKeys[j]) {
           change = true;
-          if (this.asyncKeys[j] === 38) {
-            viewY -= step;
+          if (this.asyncKeys[j] === 38){
+            viewY -= step; 
+            break
           }
-          if (this.asyncKeys[j] === 40) {
-            viewY += step;
+          if (this.asyncKeys[j] === 40){
+            viewY += step; 
+            break
           }
-          if (this.asyncKeys[j] === 37) {
-            viewX -= step;
+          if (this.asyncKeys[j] === 37){
+            viewX -= step; 
+            break
           }
-          if (this.asyncKeys[j] === 39) {
-            viewX += step;
+          if (this.asyncKeys[j] === 39){
+            viewX += step; 
+            break
           }
         }
       }
@@ -109,6 +111,7 @@ class Map extends Component {
     for (let i = 0; i < size; i += 1) {
       if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
+        this.run()
         break;
       }
     }
@@ -136,14 +139,14 @@ class Map extends Component {
   };
 
   loadTiles = (tilesKeys) => {
-    this.tiles = tilesKeys.sort((a, b) => {
+    const tiles = tilesKeys.sort((a, b) => {
       return a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght);
     })
     const style = document.createElement("style");
     style.type = 'text/css';
     let css = ''
-    for (let i = 0; i< this.tiles.length; i += 1){
-      css += `.tile-${i} {background-image: url(${reqTiles(this.tiles[i], true)})}\n`
+    for (let i = 0; i< tiles.length; i += 1){
+      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)})}\n`
     }
     style.appendChild(document.createTextNode(css));
     document.head.appendChild(style);
@@ -157,16 +160,16 @@ class Map extends Component {
       const index = subMatrix.push(matrix[i]) - 1;
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
-    this.setState({ mapView: [...subMatrix] });
+    this.setState({ view: [...subMatrix] });
   }
 
   render() {
-    const { mapView } = this.state;
+    const { view } = this.state;
     this.renderCounter++
     return (
       <div style={this.theme}>
         <h3 style={{ position: 'fixed', bottom: 10, right: 10 }}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>
-        {this.loaded ? mapView.map((row, i) => (
+        {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
       </div>
