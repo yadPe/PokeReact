@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
+import Character from './Character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -58,7 +59,7 @@ class Map extends Component {
     }
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
-    this.running = setInterval(this.run, 1000 / 30);
+    this.running = setInterval(this.run, 1000 / 15);
   }
 
   end = () => {
@@ -75,25 +76,30 @@ class Map extends Component {
     if (this.debugMode) this.loopCounter += 1;
     const { map, viewWidth, viewHeight } = this.state;
     let { viewY, viewX } = this.state;
+    const { view } = this.state;
+
     const step = 1;
     let change;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
+      console.log(view[5][5]);
       for (let j = 0; j < this.asyncKeys.length; j += 1) {
         if (Object.values(this.keys)[i] === this.asyncKeys[j]) {
           change = true;
-          if (this.asyncKeys[j] === 38) {
+          if (this.asyncKeys[j] === 38
+             && view[Math.floor(view.length / 2 - 1)][Math.floor(view.length / 2)] < 50) {
             viewY -= step;
             break;
           }
-          if (this.asyncKeys[j] === 40) {
+          if (this.asyncKeys[j] === 40
+            && view[Math.floor(view.length / 2 + 1)][Math.floor(view.length / 2)] < 50) {
             viewY += step;
             break;
           }
-          if (this.asyncKeys[j] === 37) {
+          if (this.asyncKeys[j] === 37 && view[Math.floor(view.length / 2)][Math.floor(view.length / 2 - 1)] < 50) {
             viewX -= step;
             break;
           }
-          if (this.asyncKeys[j] === 39) {
+          if (this.asyncKeys[j] === 39 && view[Math.floor(view.length / 2)][Math.floor(view.length / 2 + 1)] < 50) {
             viewX += step;
             break;
           }
@@ -182,6 +188,7 @@ class Map extends Component {
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
+        <Character />
       </div>
     );
   }

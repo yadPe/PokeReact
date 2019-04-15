@@ -10,6 +10,8 @@ const Character = () => (
     height: '32px',
     position: 'absolute',
     justifyContent: 'center',
+    top: '42%',
+    left: '49%',
   }}
   />
 
