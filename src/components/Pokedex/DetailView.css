@@ -1,0 +1,37 @@
+.detail-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  height: 100%;
+  padding: 10px;
+  background-color: grey;
+}
+
+.sprite-image {
+  width: 80%;
+  height: 250px;
+  margin: 10px auto;
+  background-color: white;
+  border: 15px solid black;
+  border-radius: 5px;
+  color: #585858;
+}
+
+.data-wrapper {
+  width: 80%;
+  height: 110px;
+  padding: 10px;
+  margin: 0 auto;
+  background-color: black;
+  border-radius: 5px;
+  color: #FFF;
+}
+
+.data-name {
+  margin: 0 0 5px;
+}
+
+.data-char {
+  font-size: 10px;
+}
