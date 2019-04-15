@@ -36,6 +36,7 @@ class Map extends Component {
     this.loaded = false;
     this.asyncKeys = [];
     this.debugMode = true;
+    this.gamepads = [];
     if (this.debugMode) {
       this.renderCounter = 0;
       this.loopCounter = 0;
@@ -58,6 +59,14 @@ class Map extends Component {
     }
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
+    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    window.addEventListener("gamepadconnected", function (e) {
+      var gp = navigator.getGamepads()[e.gamepad.index];
+      window.gp = gp
+      console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+        gp.index, gp.id,
+        gp.buttons.length, gp.axes.length);
+    });
     this.running = setInterval(this.run, 1000 / 30);
   }
 
@@ -73,6 +82,43 @@ class Map extends Component {
 
   run = () => {
     if (this.debugMode) this.loopCounter += 1;
+
+    this.checkKeyboard();
+    this.checkGamepads();
+
+  }
+
+  checkGamepads = () => {
+    if (!this.gamepads) {
+      return;
+    }
+
+    function buttonPressed(b) {
+      if (typeof (b) == "object") {
+        return b.pressed;
+      }
+      return b == 1.0;
+    }
+
+    let gp = this.gamepads[0];
+    console.log(buttonPressed(gp.buttons[12]))
+    if (buttonPressed(gp.buttons[12])) {
+      this.asyncKeys[0] = 38
+      console.log('up')
+    } else if (buttonPressed(gp.buttons[13])) {
+      this.asyncKeys[0] = 40
+      console.log('down')
+    } else if (buttonPressed(gp.buttons[14])) {
+      this.asyncKeys[0] = 37
+      console.log('left')
+    } else if (buttonPressed(gp.buttons[15])) {
+      this.asyncKeys[0] = 39
+      console.log('right')
+    }
+
+  }
+
+  checkKeyboard = () => {
     const { map, viewWidth, viewHeight } = this.state;
     let { viewY, viewX } = this.state;
     const step = 1;
@@ -105,7 +151,7 @@ class Map extends Component {
       viewY,
       viewX,
     },
-    () => this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight));
+      () => this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight));
   }
 
   keyPressed = (e) => {
