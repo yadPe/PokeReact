@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
 
-
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
+const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
 
 class Map extends Component {
-  asyncKeys = [];
-
   constructor(props) {
     super(props);
 
     this.state = {
       map: [],
-      mapView: [],
+      view: [],
+      viewWidth: 13,
+      viewHeight: 13,
       viewX: 11,
       viewY: 17,
     };
@@ -32,8 +32,15 @@ class Map extends Component {
       margin: '0 auto',
       textAlign: 'center',
     };
-  }
 
+    this.loaded = false;
+    this.asyncKeys = [];
+    this.debugMode = true;
+    if (this.debugMode) {
+      this.renderCounter = 0;
+      this.loopCounter = 0;
+    }
+  }
 
   componentWillMount() {
     this.init();
@@ -43,8 +50,9 @@ class Map extends Component {
     this.end();
   }
 
-  init = () => {
-    this.loadMap(reqMaps('./001.txt', true));
+  init = async () => {
+    await this.loadMap(reqMaps('./001-3d.txt', true));
+    await this.loadTiles(reqTiles.keys());
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       this.asyncKeys.push(false);
     }
@@ -56,38 +64,48 @@ class Map extends Component {
   end = () => {
     document.body.removeEventListener('keydown', this.keyPressed);
     document.body.removeEventListener('keyup', this.keyReleased);
-    this.asyncKeys = null;
     clearInterval(this.running);
+    this.asyncKeys = null;
     this.running = null;
+    this.renderCounter = null;
+    this.loaded = null;
   }
 
   run = () => {
-    const { map } = this.state;
+    if (this.debugMode) this.loopCounter += 1;
+    const { map, viewWidth, viewHeight } = this.state;
     let { viewY, viewX } = this.state;
     const step = 1;
+    let change;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       for (let j = 0; j < this.asyncKeys.length; j += 1) {
         if (Object.values(this.keys)[i] === this.asyncKeys[j]) {
+          change = true;
           if (this.asyncKeys[j] === 38) {
             viewY -= step;
+            break;
           }
           if (this.asyncKeys[j] === 40) {
             viewY += step;
+            break;
           }
           if (this.asyncKeys[j] === 37) {
             viewX -= step;
+            break;
           }
           if (this.asyncKeys[j] === 39) {
             viewX += step;
+            break;
           }
         }
       }
     }
+    if (!change) return;
     this.setState({
       viewY,
       viewX,
     },
-    () => this.updateViewMap(map, viewX, viewY, 13, 13));
+    () => this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight));
   }
 
   keyPressed = (e) => {
@@ -97,6 +115,7 @@ class Map extends Component {
     for (let i = 0; i < size; i += 1) {
       if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
+        this.run();
         break;
       }
     }
@@ -115,15 +134,27 @@ class Map extends Component {
   }
 
   loadMap = async (mapUri) => {
-    await fetch(mapUri).then(res => res.json()).then(
-      resJson => this.setState({ map: [...resJson] }),
-    );
     await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
       map: [...resJson],
     }));
-    const { viewY, viewX, map } = this.state;
-    this.updateViewMap(map, viewX, viewY, 13, 13);
+    this.loaded = true;
+    const {
+      viewY, viewX, viewWidth, viewHeight, map,
+    } = this.state;
+    this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
   };
+
+  loadTiles = (tilesKeys) => {
+    const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    let css = '';
+    for (let i = 0; i < tiles.length; i += 1) {
+      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)})}\n`;
+    }
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+  }
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
     if (offsetX + width > matrix[0].length) return;
@@ -133,16 +164,24 @@ class Map extends Component {
       const index = subMatrix.push(matrix[i]) - 1;
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
-    this.setState({ mapView: [...subMatrix] });
+    this.setState({ view: [...subMatrix] });
+  }
+
+  debug = () => {
+    if (!this.debugMode) return;
+    this.renderCounter += 1;
+    // eslint-disable-next-line consistent-return
+    return <h3 style={{ position: 'fixed', bottom: 10, right: 10 }}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>;
   }
 
   render() {
-    const { mapView } = this.state;
+    const { view } = this.state;
     return (
       <div style={this.theme}>
-        {mapView.map((row, i) => (
+        {this.debugMode ? this.debug() : null}
+        {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
-        ))}
+        )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
       </div>
     );
   }
