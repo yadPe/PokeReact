@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
+import Character from './Tiles/Character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -51,7 +52,7 @@ class Map extends Component {
   }
 
   init = async () => {
-    await this.loadMap(reqMaps('./001-3d.txt', true));
+    await this.loadMap(reqMaps('./001-3d-collide.txt', true));
     await this.loadTiles(reqTiles.keys());
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       this.asyncKeys.push(false);
@@ -75,28 +76,36 @@ class Map extends Component {
     if (this.debugMode) this.loopCounter += 1;
     const { map, viewWidth, viewHeight } = this.state;
     let { viewY, viewX } = this.state;
+    const { view } = this.state;
+
     const step = 1;
     let change;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
-      for (let j = 0; j < this.asyncKeys.length; j += 1) {
-        if (Object.values(this.keys)[i] === this.asyncKeys[j]) {
-          change = true;
-          if (this.asyncKeys[j] === 38) {
-            viewY -= step;
-            break;
-          }
-          if (this.asyncKeys[j] === 40) {
-            viewY += step;
-            break;
-          }
-          if (this.asyncKeys[j] === 37) {
-            viewX -= step;
-            break;
-          }
-          if (this.asyncKeys[j] === 39) {
-            viewX += step;
-            break;
-          }
+      if (Object.values(this.keys)[i] === this.asyncKeys[i]) {
+        change = true;
+        if (this.asyncKeys[i] === 38
+             && !view[Math.floor(view.length / 2 - step)][Math.floor(view.length / 2)]
+               .includes(-1)) {
+          viewY -= step;
+          break;
+        }
+        if (this.asyncKeys[i] === 40
+            && !view[Math.floor(view.length / 2 + step)][Math.floor(view.length / 2)]
+              .includes(-1)) {
+          viewY += step;
+          break;
+        }
+        if (this.asyncKeys[i] === 37
+            && !view[Math.floor(view.length / 2)][Math.floor(view.length / 2 - step)]
+              .includes(-1)) {
+          viewX -= step;
+          break;
+        }
+        if (this.asyncKeys[i] === 39
+             && !view[Math.floor(view.length / 2)][Math.floor(view.length / 2 + step)]
+               .includes(-1)) {
+          viewX += step;
+          break;
         }
       }
     }
@@ -115,7 +124,7 @@ class Map extends Component {
     for (let i = 0; i < size; i += 1) {
       if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
-        this.run();
+
         break;
       }
     }
@@ -182,6 +191,7 @@ class Map extends Component {
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
+        <Character />
       </div>
     );
   }
