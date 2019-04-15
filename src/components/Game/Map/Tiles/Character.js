@@ -1,5 +1,5 @@
 import React from 'react';
-import front from '../../../images/sacha/front.png';
+import front from '../../../../images/sacha/front.png';
 
 const Character = () => (
   <div style={{
