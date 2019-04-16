@@ -1,5 +1,5 @@
 import React from 'react';
-import front from '../../../images/sacha/front.png';
+import front from '../../../../images/sacha/front.png';
 
 const Character = () => (
   <div style={{
@@ -10,6 +10,8 @@ const Character = () => (
     height: '32px',
     position: 'absolute',
     justifyContent: 'center',
+    top: '42%',
+    left: '49%',
   }}
   />
 

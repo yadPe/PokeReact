@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
+import Character from './Tiles/Character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -54,7 +55,7 @@ class Map extends Component {
   }
 
   init = async () => {
-    await this.loadMap(reqMaps('./001-3d.txt', true));
+    await this.loadMap(reqMaps('./001-3d-collide.txt', true));
     await this.loadTiles(reqTiles.keys());
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       this.asyncKeys.push(false);
@@ -62,14 +63,28 @@ class Map extends Component {
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    console.log(this.gamepads)
     window.addEventListener("gamepadconnected", function (e) {
-      var gp = navigator.getGamepads()[e.gamepad.index];
+      let gp = navigator.getGamepads()[e.gamepad.index];
       window.gp = gp
       console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
         gp.index, gp.id,
         gp.buttons.length, gp.axes.length);
     });
-    this.running = setInterval(this.run, 1000 / 30);
+    
+
+    window.addEventListener("gamepadbuttondown", function(e){
+      // Button down
+      console.log(
+   
+         "Button down",
+         e.button, // Index of button in buttons array
+         e.gamepad
+   
+      );
+   });
+
+   this.running = setInterval(this.run, 1000 / 30);
   }
 
   end = () => {
@@ -85,8 +100,9 @@ class Map extends Component {
   run = () => {
     if (this.debugMode) this.loopCounter += 1;
 
+    
     this.checkKeyboard();
-    //this.checkGamepads();
+    this.checkGamepads();
 
   }
 
@@ -94,50 +110,56 @@ class Map extends Component {
     if (!this.gamepads) {
       return;
     }
+    const step = 1;
 
-    function buttonPressed(b) {
-      if (typeof (b) == "object") {
-        return b.pressed;
-      }
-      return b == 1.0;
+    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+
+    const gp = this.gamepads[0];
+    if (gp.buttons[12].pressed) {
+      this.moveTo('up', step)
+    } else if (gp.buttons[13].pressed) {
+      this.moveTo('down', step)
+    } else if (gp.buttons[14].pressed) {
+      this.moveTo('left', step)
+    } else if (gp.buttons[15].pressed) {
+      this.moveTo('right', step)
+    } else if (gp.axes[0] === 1) {
+     
+      this.moveTo('right', step)
+    }
+    else if (gp.axes[0] === -1) {
+     
+      this.moveTo('left', step)
+    }
+    else if (gp.axes[1] === 1) {
+     
+      this.moveTo('down', step)
+    }
+    else if (gp.axes[1] === -1) {
+     
+      this.moveTo('up', step)
     }
 
-    let gp = this.gamepads[0];
-    console.log(buttonPressed(gp.buttons[12]))
-    if (buttonPressed(gp.buttons[12])) {
-      this.asyncKeys[0] = 38
-      console.log('up')
-    } else if (buttonPressed(gp.buttons[13])) {
-      this.asyncKeys[0] = 40
-      console.log('down')
-    } else if (buttonPressed(gp.buttons[14])) {
-      this.asyncKeys[0] = 37
-      console.log('left')
-    } else if (buttonPressed(gp.buttons[15])) {
-      this.asyncKeys[0] = 39
-      console.log('right')
-    }
-
-  }
+  } 
 
   checkKeyboard = () => {
     const step = 1;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       if (Object.values(this.keys)[i] === this.asyncKeys[i]) {
 
-        if (this.asyncKeys[i] === 38){
+        if (this.asyncKeys[i] === 38) {
           this.moveTo('up', step)
           break;
         }
-        if (this.asyncKeys[i] === 40){
+        if (this.asyncKeys[i] === 40) {
           this.moveTo('down', step)
           break;
         }
-        if (this.asyncKeys[i] === 37){
+        if (this.asyncKeys[i] === 37) {
           this.moveTo('left', step)
           break;
         }
-        if (this.asyncKeys[i] === 39){
+        if (this.asyncKeys[i] === 39) {
           this.moveTo('right', step)
           break;
         }
@@ -168,7 +190,6 @@ class Map extends Component {
           .includes(-1)) {
           viewX -= step;
           this.left += 5
-          console.log(this.left)
         }
         break;
 
@@ -177,7 +198,6 @@ class Map extends Component {
           .includes(-1)) {
           viewX += step;
           this.left -= 5
-          console.log(this.left)
         }
         break;
 
@@ -189,7 +209,7 @@ class Map extends Component {
       viewX,
     },
       () => {
-        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight); 
+        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
         //this.clean();
         this.lastScroll = performance.now()
       });
@@ -203,7 +223,7 @@ class Map extends Component {
     for (let i = 0; i < size; i += 1) {
       if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
-        this.run();
+
         break;
       }
     }
@@ -270,6 +290,7 @@ class Map extends Component {
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
+        <Character />
       </div>
     );
   }

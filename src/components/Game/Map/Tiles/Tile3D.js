@@ -6,7 +6,7 @@ const Tile3D = (props) => {
   return (
     <div className="tile3DContainer">
       {data.map((tile, index) => (
-        <div className={`tile3D tile-${tile}`} key={`${tile}-${index + 1}`} />
+        <div className={`tile3D tile-${tile === -1 ? 'collide' : tile}`} key={`${tile}-${index + 1}`} />
       ))}
     </div>
   );
