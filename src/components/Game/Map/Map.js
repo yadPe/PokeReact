@@ -37,6 +37,8 @@ class Map extends Component {
     this.asyncKeys = [];
     this.debugMode = true;
     this.gamepads = [];
+    this.scrollSpeed = 8;
+    this.lastScroll = 0;
     if (this.debugMode) {
       this.renderCounter = 0;
       this.loopCounter = 0;
@@ -84,7 +86,7 @@ class Map extends Component {
     if (this.debugMode) this.loopCounter += 1;
 
     this.checkKeyboard();
-    this.checkGamepads();
+    //this.checkGamepads();
 
   }
 
@@ -119,40 +121,80 @@ class Map extends Component {
   }
 
   checkKeyboard = () => {
-    const { map, viewWidth, viewHeight } = this.state;
-    let { viewY, viewX } = this.state;
     const step = 1;
-    let change;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
-      for (let j = 0; j < this.asyncKeys.length; j += 1) {
-        if (Object.values(this.keys)[i] === this.asyncKeys[j]) {
-          change = true;
-          if (this.asyncKeys[j] === 38) {
-            viewY -= step;
-            break;
-          }
-          if (this.asyncKeys[j] === 40) {
-            viewY += step;
-            break;
-          }
-          if (this.asyncKeys[j] === 37) {
-            viewX -= step;
-            break;
-          }
-          if (this.asyncKeys[j] === 39) {
-            viewX += step;
-            break;
-          }
+      if (Object.values(this.keys)[i] === this.asyncKeys[i]) {
+
+        if (this.asyncKeys[i] === 38){
+          this.moveTo('up', step)
+          break;
+        }
+        if (this.asyncKeys[i] === 40){
+          this.moveTo('down', step)
+          break;
+        }
+        if (this.asyncKeys[i] === 37){
+          this.moveTo('left', step)
+          break;
+        }
+        if (this.asyncKeys[i] === 39){
+          this.moveTo('right', step)
+          break;
         }
       }
     }
-    if (!change) return;
+  }
+
+  moveTo = (direction, step) => {
+    if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return
+    const { map, view, viewWidth, viewHeight } = this.state;
+    let { viewY, viewX } = this.state;
+    switch (direction) {
+      case 'up':
+        if (!view[Math.floor(view.length / 2 - step)][Math.floor(view.length / 2)]
+          .includes(-1)) {
+          viewY -= step;
+        }
+        break;
+
+      case 'down':
+        if (!view[Math.floor(view.length / 2 + step)][Math.floor(view.length / 2)].includes(-1)) {
+          viewY += step;
+        }
+        break;
+
+      case 'left':
+        if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 - step)]
+          .includes(-1)) {
+          viewX -= step;
+          this.left += 5
+          console.log(this.left)
+        }
+        break;
+
+      case 'right':
+        if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 + step)]
+          .includes(-1)) {
+          viewX += step;
+          this.left -= 5
+          console.log(this.left)
+        }
+        break;
+
+      default:
+        return;
+    }
     this.setState({
       viewY,
       viewX,
     },
-      () => this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight));
+      () => {
+        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight); 
+        //this.clean();
+        this.lastScroll = performance.now()
+      });
   }
+
 
   keyPressed = (e) => {
     const keys = e.keyCode;
