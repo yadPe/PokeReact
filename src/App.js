@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Route, Switch, BrowserRouter, NavLink,
-} from 'react-router-dom';
+import { Route, Switch, BrowserRouter, NavLink, } from 'react-router-dom';
 import Home from './components/Home/Home';
+import Menu from './components/Menu/Menu';
 import Game from './components/Game/Game';
 import Pokedex from './components/Pokedex/Pokedex';
 
@@ -22,24 +21,11 @@ class App extends Component {
 
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route path="/menu" component={Menu} />
               <Route path="/play" component={Game} />
               <Route path="/pokedex" component={Pokedex} />
             </Switch>
-            <NavLink to="/play">
-              {' '}
-              <button
-                style={{
-                  backgroundColor: 'red', border: '5px solid black', height: '200px', width: '600px', fontSize: '10vh', marginTop: '20%',
-                }}
-                type="button"
-              >
-                {' '}
-Play
-                {' '}
-
-              </button>
-              {' '}
-            </NavLink>
+ 
           </BrowserRouter>
         </div>
       </div>
