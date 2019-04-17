@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import './Pokedex.css';
 import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
-import { Route, Switch, BrowserRouter, NavLink, } from 'react-router-dom';
 
 class Pokedex extends Component {
   constructor() {
@@ -26,15 +26,19 @@ class Pokedex extends Component {
   render() {
     const { pokemon } = this.state;
     return (
-    <div className="Background">
+      <div className="Background">
 
-      <NavLink to="/menu"> <div className="ProfileBtn"></div> </NavLink>
-      <NavLink to="/menu"> <div className="MenuBtn"></div> </NavLink>
+        <NavLink to="/menu">
+          <div className="ProfileBtn" />
+        </NavLink>
+        <NavLink to="/menu">
+          <div className="MenuBtn" />
+        </NavLink>
 
-      <div className="Pokedex">
-        <PokeList handleOnClick={this.handleOnClick} />
-        <DetailView pokemon={pokemon} />
-      </div>
+        <div className="Pokedex">
+          <PokeList handleOnClick={this.handleOnClick} />
+          <DetailView pokemon={pokemon} />
+        </div>
       </div>
     );
   }
