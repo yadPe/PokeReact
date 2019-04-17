@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Map from './Map/Map';
+import { Route, Switch, BrowserRouter, NavLink, } from 'react-router-dom';
 
 class Game extends Component {
   constructor(props) {
@@ -10,8 +11,14 @@ class Game extends Component {
 
   render() {
     return (
-      <div className="gameContainer">
+    <div className="Background">
+
+      <NavLink to="/menu"> <div className="ProfileBtn"></div> </NavLink>
+      <NavLink to="/menu"> <div className="MenuBtn"></div> </NavLink>
+
+      <div className="GameContainer">
         <Map />
+      </div>
       </div>
     );
   }
