@@ -59,12 +59,23 @@
 .ProfileBtn:hover {
     background-image: url("images/profileBtn-hover.png");
 }
+
+.RightMenu {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  padding: 24px;
+}
+
 .MenuBtn {
     width: 72px;
     height: 72px;
-    position: fixed;
-    top: 24px;
-    right: 24px;
+    margin-bottom: 24px;
     background-image: url("images/menuBtn.png");
     background-size: cover;
   }
@@ -72,17 +83,47 @@
     background-image: url("images/menuBtn-hover.png");
 }
 
-.HomeBtn {
+.RoundBtn {
+  font-family: 'Press Start 2P', cursive;
+  color: #395EA9;
+  background-color: #FFCB05;
+  border-radius: 50px;
+  border-color: #395EA9;
+  border-style: solid;
+  border-width: 8px;
+  margin-bottom: 24px;
+  box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
+  font-size: 0.8em;
+  animation-name: LogoBtn;
+  animation-duration: 2s;
+  transition: 0.3s;
+  width: 72px;
+  height: 72px;
+}
+.RoundBtn:hover {
+  cursor: pointer;
+  background-color: #FFE000;
+  transition: 0.3s;
+}
+.RoundBtn:active {
+cursor: pointer;
+background-color: #FFE000;
+box-shadow: 0px 0px #1D2C5E;
+transform: translate(-6px, 6px);
+transition: 0.3s;
+}
+
+.Button {
     font-family: 'Press Start 2P', cursive;
     color: #395EA9;
     background-color: #FFCB05;
     border-radius: 50px;
     border-color: #395EA9;
     border-style: solid;
-    border-width: 0.3em;
+    border-width: 8px;
     padding: 12px;
     margin: 24px;
-    box-shadow: -8px 8px #1D2C5E;
+    box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
     font-size: 0.8em;
     width: 33vw;
     min-width: 222px;
@@ -90,16 +131,22 @@
     animation-duration: 2s;
     transition: 0.3s;
 }
-.HomeBtn:hover {
+@keyframes LogoBtn {
+  0%   {opacity: 0;}
+  80%   {opacity: 0;}
+  100% {opacity: 1;}
+  }
+.Button:hover {
     cursor: pointer;
     background-color: #FFE000;
     transition: 0.3s;
 }
-
-@keyframes LogoBtn {
-0%   {opacity: 0;}
-80%   {opacity: 0;}
-100% {opacity: 1;}
+.Button:active {
+  cursor: pointer;
+  background-color: #FFE000;
+  box-shadow: 0px 0px #1D2C5E;
+  transform: translate(-6px, 6px);
+  transition: 0.3s;
 }
 
 .App {

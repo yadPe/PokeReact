@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import Map from './Map/Map';
-import { Route, Switch, BrowserRouter, NavLink, } from 'react-router-dom';
 import './Game.css'
 
 class Game extends Component {
@@ -14,12 +14,22 @@ class Game extends Component {
     return (
     <div className="Background" style={{display : 'block'}}>
 
-      <NavLink to="/menu"> <div className="ProfileBtn"></div> </NavLink>
-      <NavLink to="/menu"> <div className="MenuBtn"></div> </NavLink>
+        <NavLink to="/menu">
+          <div className="ProfileBtn" />
+        </NavLink>
 
-      <div className="GameContainer">
-        <Map />
-      </div>
+        <div className="RightMenu">
+          <NavLink to="/menu">
+            <div className="MenuBtn" />
+          </NavLink>
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn"> ? </button>
+          </NavLink>
+        </div>
+
+        <div className="GameContainer">
+          <Map />
+        </div>
       </div>
     );
   }
