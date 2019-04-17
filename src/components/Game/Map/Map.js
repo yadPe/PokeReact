@@ -63,27 +63,6 @@ class Map extends Component {
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-    console.log(this.gamepads)
-    window.addEventListener("gamepadconnected", function (e) {
-      let gp = navigator.getGamepads()[e.gamepad.index];
-      window.gp = gp
-      console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
-        gp.index, gp.id,
-        gp.buttons.length, gp.axes.length);
-    });
-    
-
-    window.addEventListener("gamepadbuttondown", function(e){
-      // Button down
-      console.log(
-   
-         "Button down",
-         e.button, // Index of button in buttons array
-         e.gamepad
-   
-      );
-   });
-
    this.running = setInterval(this.run, 1000 / 30);
   }
 
@@ -107,12 +86,11 @@ class Map extends Component {
   }
 
   checkGamepads = () => {
-    if (!this.gamepads) {
+    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    if (!this.gamepads[0]) {
       return;
     }
     const step = 1;
-
-    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 
     const gp = this.gamepads[0];
     if (gp.buttons[12].pressed) {
