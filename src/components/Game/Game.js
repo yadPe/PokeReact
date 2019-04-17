@@ -10,9 +10,22 @@ class Game extends Component {
     };
   }
 
+  componentDidMount() {
+
+  }
+
+  createGameInstances = (num) => {
+    const instances = [];
+    for (let i = 0; i < num; i++) {
+      instances.push(<div className="instanceContainer"><Map controller={i}/></div>)
+    }
+    return instances
+  }
+
+
   render() {
     return (
-    <div className="Background" style={{display : 'block'}}>
+      <div className="Background" style={{ display: 'block' }}>
 
         <NavLink to="/menu">
           <div className="ProfileBtn" />
@@ -27,8 +40,8 @@ class Game extends Component {
           </NavLink>
         </div>
 
-        <div className="GameContainer">
-          <Map />
+        <div className='gameContainer'>
+          {this.createGameInstances(this.props.players || 1)}
         </div>
       </div>
     );

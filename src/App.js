@@ -21,6 +21,10 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route path="/menu" component={Menu} />
               <Route path="/play" component={Game} />
+              <Route
+                path='/playvs'
+                render={(props) => <Game {...props} players={2}/>}
+              />
               <Route path="/pokedex" component={Pokedex} />
             </Switch>
           </BrowserRouter>

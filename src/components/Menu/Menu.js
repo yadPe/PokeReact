@@ -19,7 +19,7 @@ const Menu = () => (
     <NavLink to="/play">
       <button type="button" className="Button"> Catch ‘em all! </button>
     </NavLink>
-    <NavLink to="/play">
+    <NavLink to="/playvs">
       <button type="button" className="Button"> Versus </button>
     </NavLink>
     <NavLink to="/pokedex">
