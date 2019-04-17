@@ -2,16 +2,17 @@ import React from 'react';
 import front from '../../../../images/sacha/front.png';
 
 const Character = () => (
-  <div style={{
+  <div className='character' style={{
     backgroundImage: `url(${front})`,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    width: '32px',
-    height: '32px',
+    width: '64px',
+    height: '64px',
     position: 'absolute',
     justifyContent: 'center',
-    top: '42%',
-    left: '49%',
+    transform: 'translate(-50%, -50%)',
+    top: '50%',
+    left: '50%',
   }}
   />
 

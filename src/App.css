@@ -152,12 +152,3 @@ transition: 0.3s;
 .App {
   text-align: center;
 }
-
-.GameContainer {
-  border-color: #395EA9;
-  border-style: solid;
-  border-width: 0.3em;
-  margin: 24px;
-  box-shadow: -8px 8px #1D2C5E;
-}
-
