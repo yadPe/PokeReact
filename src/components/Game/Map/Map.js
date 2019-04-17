@@ -188,7 +188,8 @@ class Map extends Component {
       () => {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
         //this.clean();
-        this.lastScroll = performance.now()
+        this.lastScroll = performance.now();
+        this.props.reportPosition({player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6})
       });
   }
 

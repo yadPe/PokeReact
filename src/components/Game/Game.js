@@ -17,9 +17,13 @@ class Game extends Component {
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i++) {
-      instances.push(<div className="instanceContainer"><Map controller={i}/></div>)
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition}/></div>)
     }
     return instances
+  }
+
+  getPlayersPosition = (data) => {
+    console.log(this.data)
   }
 
 
