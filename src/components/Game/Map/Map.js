@@ -29,7 +29,6 @@ class Map extends Component {
       width: '832px',
       height: '832px',
       overflow: 'hidden',
-      border: '4px solid black',
       margin: '0 auto',
       textAlign: 'center',
     };
@@ -257,7 +256,7 @@ class Map extends Component {
     if (!this.debugMode) return;
     this.renderCounter += 1;
     // eslint-disable-next-line consistent-return
-    return <h3 style={{ position: 'fixed', bottom: 10, right: 10 }}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>;
+    return <h3 style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 1000}}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>;
   }
 
   render() {

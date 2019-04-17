@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Map from './Map/Map';
 import { Route, Switch, BrowserRouter, NavLink, } from 'react-router-dom';
+import './Game.css'
 
 class Game extends Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class Game extends Component {
 
   render() {
     return (
-    <div className="Background">
+    <div className="Background" style={{display : 'block'}}>
 
       <NavLink to="/menu"> <div className="ProfileBtn"></div> </NavLink>
       <NavLink to="/menu"> <div className="MenuBtn"></div> </NavLink>
