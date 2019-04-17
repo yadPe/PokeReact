@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 import './Pokedex.css';
 import PokeList from './PokeList';
 import DetailView from './DetailView';
@@ -12,7 +13,7 @@ class Pokedex extends Component {
   }
 
   handleOnClick(id) {
-    fetch(`http://pokeapi.co/api/v2/pokemon/${id}/`)
+    fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
       .then(res => res.json())
       .then((data) => {
         const pokemon = new Pokemon(data);
@@ -25,9 +26,19 @@ class Pokedex extends Component {
   render() {
     const { pokemon } = this.state;
     return (
-      <div className="Pokedex">
-        <PokeList handleOnClick={this.handleOnClick} />
-        <DetailView pokemon={pokemon} />
+      <div className="Background">
+
+        <NavLink to="/menu">
+          <div className="ProfileBtn" />
+        </NavLink>
+        <NavLink to="/menu">
+          <div className="MenuBtn" />
+        </NavLink>
+
+        <div className="Pokedex">
+          <PokeList handleOnClick={this.handleOnClick} />
+          <DetailView pokemon={pokemon} />
+        </div>
       </div>
     );
   }

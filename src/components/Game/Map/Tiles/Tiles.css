@@ -1,0 +1,32 @@
+.tile {
+    float: left;
+    width: 64px;
+    height: 64px;
+    background-position: center;
+    background-size: cover;
+    margin: 0;
+    image-rendering: pixelated;
+    background-repeat: no-Repeat;
+}
+
+.tile3D {
+    width: 64px;
+    height: 64px;
+    background-position: center;
+    background-size: cover;
+    margin: 0;
+    image-rendering: pixelated;
+    background-repeat: no-Repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.tile3DContainer {
+    float: left;
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
