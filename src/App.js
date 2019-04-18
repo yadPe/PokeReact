@@ -5,6 +5,7 @@ import Menu from './components/Menu/Menu';
 import Game from './components/Game/Game';
 import Pokedex from './components/Pokedex/Pokedex';
 import './App.css';
+import CreationProfile from './components/Profil/CreationProfile';
 
 class App extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class App extends Component {
               <Route path="/menu" component={Menu} />
               <Route path="/play" component={Game} />
               <Route path="/pokedex" component={Pokedex} />
+              <Route path="/creation" component={CreationProfile} />
             </Switch>
           </BrowserRouter>
         </div>
