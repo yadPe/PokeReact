@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import './Pokedex.css';
+import { NavLink } from 'react-router-dom';
 import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
-import { Route, Switch, BrowserRouter, NavLink, } from 'react-router-dom';
+import Divider from './Divider';
 
 class Pokedex extends Component {
-  constructor() {
-    super();
-    this.state = { pokemon: {} };
+  constructor(props) {
+    super(props);
+    this.state = {
+      pokemon: {},
+    };
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
-  handleOnClick(id) {
+  componentWillMount() {
+    this.fetchApi(1);
+  }
+
+  fetchApi = (id) => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
       .then(res => res.json())
       .then((data) => {
@@ -23,18 +30,27 @@ class Pokedex extends Component {
       .catch(err => console.log(err));
   }
 
+  handleOnClick(id) {
+    this.fetchApi(id);
+  }
+
   render() {
     const { pokemon } = this.state;
     return (
-    <div className="Background">
+      <div className="Background">
 
-      <NavLink to="/menu"> <div className="ProfileBtn"></div> </NavLink>
-      <NavLink to="/menu"> <div className="MenuBtn"></div> </NavLink>
+        <NavLink to="/menu">
+          <div className="ProfileBtn" />
+        </NavLink>
+        <NavLink to="/menu">
+          <div className="MenuBtn" />
+        </NavLink>
 
-      <div className="Pokedex">
-        <PokeList handleOnClick={this.handleOnClick} />
-        <DetailView pokemon={pokemon} />
-      </div>
+        <div className="Pokedex">
+          <PokeList handleOnClick={this.handleOnClick} />
+          <Divider />
+          <DetailView pokemon={pokemon} getNewState={this.newPokemon} />
+        </div>
       </div>
     );
   }
