@@ -11,7 +11,7 @@ const Menu = () => (
     <img src={logo} className="MenuLogo" alt="PokeReact logo" />
     <div className="RightMenu">
 
-    <NavLink to="/play">
+      <NavLink to="/play">
         <button type="button" className="RoundBtn"> ? </button>
       </NavLink>
     </div>
@@ -24,6 +24,9 @@ const Menu = () => (
     </NavLink>
     <NavLink to="/pokedex">
       <button type="button" className="Button"> Pokedex </button>
+    </NavLink>
+    <NavLink to="/creation">
+      <button type="button" className="Button"> creationProfile </button>
     </NavLink>
   </div>
 );
