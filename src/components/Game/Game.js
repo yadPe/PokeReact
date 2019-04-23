@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import './Game.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Map from './Map/Map';
 
 class Game extends Component {
@@ -8,10 +12,50 @@ class Game extends Component {
     };
   }
 
+  componentDidMount() {
+
+  }
+
+  createGameInstances = (num) => {
+    const instances = [];
+    for (let i = 0; i < num; i++) {
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition}/></div>)
+    }
+    return instances
+  }
+
+  getPlayersPosition = (data) => {
+    console.log(this.data)
+  }
+
+
   render() {
     return (
-      <div className="gameContainer">
-        <Map />
+      <div className="Background" style={{ display: 'block' }}>
+
+        <div className="LeftMenu">
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faUser} />
+            </button>
+          </NavLink>
+        </div>
+
+        <div className="RightMenu">
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+          </NavLink>
+          <NavLink to="/commands">
+            <button type="button" className="RoundBtn"> ? </button>
+          </NavLink>
+        </div>
+
+        <div className='gameContainer'>
+          {this.createGameInstances(this.props.players || 1)}
+        </div>
+
       </div>
     );
   }
