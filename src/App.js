@@ -3,6 +3,7 @@ import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Home from './components/Home/Home';
 import Menu from './components/Menu/Menu';
 import Game from './components/Game/Game';
+import Commands from './components/Commands/Commands';
 import Pokedex from './components/Pokedex/Pokedex';
 import Recognition from './components/Profil/Recognition';
 import './App.css';
@@ -25,6 +26,7 @@ class App extends Component {
               <Route path="/recognition" component={Recognition} />
               <Route path="/play" component={Game} />
               <Route path="/pokedex" component={Pokedex} />
+              <Route path="/commands" component={Commands} />
               <Route path="/creation" component={CreationProfile} />
 
             </Switch>
