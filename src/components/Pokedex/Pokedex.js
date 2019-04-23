@@ -50,7 +50,6 @@ class Pokedex extends Component {
           <PokeList handleOnClick={this.handleOnClick} />
           <Divider />
           <DetailView pokemon={pokemon} getNewState={this.newPokemon} />
-          <button type="button" className="testbutton" />
         </div>
       </div>
     );
