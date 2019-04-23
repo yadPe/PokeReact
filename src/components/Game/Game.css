@@ -1,9 +1,11 @@
-.GameContainer {
-    transform: translate(-50%, -50%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
+.gameContainer{
+    padding: 2% 5%;
+}
+
+.instanceContainer {
+    position: relative;
+    display: inline-block;
     border: 7px solid #395EA9;
-    margin: 0;
+    margin: 5px;
     box-shadow: -8px 8px #1D2C5E;
 }
