@@ -33,6 +33,9 @@ const Menu = () => (
     <NavLink to="/pokedex">
       <button type="button" className="Button"> Pokedex </button>
     </NavLink>
+    <NavLink to="/creation">
+      <button type="button" className="Button"> creationProfile </button>
+    </NavLink>
   </div>
 );
 

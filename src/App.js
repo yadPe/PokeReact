@@ -6,6 +6,7 @@ import Game from './components/Game/Game';
 import Commands from './components/Commands/Commands';
 import Pokedex from './components/Pokedex/Pokedex';
 import './App.css';
+import CreationProfile from './components/Profil/CreationProfile';
 
 class App extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class App extends Component {
               <Route path="/play" component={Game} />
               <Route path="/pokedex" component={Pokedex} />
               <Route path="/commands" component={Commands} />
+              <Route path="/creation" component={CreationProfile} />
             </Switch>
           </BrowserRouter>
         </div>
