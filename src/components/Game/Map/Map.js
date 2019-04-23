@@ -61,7 +61,9 @@ class Map extends Component {
     }
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
-    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    // eslint-disable-next-line no-nested-ternary
+    this.gamepads = navigator.getGamepads ? navigator.getGamepads()
+      : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
   }
 
@@ -81,11 +83,12 @@ class Map extends Component {
 
     this.checkKeyboard();
     this.checkGamepads(this.props.controller);
-
   }
 
   checkGamepads = (gamepadId) => {
-    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    // eslint-disable-next-line no-nested-ternary
+    this.gamepads = navigator.getGamepads ? navigator.getGamepads()
+      : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     if (!this.gamepads[gamepadId]) {
       return;
     }
@@ -93,51 +96,42 @@ class Map extends Component {
 
     const gp = this.gamepads[gamepadId];
     if (gp.buttons[12].pressed) {
-      this.moveTo('up', step)
+      this.moveTo('up', step);
     } else if (gp.buttons[13].pressed) {
-      this.moveTo('down', step)
+      this.moveTo('down', step);
     } else if (gp.buttons[14].pressed) {
-      this.moveTo('left', step)
+      this.moveTo('left', step);
     } else if (gp.buttons[15].pressed) {
-      this.moveTo('right', step)
+      this.moveTo('right', step);
     } else if (gp.axes[0] === 1) {
-
-      this.moveTo('right', step)
+      this.moveTo('right', step);
+    } else if (gp.axes[0] === -1) {
+      this.moveTo('left', step);
+    } else if (gp.axes[1] === 1) {
+      this.moveTo('down', step);
+    } else if (gp.axes[1] === -1) {
+      this.moveTo('up', step);
     }
-    else if (gp.axes[0] === -1) {
-
-      this.moveTo('left', step)
-    }
-    else if (gp.axes[1] === 1) {
-
-      this.moveTo('down', step)
-    }
-    else if (gp.axes[1] === -1) {
-
-      this.moveTo('up', step)
-    }
-
   }
 
   checkKeyboard = () => {
     const step = 1;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       if (Object.values(this.keys)[i] === this.asyncKeys[i]) {
-
         if (this.asyncKeys[i] === 38) {
-          this.moveTo('up', step)
+          this.moveTo('up', step);
           break;
         }
         if (this.asyncKeys[i] === 40) {
-          this.moveTo('down', step)
+          this.moveTo('down', step);
           break;
         }
         if (this.asyncKeys[i] === 37) {
-          this.moveTo('left', step)
+          this.moveTo('left', step);
           break;
         }
         if (this.asyncKeys[i] === 39) {
-          this.moveTo('right', step)
+          this.moveTo('right', step);
           break;
         }
       }
@@ -145,8 +139,10 @@ class Map extends Component {
   }
 
   moveTo = (direction, step) => {
-    if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return
-    const { map, view, viewWidth, viewHeight } = this.state;
+    if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return;
+    const {
+      map, view, viewWidth, viewHeight,
+    } = this.state;
     let { viewY, viewX } = this.state;
     switch (direction) {
       case 'up':
@@ -166,7 +162,7 @@ class Map extends Component {
         if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 - step)]
           .includes(-1)) {
           viewX -= step;
-          this.left += 5
+          this.left += 5;
         }
         break;
 
@@ -174,7 +170,7 @@ class Map extends Component {
         if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 + step)]
           .includes(-1)) {
           viewX += step;
-          this.left -= 5
+          this.left -= 5;
         }
         break;
 
@@ -185,12 +181,12 @@ class Map extends Component {
       viewY,
       viewX,
     },
-      () => {
-        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-        //this.clean();
-        this.lastScroll = performance.now();
-        this.props.reportPosition({player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6})
-      });
+    () => {
+      this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+      // this.clean();
+      this.lastScroll = performance.now();
+      this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 });
+    });
   }
 
 
@@ -232,14 +228,14 @@ class Map extends Component {
 
   loadTiles = (tilesKeys) => {
     const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
-    console.log(tiles)
-   
+    console.log(tiles);
+
     const style = document.createElement('style');
     style.type = 'text/css';
     let css = '';
     for (let i = 0; i < tiles.length; i += 1) {
       const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
-      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)))
+      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)));
       css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
     }
     style.appendChild(document.createTextNode(css));
@@ -261,7 +257,15 @@ class Map extends Component {
     if (!this.debugMode) return;
     this.renderCounter += 1;
     // eslint-disable-next-line consistent-return
-    return <h3 style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 1000 }}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>;
+    return (
+      <h3 style={{
+        position: 'fixed', bottom: 10, right: 10, zIndex: 1000,
+      }}
+      >
+        {`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}
+
+      </h3>
+    );
   }
 
   render() {
