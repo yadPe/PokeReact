@@ -6,15 +6,22 @@ import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
+import Divider from './Divider';
 
 class Pokedex extends Component {
-  constructor() {
-    super();
-    this.state = { pokemon: {} };
+  constructor(props) {
+    super(props);
+    this.state = {
+      pokemon: {},
+    };
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
-  handleOnClick(id) {
+  componentWillMount() {
+    this.fetchApi(1);
+  }
+
+  fetchApi = (id) => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
       .then(res => res.json())
       .then((data) => {
@@ -23,6 +30,10 @@ class Pokedex extends Component {
       })
       // eslint-disable-next-line no-console
       .catch(err => console.log(err));
+  }
+
+  handleOnClick(id) {
+    this.fetchApi(id);
   }
 
   render() {
@@ -48,7 +59,8 @@ class Pokedex extends Component {
 
         <div className="Pokedex">
           <PokeList handleOnClick={this.handleOnClick} />
-          <DetailView pokemon={pokemon} />
+          <Divider />
+          <DetailView pokemon={pokemon} getNewState={this.newPokemon} />
         </div>
       </div>
     );

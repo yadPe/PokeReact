@@ -3,24 +3,33 @@ import './DetailView.css';
 
 const DetailView = ({ pokemon }) => {
   const {
-    id, name, sprite, type,
+    id, name, sprite, type, weight, speed,
   } = pokemon;
 
   return (
     <section className="detail-view">
-      <h1 className="data-name">{name}</h1>
+      <h1 className="data-name1">{name}</h1>
       <img src={sprite} className="sprite-image" alt="" />
       <div className="data-wrapper">
-        <h1 className="data-name">
-Pokemon #
+        <h1 className="data-name2">
+          Pokemon #
           {id}
           {' '}
-          {name}
         </h1>
         <p className="data-char">
-Type:
+          Type :
           {' '}
           {type}
+        </p>
+        <p className="data-char">
+          Weight :
+          {' '}
+          {weight}
+        </p>
+        <p className="data-char">
+          Speed :
+          {' '}
+          {speed}
         </p>
       </div>
     </section>
