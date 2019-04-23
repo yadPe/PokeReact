@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import './Game.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Map from './Map/Map';
-import './Game.css'
 
 class Game extends Component {
   constructor(props) {
@@ -31,15 +33,21 @@ class Game extends Component {
     return (
       <div className="Background" style={{ display: 'block' }}>
 
-        <NavLink to="/menu">
-          <div className="ProfileBtn" />
-        </NavLink>
+        <div className="LeftMenu">
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faUser} />
+            </button>
+          </NavLink>
+        </div>
 
         <div className="RightMenu">
           <NavLink to="/menu">
-            <div className="MenuBtn" />
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faBars} />
+            </button>
           </NavLink>
-          <NavLink to="/menu">
+          <NavLink to="/commands">
             <button type="button" className="RoundBtn"> ? </button>
           </NavLink>
         </div>
@@ -47,6 +55,7 @@ class Game extends Component {
         <div className='gameContainer'>
           {this.createGameInstances(this.props.players || 1)}
         </div>
+
       </div>
     );
   }

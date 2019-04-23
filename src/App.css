@@ -24,6 +24,21 @@
     color: white;
   }
 
+.Commands {
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    width: 66vw;
+}
+.CommandsImg {
+  width: 120px;
+  margin: 24px;
+}
+
 .Logo {
     width: 66vw;
     animation-name: Logo;
@@ -60,6 +75,18 @@
     background-image: url("images/profileBtn-hover.png");
 }
 
+.LeftMenu {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  padding: 24px;
+}
+
 .RightMenu {
   text-align: center;
   display: flex;
@@ -93,7 +120,7 @@
   border-width: 8px;
   margin-bottom: 24px;
   box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
-  font-size: 0.8em;
+  font-size: 1em;
   animation-name: LogoBtn;
   animation-duration: 2s;
   transition: 0.3s;
@@ -106,40 +133,73 @@
   transition: 0.3s;
 }
 .RoundBtn:active {
-cursor: pointer;
-background-color: #FFE000;
-box-shadow: 0px 0px #1D2C5E;
-transform: translate(-6px, 6px);
-transition: 0.3s;
+  cursor: pointer;
+  background-color: #FFE000;
+  box-shadow: 0px 0px #1D2C5E;
+  transform: translate(-6px, 6px);
+  transition: 0.3s;
 }
 
-.Button {
-    font-family: 'Press Start 2P', cursive;
-    color: #395EA9;
-    background-color: #FFCB05;
-    border-radius: 50px;
-    border-color: #395EA9;
-    border-style: solid;
-    border-width: 8px;
-    padding: 12px;
-    margin: 24px;
+.AnimatedRoundBtn {
+  font-family: 'Press Start 2P', cursive;
+  color: #395EA9;
+  background-color: #FFCB05;
+  border-radius: 50px;
+  border-color: #395EA9;
+  border-style: solid;
+  border-width: 8px;
+  margin-bottom: 24px;
+  font-size: 0.8em;
+  width: 72px;
+  height: 72px;
+  position: relative;
+  animation: ActiveBtn 0.5s infinite;
+}
+@keyframes ActiveBtn {
+  0% {
+    left: 0px;
+    top: 0px;
     box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
-    font-size: 0.8em;
-    width: 33vw;
-    min-width: 222px;
-    animation-name: LogoBtn;
-    animation-duration: 2s;
-    transition: 0.3s;
+    }
+  50% {
+    left: -6px;
+    top: 6px;
+    box-shadow: 0px 0px #1D2C5E, inset 0px 0px #C7A008;
+    }
+  100% {
+    left: 0px;
+    top: 0px;
+    box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
+    }
+  }
+
+.Button {
+  font-family: 'Press Start 2P', cursive;
+  color: #395EA9;
+  background-color: #FFCB05;
+  border-radius: 50px;
+  border-color: #395EA9;
+  border-style: solid;
+  border-width: 8px;
+  padding: 12px;
+  margin: 24px;
+  box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
+  font-size: 0.8em;
+  width: 33vw;
+  min-width: 222px;
+  animation-name: LogoBtn;
+  animation-duration: 2s;
+  transition: 0.3s;
 }
 @keyframes LogoBtn {
-  0%   {opacity: 0;}
-  80%   {opacity: 0;}
+  0% {opacity: 0;}
+  80% {opacity: 0;}
   100% {opacity: 1;}
   }
 .Button:hover {
-    cursor: pointer;
-    background-color: #FFE000;
-    transition: 0.3s;
+  cursor: pointer;
+  background-color: #FFE000;
+  transition: 0.3s;
 }
 .Button:active {
   cursor: pointer;
@@ -151,4 +211,40 @@ transition: 0.3s;
 
 .App {
   text-align: center;
+}
+
+.FirstPokemonButton {
+  margin: 80px;
+  padding: 30px;
+}
+
+.Input{
+  font-family: 'Press Start 2P', cursive;
+  color: #395EA9;
+  background-color: white;
+  border-radius: 50px;
+  border-color: #395EA9;
+  border-style: solid;
+  border-width: 8px;
+  padding: 12px;
+  margin: 24px;
+  box-shadow: -6px 6px #1D2C5E, inset -6px 6px white;
+  font-size: 0.8em;
+  width: 33vw;
+  min-width: 222px;   
+}
+
+.ButtonCenter{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+h1,h2{
+  font-family: 'Press Start 2P', cursive;
+  color: #FFCB05;
+  font-size: 1.3em;
+
 }
