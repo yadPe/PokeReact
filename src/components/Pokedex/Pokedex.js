@@ -7,18 +7,21 @@ import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
+import DividerButton from './DividerButton';
 
 class Pokedex extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pokemon: {},
+      pokemonid: 1,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
   componentWillMount() {
-    this.fetchApi(1);
+    const { pokemonid } = this.state;
+    this.fetchApi(pokemonid);
   }
 
   fetchApi = (id) => {
@@ -33,7 +36,33 @@ class Pokedex extends Component {
   }
 
   handleOnClick(id) {
-    this.fetchApi(id);
+    this.setState({
+      pokemonid: id / 1,
+    }, () => this.fetchApi(id));
+  }
+
+  previousPokemon() {
+    let { pokemonid } = this.state;
+    if (pokemonid > 1) {
+      pokemonid -= 1;
+    } else {
+      pokemonid = 1;
+    }
+    this.setState({
+      pokemonid,
+    }, () => this.fetchApi(pokemonid));
+  }
+
+  nextPokemon() {
+    let { pokemonid } = this.state;
+    if (pokemonid < 151) {
+      pokemonid += 1;
+    } else {
+      pokemonid = 1;
+    }
+    this.setState({
+      pokemonid,
+    }, () => this.fetchApi(pokemonid));
   }
 
   render() {
@@ -61,6 +90,14 @@ class Pokedex extends Component {
           <PokeList handleOnClick={this.handleOnClick} />
           <Divider />
           <DetailView pokemon={pokemon} getNewState={this.newPokemon} />
+        </div>
+
+        <div className="Buttons">
+          <button type="button" className="pokedexbuttons" onClick={() => this.previousPokemon()} />
+          <h5>Previous Pokemon</h5>
+          <DividerButton />
+          <h5>Next Pokemon</h5>
+          <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
         </div>
       </div>
     );
