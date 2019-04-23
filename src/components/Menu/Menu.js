@@ -16,7 +16,7 @@ const Menu = () => (
       </NavLink>
     </div>
 
-    <NavLink to="/play">
+    <NavLink to="/creation">
       <button type="button" className="Button"> Catch ‘em all! </button>
     </NavLink>
     <NavLink to="/play">

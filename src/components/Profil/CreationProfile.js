@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import UserName from './UserName';
 import PremierPokemon from './PremierPokemon';
 import Trainer from './Trainer';
 import '../../App.css';
+import Recognition from './Recognition';
 
 class CreationProfile extends Component {
   constructor(props) {
@@ -17,17 +17,23 @@ class CreationProfile extends Component {
   saveInputs = (input) => {
     let { profil } = this.state;
     const { history } = this.props;
+    if (input.type === 'testSubmit') {
+      this.setState({
+        step: 2,
+        profil: { ...profil, name: input.value },
+      });
+    }
     if (input.type === 'usernameSubmit') {
       this.setState({
         profil: { ...profil, name: input.value },
-        step: 2,
+        step: 3,
       });
     }
 
     if (input.type === 'trainerSubmit') {
       this.setState({
         profil: { ...profil, trainer: [input.value] },
-        step: 3,
+        step: 4,
       });
     }
     if (input.type === 'pokemonSubmit') {
@@ -36,22 +42,24 @@ class CreationProfile extends Component {
         profil,
       }, () => {
         localStorage.setItem(profil.name, JSON.stringify(profil));
-        history.push('/menu');
+        history.push('/play');
       });
     }
   }
 
   displayStep = () => {
-    const { step, profil } = this.state;
+    const { step, profil, name } = this.state;
     switch (step) {
       case 1:
-        return <UserName sendInput={this.saveInputs} />;
+        return <Recognition updateProfil={profil.name} sendInput={this.saveInputs} firstInput={this.firstInput} />;
       case 2:
-        return <Trainer name={profil.name} sendInput={this.saveInputs} />;
+        return <UserName name={name} sendInput={this.saveInputs} />;
       case 3:
+        return <Trainer name={profil.name} sendInput={this.saveInputs} />;
+      case 4:
         return <PremierPokemon name={profil.name} sendInput={this.saveInputs} />;
       default:
-        return <UserName sendInput={this.saveInputs} />;
+        return <Recognition sendInput={this.saveInputs} />;
     }
   }
 
@@ -64,4 +72,4 @@ class CreationProfile extends Component {
   }
 }
 
-export default withRouter(CreationProfile);
+export default CreationProfile;

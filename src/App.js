@@ -4,6 +4,7 @@ import Home from './components/Home/Home';
 import Menu from './components/Menu/Menu';
 import Game from './components/Game/Game';
 import Pokedex from './components/Pokedex/Pokedex';
+import Recognition from './components/Profil/Recognition';
 import './App.css';
 import CreationProfile from './components/Profil/CreationProfile';
 
@@ -21,9 +22,11 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/menu" component={Menu} />
+              <Route path="/recognition" component={Recognition} />
               <Route path="/play" component={Game} />
               <Route path="/pokedex" component={Pokedex} />
               <Route path="/creation" component={CreationProfile} />
+
             </Switch>
           </BrowserRouter>
         </div>
