@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import './Game.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Map from './Map/Map';
-import { Route, Switch, BrowserRouter, NavLink, } from 'react-router-dom';
 
 class Game extends Component {
   constructor(props) {
@@ -11,14 +14,31 @@ class Game extends Component {
 
   render() {
     return (
-    <div className="Background">
+      <div className="Background" style={{display: 'block' }}>
 
-      <NavLink to="/menu"> <div className="ProfileBtn"></div> </NavLink>
-      <NavLink to="/menu"> <div className="MenuBtn"></div> </NavLink>
+        <div className="LeftMenu">
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faUser} />
+            </button>
+          </NavLink>
+        </div>
 
-      <div className="GameContainer">
-        <Map />
-      </div>
+        <div className="RightMenu">
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+          </NavLink>
+          <NavLink to="/commands">
+            <button type="button" className="RoundBtn"> ? </button>
+          </NavLink>
+        </div>
+
+        <div className="GameContainer">
+          <Map />
+        </div>
+
       </div>
     );
   }

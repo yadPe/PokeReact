@@ -1,14 +1,14 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import '../../App.css';
 import logo from '../../images/Logo.png';
-import { Route, Switch, BrowserRouter, NavLink, } from 'react-router-dom';
 
 const Home = () => (
   <div className="Home">
-  
     <img src={logo} className="Logo" alt="PokeReact logo" />
-    <NavLink to="/menu"> <button className="HomeBtn"> Play now ! </button> </NavLink>
-
+    <NavLink to="/menu">
+      <button type="button" className="Button"> Play now ! </button>
+    </NavLink>
   </div>
 );
 

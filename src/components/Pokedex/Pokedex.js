@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import './Pokedex.css';
 import { NavLink } from 'react-router-dom';
+import './Pokedex.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
@@ -39,12 +41,21 @@ class Pokedex extends Component {
     return (
       <div className="Background">
 
-        <NavLink to="/menu">
-          <div className="ProfileBtn" />
-        </NavLink>
-        <NavLink to="/menu">
-          <div className="MenuBtn" />
-        </NavLink>
+        <div className="LeftMenu">
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faUser} />
+            </button>
+          </NavLink>
+        </div>
+
+        <div className="RightMenu">
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+          </NavLink>
+        </div>
 
         <div className="Pokedex">
           <PokeList handleOnClick={this.handleOnClick} />
