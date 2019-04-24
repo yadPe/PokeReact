@@ -4,28 +4,69 @@ import './Game.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Map from './Map/Map';
+import { storeAsyncKeys } from './utils';
 
 class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
+
+    this.asyncKeys = [];
+    this.controls = [ 38, 40, 37, 39, 87, 83, 65, 68]
   }
 
   componentDidMount() {
+    for (let i = 0; i < Object.keys(this.controls[0]).length * (this.props.players || 1); i += 1) {
+      this.asyncKeys.push(false);
+    }
+    storeAsyncKeys({type: 'set', value: this.asyncKeys});
+    document.body.addEventListener('keydown', this.keyPressed);
+    document.body.addEventListener('keyup', this.keyReleased);
+  }
 
+  componentWillUnmount() {
+    document.body.removeEventListener('keydown', this.keyPressed);
+    document.body.removeEventListener('keyup', this.keyReleased);
+  }
+
+  keyPressed = (e) => {
+    const keys = e.keyCode;
+    const size = this.controls.length;
+
+    for (let i = 0; i < size; i += 1) {
+      if (this.controls[i] === keys && !this.asyncKeys[i]) {
+        this.asyncKeys[i] = keys;
+        console.log(this.asyncKeys)
+        storeAsyncKeys({type: 'set', value: this.asyncKeys});
+        break;
+      }
+    }
+  }
+
+  keyReleased = (e) => {
+    const keys = e.keyCode;
+    const size = this.controls.length;
+
+    for (let i = 0; i < size; i += 1) {
+      if (this.controls[i] === keys && this.asyncKeys[i]) {
+        this.asyncKeys[i] = false;
+        console.log(this.asyncKeys)
+        break;
+      }
+    }
   }
 
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i++) {
-      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition}/></div>)
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls[i]} asyncKeys={this.asyncKeys} /></div>)
     }
     return instances
   }
 
   getPlayersPosition = (data) => {
-    console.log(this.data)
+    console.log(data)
   }
 
 

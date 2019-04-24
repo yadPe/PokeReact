@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
 import Character from './Tiles/Character';
+import { ableToMove, storeAsyncKeys } from '../utils';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -16,13 +17,6 @@ class Map extends Component {
       viewHeight: 13,
       viewX: 11,
       viewY: 17,
-    };
-
-    this.keys = {
-      keyUp: 38,
-      keyDown: 40,
-      keyLeft: 37,
-      keyRight: 39,
     };
 
     this.theme = {
@@ -54,37 +48,92 @@ class Map extends Component {
   }
 
   init = async () => {
+    this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
     await this.loadTiles(reqTiles.keys());
-    for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
-      this.asyncKeys.push(false);
-    }
-    document.body.addEventListener('keydown', this.keyPressed);
-    document.body.addEventListener('keyup', this.keyReleased);
+    // for (let i = 0; i < Object.keys(this.config.keys).length; i += 1) {
+    //   this.asyncKeys.push(false);
+    // }
+    // document.body.addEventListener('keydown', this.keyPressed);
+    // document.body.addEventListener('keyup', this.keyReleased);
+    this.asyncKeys = this.props.asyncKeys;
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
   }
 
   end = () => {
-    document.body.removeEventListener('keydown', this.keyPressed);
-    document.body.removeEventListener('keyup', this.keyReleased);
+    // document.body.removeEventListener('keydown', this.keyPressed);
+    // document.body.removeEventListener('keyup', this.keyReleased);
     clearInterval(this.running);
     this.asyncKeys = null;
     this.running = null;
     this.renderCounter = null;
     this.loaded = null;
+    this.config = null;
   }
 
-  run = () => {
-    if (this.debugMode) this.loopCounter += 1;
-
-
-    this.checkKeyboard();
-    this.checkGamepads(this.props.controller);
-
+  configInstance = () => {
+    this.config = {};
+    this.gamepad = this.props.controller;
+    this.config.keys = this.props.controls;
   }
 
-  checkGamepads = (gamepadId) => {
+  loadMap = async (mapUri) => {
+    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
+      map: [...resJson],
+    }));
+    this.loaded = true;
+    const {
+      viewY, viewX, viewWidth, viewHeight, map,
+    } = this.state;
+    this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+  };
+
+  loadTiles = (tilesKeys) => {
+    const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
+    document.head.childNodes.forEach(node => {
+      if (node.id === 'tileSet') {
+        node.remove();
+        console.log('Cleaned old tilesSet');
+      }
+    });
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.id = 'tileSet';
+    let css = '';
+    for (let i = 0; i < tiles.length; i += 1) {
+      const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
+      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
+    }
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+  }
+
+  // keyPressed = (e) => {
+  //   const keys = e.keyCode;
+  //   const size = Object.keys(this.config.keys).length;
+
+  //   for (let i = 0; i < size; i += 1) {
+  //     if (Object.values(this.config.keys)[i] === keys && !this.asyncKeys[i]) {
+  //       this.asyncKeys[i] = keys;
+  //       break;
+  //     }
+  //   }
+  // }
+
+  // keyReleased = (e) => {
+  //   const keys = e.keyCode;
+  //   const size = Object.keys(this.config.keys).length;
+
+  //   for (let i = 0; i < size; i += 1) {
+  //     if (Object.values(this.config.keys)[i] === keys && this.asyncKeys[i]) {
+  //       this.asyncKeys[i] = false;
+  //       break;
+  //     }
+  //   }
+  // }
+
+  checkGamepad = (gamepadId) => {
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     if (!this.gamepads[gamepadId]) {
       return;
@@ -101,19 +150,12 @@ class Map extends Component {
     } else if (gp.buttons[15].pressed) {
       this.moveTo('right', step)
     } else if (gp.axes[0] === 1) {
-
       this.moveTo('right', step)
-    }
-    else if (gp.axes[0] === -1) {
-
+    } else if (gp.axes[0] === -1) {
       this.moveTo('left', step)
-    }
-    else if (gp.axes[1] === 1) {
-
+    } else if (gp.axes[1] === 1) {
       this.moveTo('down', step)
-    }
-    else if (gp.axes[1] === -1) {
-
+    } else if (gp.axes[1] === -1) {
       this.moveTo('up', step)
     }
 
@@ -121,9 +163,8 @@ class Map extends Component {
 
   checkKeyboard = () => {
     const step = 1;
-    for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
-      if (Object.values(this.keys)[i] === this.asyncKeys[i]) {
-
+    for (let i = 0; i < Object.keys(this.config.keys).length; i += 1) {
+      if (Object.values(this.config.keys)[i] === this.asyncKeys[i]) {
         if (this.asyncKeys[i] === 38) {
           this.moveTo('up', step)
           break;
@@ -148,34 +189,22 @@ class Map extends Component {
     if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return
     const { map, view, viewWidth, viewHeight } = this.state;
     let { viewY, viewX } = this.state;
+    if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) return
     switch (direction) {
       case 'up':
-        if (!view[Math.floor(view.length / 2 - step)][Math.floor(view.length / 2)]
-          .includes(-1)) {
-          viewY -= step;
-        }
+        viewY -= step;
         break;
 
       case 'down':
-        if (!view[Math.floor(view.length / 2 + step)][Math.floor(view.length / 2)].includes(-1)) {
-          viewY += step;
-        }
+        viewY += step;
         break;
 
       case 'left':
-        if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 - step)]
-          .includes(-1)) {
-          viewX -= step;
-          this.left += 5
-        }
+        viewX -= step;
         break;
 
       case 'right':
-        if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 + step)]
-          .includes(-1)) {
-          viewX += step;
-          this.left -= 5
-        }
+        viewX += step;
         break;
 
       default:
@@ -187,63 +216,9 @@ class Map extends Component {
     },
       () => {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-        //this.clean();
         this.lastScroll = performance.now();
-        this.props.reportPosition({player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6})
+        this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 })
       });
-  }
-
-
-  keyPressed = (e) => {
-    const keys = e.keyCode;
-    const size = Object.keys(this.keys).length;
-
-    for (let i = 0; i < size; i += 1) {
-      if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
-        this.asyncKeys[i] = keys;
-
-        break;
-      }
-    }
-  }
-
-  keyReleased = (e) => {
-    const keys = e.keyCode;
-    const size = Object.keys(this.keys).length;
-
-    for (let i = 0; i < size; i += 1) {
-      if (Object.values(this.keys)[i] === keys && this.asyncKeys[i]) {
-        this.asyncKeys[i] = false;
-        break;
-      }
-    }
-  }
-
-  loadMap = async (mapUri) => {
-    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
-      map: [...resJson],
-    }));
-    this.loaded = true;
-    const {
-      viewY, viewX, viewWidth, viewHeight, map,
-    } = this.state;
-    this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-  };
-
-  loadTiles = (tilesKeys) => {
-    const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
-    console.log(tiles)
-   
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    let css = '';
-    for (let i = 0; i < tiles.length; i += 1) {
-      const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
-      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)))
-      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
-    }
-    style.appendChild(document.createTextNode(css));
-    document.head.appendChild(style);
   }
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
@@ -255,6 +230,17 @@ class Map extends Component {
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
     this.setState({ view: [...subMatrix] });
+  }
+
+  run = () => {
+    if (this.debugMode) this.loopCounter += 1;
+
+    this.asyncKeys = storeAsyncKeys({type: 'get'});
+
+
+    this.checkKeyboard();
+    this.checkGamepad(this.props.controller);
+
   }
 
   debug = () => {
