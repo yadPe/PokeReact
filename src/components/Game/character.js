@@ -1,3 +1,5 @@
+import React, { Component } from 'react';
+
 class Character {
   constructor(name, y, x, playground) {
     this.name = name;
@@ -6,37 +8,59 @@ class Character {
     this.playground = { matrix: playground };
   }
 
-  static ableToMove(direction, step) {
+  ableToMove(direction, step) {
     const newPos = { x: this.x, y: this.y };
+
     switch (direction) {
       case 'up':
-        newPos.y += step;
-        break;
+        if (!this.playground.matrix[this.y - 1][this.x].includes(-1)) {
+          newPos.y -= step;
+          break;
+        } else {
+          return null;
+        }
+
       case 'down':
-        newPos.y -= step;
-        break;
+        if (!this.playground.matrix[this.y + 1][this.x].includes(-1)) {
+          newPos.y = step;
+          break;
+        } else {
+          return null;
+        }
+
+
       case 'right':
-        newPos.x += step;
-        break;
+        if (!this.playground.matrix[this.y][this.x + 1].includes(-1)) {
+          newPos.x += step;
+          break;
+        } else {
+          return null;
+        }
+
+
       case 'left':
-        newPos.x -= step;
-        break;
+        if (!this.playground.matrix[this.y][this.x - 1].includes(-1)) {
+          newPos.x -= step;
+          break;
+        } else {
+          return null;
+        }
+
+
       default:
         return undefined;
     }
-    return (
-      !this.playground.matrix[newPos.y][newPos.x].includes(-1)
-    );
+    return !this.playground.matrix[newPos.y][newPos.x].includes(-1);
   }
 
-  static getPlaygroundSize() {
+  getPlaygroundSize() {
     this.playground.width = this.playground.matrix[0].length;
     this.playground.height = this.playground.matrix.length;
   }
 
-  go(direction) {}
+  // go(direction) {}
 
-  static randomDirection = () => {
+  randomDirection = () => {
     const dirs = ['up', 'down', 'right', 'left'];
     return dirs[Math.floor(Math.random() * 4)];
   }
@@ -49,9 +73,9 @@ class Pokemon extends Character {
   }
 
   run() {
-    if (!this.playground.x) { this.getPlaygroundSize(); }
+    if (!this.playground.width) { this.getPlaygroundSize(); console.log('mk playground'); return; }
 
-    if (!this.direction) { this.direction = this.randomDirection(); }
+    if (!this.direction) { this.direction = this.randomDirection(); console.log('mk pos'); return; }
 
     if (this.ableToMove(this.direction, 1)) {
       if (this.direction === 'up' || 'down') {
@@ -70,6 +94,7 @@ class Pokemon extends Character {
       }
     } else {
       this.direction = this.randomDirection();
+      console.log('pokemon blok');
     }
   }
 
@@ -77,3 +102,5 @@ class Pokemon extends Character {
     this.wasCatched = true;
   }
 }
+
+export { Character, Pokemon };

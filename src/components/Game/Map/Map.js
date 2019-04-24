@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
-import Character from './Tiles/Character';
+import Player from './Tiles/Character';
+import { Character, Pokemon } from '../character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -49,6 +50,7 @@ class Map extends Component {
     this.init();
   }
 
+
   componentWillUnmount() {
     this.end();
   }
@@ -79,7 +81,19 @@ class Map extends Component {
 
   run = () => {
     if (this.debugMode) this.loopCounter += 1;
+    if (this.pokemon1) {
+      this.pokemon1.run();
+      // console.log(this.pokemon1);
+      // console.log(this.pokemon1.x, this.pokemon1.y);
+      // console.log(`perso : x=${this.state.viewX + 6} y=${this.state.viewY + 6}`);
 
+      if ((this.pokemon1.x < this.state.viewX && this.pokemon1.x < this.state.viewX + 13) && (this.pokemon1.y >= this.state.viewY && this.pokemon1.y < this.state.viewY + 13)) {
+        console.log(this.state.viewX - this.pokemon1.x, this.pokemon1.y - this.state.viewY);
+        this.state.view[this.pokemon1.y - this.state.viewY][this.state.viewX - this.pokemon1.x].push(1174);
+
+        // console.log('pont visible');
+      }
+    }
 
     this.checkKeyboard();
     this.checkGamepads(this.props.controller);
@@ -220,6 +234,7 @@ class Map extends Component {
       map: [...resJson],
     }));
     this.loaded = true;
+    this.pokemon1 = new Pokemon(55, 'greug', 16, 20, this.state.map);
     const {
       viewY, viewX, viewWidth, viewHeight, map,
     } = this.state;
@@ -228,14 +243,14 @@ class Map extends Component {
 
   loadTiles = (tilesKeys) => {
     const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
-    console.log(tiles);
+
 
     const style = document.createElement('style');
     style.type = 'text/css';
     let css = '';
     for (let i = 0; i < tiles.length; i += 1) {
       const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
-      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)));
+
       css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
     }
     style.appendChild(document.createTextNode(css));
@@ -268,6 +283,7 @@ class Map extends Component {
     );
   }
 
+
   render() {
     const { view } = this.state;
     return (
@@ -276,7 +292,7 @@ class Map extends Component {
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
-        <Character />
+        <Player />
       </div>
     );
   }

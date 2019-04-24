@@ -1,7 +1,7 @@
 import React from 'react';
 import front from '../../../../images/sacha/front.png';
 
-const Character = () => (
+const Player = () => (
   <div
     className="character"
     style={{
@@ -21,4 +21,4 @@ const Character = () => (
 
 );
 
-export default Character;
+export default Player;
