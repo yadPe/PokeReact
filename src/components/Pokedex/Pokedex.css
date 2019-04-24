@@ -12,10 +12,10 @@
   background-color: #e61515;
 }
 
-.testbutton {
+.pokedexbuttons {
   padding: 5px;
-  width: 40px;
-  height: 40px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   border: outset rgb(248, 187, 187) 6px;
   transform: rotate(60deg);
@@ -27,4 +27,18 @@
       rgb(43, 125, 196) 100%
   );
   cursor: pointer;
+}
+
+.Buttons {
+  display: flex;
+  font-family: 'Orbitron', sans-serif;
+  align-items: center;
+  justify-content: space-around;
+  width: 50%;
+  height: 3vh;
+  margin: 0 auto;
+  padding: 1em;
+  border-radius: 15px;
+  border: double black 10px;
+  background-color: #e61515;
 }

@@ -54,7 +54,7 @@ class Map extends Component {
   }
 
   init = async () => {
-    await this.loadMap(reqMaps('./001-3d-collide.txt', true));
+    await this.loadMap(reqMaps('./map1.txt', true));
     await this.loadTiles(reqTiles.keys());
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       this.asyncKeys.push(false);
@@ -62,7 +62,7 @@ class Map extends Component {
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-   this.running = setInterval(this.run, 1000 / 30);
+    this.running = setInterval(this.run, 1000 / 30);
   }
 
   end = () => {
@@ -78,20 +78,20 @@ class Map extends Component {
   run = () => {
     if (this.debugMode) this.loopCounter += 1;
 
-    
+
     this.checkKeyboard();
-    this.checkGamepads();
+    this.checkGamepads(this.props.controller);
 
   }
 
-  checkGamepads = () => {
+  checkGamepads = (gamepadId) => {
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-    if (!this.gamepads[0]) {
+    if (!this.gamepads[gamepadId]) {
       return;
     }
     const step = 1;
 
-    const gp = this.gamepads[0];
+    const gp = this.gamepads[gamepadId];
     if (gp.buttons[12].pressed) {
       this.moveTo('up', step)
     } else if (gp.buttons[13].pressed) {
@@ -101,23 +101,23 @@ class Map extends Component {
     } else if (gp.buttons[15].pressed) {
       this.moveTo('right', step)
     } else if (gp.axes[0] === 1) {
-     
+
       this.moveTo('right', step)
     }
     else if (gp.axes[0] === -1) {
-     
+
       this.moveTo('left', step)
     }
     else if (gp.axes[1] === 1) {
-     
+
       this.moveTo('down', step)
     }
     else if (gp.axes[1] === -1) {
-     
+
       this.moveTo('up', step)
     }
 
-  } 
+  }
 
   checkKeyboard = () => {
     const step = 1;
@@ -188,7 +188,8 @@ class Map extends Component {
       () => {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
         //this.clean();
-        this.lastScroll = performance.now()
+        this.lastScroll = performance.now();
+        this.props.reportPosition({player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6})
       });
   }
 
@@ -231,11 +232,15 @@ class Map extends Component {
 
   loadTiles = (tilesKeys) => {
     const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
+    console.log(tiles)
+   
     const style = document.createElement('style');
     style.type = 'text/css';
     let css = '';
     for (let i = 0; i < tiles.length; i += 1) {
-      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)})}\n`;
+      const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
+      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)))
+      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
     }
     style.appendChild(document.createTextNode(css));
     document.head.appendChild(style);
@@ -256,7 +261,7 @@ class Map extends Component {
     if (!this.debugMode) return;
     this.renderCounter += 1;
     // eslint-disable-next-line consistent-return
-    return <h3 style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 1000}}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>;
+    return <h3 style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 1000 }}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>;
   }
 
   render() {
