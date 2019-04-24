@@ -8,6 +8,7 @@ import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
 import DividerButton from './DividerButton';
+import Capture from './Capture';
 
 class Pokedex extends Component {
   constructor(props) {
@@ -15,11 +16,8 @@ class Pokedex extends Component {
     this.state = {
       pokemon: {},
       pokemonid: 1,
-      modalIsOpen: false,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
   }
 
   componentWillMount() {
@@ -36,14 +34,6 @@ class Pokedex extends Component {
       })
       // eslint-disable-next-line no-console
       .catch(err => console.log(err));
-  }
-
-  openModal() {
-    this.setState({ modalIsOpen: true });
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false });
   }
 
   handleOnClick(id) {
@@ -78,7 +68,6 @@ class Pokedex extends Component {
 
   render() {
     const { pokemon } = this.state;
-    const { modalIsOpen } = this.state;
     return (
       <div className="Background">
 
@@ -106,14 +95,14 @@ class Pokedex extends Component {
 
         <div className="Buttons">
           <button type="button" className="pokedexbuttons" onClick={() => this.previousPokemon()} />
-          <h5>Previous Pokemon</h5>
+          <h5 className="nextandpreviousbuttons">Previous Pokemon</h5>
           <DividerButton />
-          <h5>Next Pokemon</h5>
+          <h5 className="nextandpreviousbuttons">Next Pokemon</h5>
           <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
         </div>
 
         <div>
-          <button type="button" className="Button" onClick={() => this.openModal()} />
+          <Capture />
         </div>
       </div>
     );

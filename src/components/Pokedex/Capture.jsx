@@ -1,9 +1,11 @@
 import React from 'react';
+import Modal from 'react-modal';
+import './Capture.css';
 
 export default class Capture extends React.Component {
   constructor(props) {
     super(props);
-
+    this.userName = '';
     this.state = {
       modalIsOpen: false,
     };
@@ -20,18 +22,32 @@ export default class Capture extends React.Component {
     this.setState({ modalIsOpen: false });
   }
 
+  /* localStorage.setItem('blablabla', 'blabla');
+  this.state = {
+    this.userNome = localStorage.getItem('username')
+  }
+  {this.userNome} */
+
   render() {
     const { modalIsOpen } = this.state;
     return (
       <div>
         <button className="btnEasterEgg" onClick={this.openModal} type="button" />
-        <div
+        <Modal
           isOpen={modalIsOpen}
           onRequestClose={this.closeModal}
-          contentLabel="Example Modal"
+          contentLabel=""
         >
-          <h1>Coucou</h1>
-        </div>
+          <h1>
+            Hello
+            {' '}
+            {this.userName}
+            !
+            Bravo ! Tu as capturé
+            {' '}
+            {' '}
+          </h1>
+        </Modal>
       </div>
     );
   }
