@@ -36,10 +36,44 @@ class Character {
 
   go(direction) {}
 
-  static randomDirection = () => Math.floor(Math.random() * 4);
+  static randomDirection = () => {
+    const dirs = ['up', 'down', 'right', 'left'];
+    return dirs[Math.floor(Math.random() * 4)];
+  }
 }
 
 class Pokemon extends Character {
+  constructor(id, name, x, y, playground) {
+    super(name, x, y, playground);
+    this.id = id;
+  }
 
+  run() {
+    if (!this.playground.x) { this.getPlaygroundSize(); }
 
+    if (!this.direction) { this.direction = this.randomDirection(); }
+
+    if (this.ableToMove(this.direction, 1)) {
+      if (this.direction === 'up' || 'down') {
+        if (this.direction === 'up') {
+          this.y -= 1;
+        } else {
+          this.y += 1;
+        }
+      }
+      if (this.direction === 'right' || 'left') {
+        if (this.direction === 'right') {
+          this.x += 1;
+        } else {
+          this.x -= 1;
+        }
+      }
+    } else {
+      this.direction = this.randomDirection();
+    }
+  }
+
+  catched() {
+    this.wasCatched = true;
+  }
 }
