@@ -1,4 +1,4 @@
-class Characters {
+class Character {
   constructor(name, y, x, playground) {
     this.name = name;
     this.x = x;
@@ -37,4 +37,9 @@ class Characters {
   go(direction) {}
 
   static randomDirection = () => Math.floor(Math.random() * 4);
+}
+
+class Pokemon extends Character {
+
+
 }
