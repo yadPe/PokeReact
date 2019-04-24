@@ -3,10 +3,10 @@ class Characters {
     this.name = name;
     this.x = x;
     this.y = y;
-    this.playground = playground;
+    this.playground = { matrix: playground };
   }
 
-  ableToMove(direction, step) {
+  static ableToMove(direction, step) {
     const newPos = { x: this.x, y: this.y };
     switch (direction) {
       case 'up':
@@ -25,7 +25,16 @@ class Characters {
         return undefined;
     }
     return (
-      !this.playground[newPos.y][newPos.x].includes(-1)
+      !this.playground.matrix[newPos.y][newPos.x].includes(-1)
     );
   }
+
+  static getPlaygroundSize() {
+    this.playground.width = this.playground.matrix[0].length;
+    this.playground.height = this.playground.matrix.length;
+  }
+
+  go(direction) {}
+
+  static randomDirection = () => Math.floor(Math.random() * 4);
 }
