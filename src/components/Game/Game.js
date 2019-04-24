@@ -12,9 +12,26 @@ class Game extends Component {
     };
   }
 
+  componentDidMount() {
+
+  }
+
+  createGameInstances = (num) => {
+    const instances = [];
+    for (let i = 0; i < num; i++) {
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition}/></div>)
+    }
+    return instances
+  }
+
+  getPlayersPosition = (data) => {
+    console.log(this.data)
+  }
+
+
   render() {
     return (
-      <div className="Background" style={{display: 'block' }}>
+      <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
           <NavLink to="/menu">
@@ -35,8 +52,8 @@ class Game extends Component {
           </NavLink>
         </div>
 
-        <div className="GameContainer">
-          <Map />
+        <div className='gameContainer'>
+          {this.createGameInstances(this.props.players || 1)}
         </div>
 
       </div>
