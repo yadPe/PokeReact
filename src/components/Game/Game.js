@@ -14,10 +14,10 @@ class Game extends Component {
 
   render() {
     return (
-      <div className="Background" style={{display: 'block' }}>
+      <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-          <NavLink to="/menu">
+          <NavLink to="/profil">
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faUser} />
             </button>

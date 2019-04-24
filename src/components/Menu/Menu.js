@@ -9,7 +9,7 @@ const Menu = () => (
   <div className="Background">
 
     <div className="LeftMenu">
-      <NavLink to="/play">
+      <NavLink to="/profil">
         <button type="button" className="RoundBtn">
           <FontAwesomeIcon icon={faUser} />
         </button>
@@ -32,9 +32,6 @@ const Menu = () => (
     </NavLink>
     <NavLink to="/pokedex">
       <button type="button" className="Button"> Pokedex </button>
-    </NavLink>
-    <NavLink to="/creation">
-      <button type="button" className="Button"> creationProfile </button>
     </NavLink>
   </div>
 );

@@ -5,6 +5,7 @@ import Trainer from './Trainer';
 import '../../App.css';
 import Recognition from './Recognition';
 
+
 class CreationProfile extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +30,6 @@ class CreationProfile extends Component {
         step: 3,
       });
     }
-
     if (input.type === 'trainerSubmit') {
       this.setState({
         profil: { ...profil, trainer: [input.value] },
@@ -51,7 +51,7 @@ class CreationProfile extends Component {
     const { step, profil, name } = this.state;
     switch (step) {
       case 1:
-        return <Recognition updateProfil={profil.name} sendInput={this.saveInputs} firstInput={this.firstInput} />;
+        return <Recognition sendInput={this.saveInputs} />;
       case 2:
         return <UserName name={name} sendInput={this.saveInputs} />;
       case 3:

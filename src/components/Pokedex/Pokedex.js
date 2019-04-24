@@ -42,7 +42,7 @@ class Pokedex extends Component {
       <div className="Background">
 
         <div className="LeftMenu">
-          <NavLink to="/menu">
+          <NavLink to="/profil">
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faUser} />
             </button>

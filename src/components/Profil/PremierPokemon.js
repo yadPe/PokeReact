@@ -2,6 +2,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import '../../App.css';
+import Pikachu from '../../images/Pikachu.png';
+import Bulbizarre from '../../images/Bulbizarre.png';
+import Salameche from '../../images/Salameche.png';
+import Carapuce from '../../images/Carapuce.png';
 
 
 class PremierPokemon extends Component {
@@ -26,10 +30,10 @@ class PremierPokemon extends Component {
         <br />
         <h2>Choose your Pokemon</h2>
         <div>
-          <img className="pokemon RoundBtn FirstPokemonButton" id="Pikachu" src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/025.png" alt="Pikachu" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="Bulbizarre" src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png" alt="Bulbizarre" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="Salamèche" src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/004.png" alt="Salamèche" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="Carapuce" src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/007.png" alt="Carapuce" type="button" onClick={this.handleChange} />
+          <img className="pokemon RoundBtn FirstPokemonButton" id="Pikachu" src={Pikachu} alt="Pikachu" type="button" onClick={this.handleChange} />
+          <img className="pokemon RoundBtn FirstPokemonButton" id="Bulbizarre" src={Bulbizarre} alt="Bulbizarre" type="button" onClick={this.handleChange} />
+          <img className="pokemon RoundBtn FirstPokemonButton" id="Salamèche" src={Salameche} alt="Salamèche" type="button" onClick={this.handleChange} />
+          <img className="pokemon RoundBtn FirstPokemonButton" id="Carapuce" src={Carapuce} alt="Carapuce" type="button" onClick={this.handleChange} />
         </div>
       </div>
     );
