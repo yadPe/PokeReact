@@ -83,15 +83,10 @@ class Map extends Component {
     if (this.debugMode) this.loopCounter += 1;
     if (this.pokemon1) {
       this.pokemon1.run();
-      // console.log(this.pokemon1);
-      // console.log(this.pokemon1.x, this.pokemon1.y);
-      // console.log(`perso : x=${this.state.viewX + 6} y=${this.state.viewY + 6}`);
 
-      if ((this.pokemon1.x < this.state.viewX && this.pokemon1.x < this.state.viewX + 13) && (this.pokemon1.y >= this.state.viewY && this.pokemon1.y < this.state.viewY + 13)) {
-        console.log(this.state.viewX - this.pokemon1.x, this.pokemon1.y - this.state.viewY);
+
+      if ((this.pokemon1.x < this.state.viewX - 1 && this.pokemon1.x < this.state.viewX + 12) && (this.pokemon1.y >= this.state.viewY && this.pokemon1.y < this.state.viewY + this.state.viewHeight - 1)) {
         this.state.view[this.pokemon1.y - this.state.viewY][this.state.viewX - this.pokemon1.x].push(1174);
-
-        // console.log('pont visible');
       }
     }
 
