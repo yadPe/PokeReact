@@ -29,6 +29,25 @@
   cursor: pointer;
 }
 
+.pokedexbuttons:hover {
+  background: radial-gradient(
+      circle farthest-corner at 40% 25%,
+      rgb(233, 241, 218) 9%,
+      rgb(184, 237, 124) 20%,
+      rgb(64, 165, 106) 62%,
+      rgb(43, 196, 145) 100%
+  );
+}
+.pokedexbuttons:active {
+  background: radial-gradient(
+      circle farthest-corner at 40% 25%,
+      rgb(229, 255, 181) 9%,
+      rgb(204, 237, 124) 20%,
+      rgb(103, 165, 64) 62%,
+      rgb(66, 204, 40) 100%
+  );
+}
+
 .Buttons {
   display: flex;
   font-family: 'Orbitron', sans-serif;

@@ -15,8 +15,11 @@ class Pokedex extends Component {
     this.state = {
       pokemon: {},
       pokemonid: 1,
+      modalIsOpen: false,
     };
     this.handleOnClick = this.handleOnClick.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   componentWillMount() {
@@ -33,6 +36,14 @@ class Pokedex extends Component {
       })
       // eslint-disable-next-line no-console
       .catch(err => console.log(err));
+  }
+
+  openModal() {
+    this.setState({ modalIsOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ modalIsOpen: false });
   }
 
   handleOnClick(id) {
@@ -67,6 +78,7 @@ class Pokedex extends Component {
 
   render() {
     const { pokemon } = this.state;
+    const { modalIsOpen } = this.state;
     return (
       <div className="Background">
 
@@ -98,6 +110,10 @@ class Pokedex extends Component {
           <DividerButton />
           <h5>Next Pokemon</h5>
           <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
+        </div>
+
+        <div>
+          <button type="button" className="Button" onClick={() => this.openModal()} />
         </div>
       </div>
     );
