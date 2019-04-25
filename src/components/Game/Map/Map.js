@@ -19,6 +19,7 @@ class Map extends Component {
       viewX: 11,
       viewY: 17,
       winner: 'none',
+      characterDirection: 'CharacterDown0',
     };
 
     this.keys = {
@@ -144,7 +145,7 @@ class Map extends Component {
   }
 
   checkKeyboard = () => {
-    const step = 1;
+    let step = 1;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       if (Object.values(this.keys)[i] === this.asyncKeys[i]) {
         if (this.asyncKeys[i] === 38) {
@@ -163,7 +164,11 @@ class Map extends Component {
           this.moveTo('right', step);
           break;
         }
-      
+        if (this.asyncKeys[i] === null) {
+          step = 0;
+          this.moveTo('stay', step);
+          break;
+        }
       }
     }
   }
@@ -174,18 +179,23 @@ class Map extends Component {
     const {
       map, view, viewWidth, viewHeight,
     } = this.state;
-    let { viewY, viewX } = this.state;
+    let { viewY, viewX, characterDirection } = this.state;
+
+
     switch (direction) {
       case 'up':
         if (!view[Math.floor(view.length / 2 - step)][Math.floor(view.length / 2)]
           .includes(-1)) {
           viewY -= step;
+          characterDirection = 'CharacterUp1';
         }
         break;
 
       case 'down':
-        if (!view[Math.floor(view.length / 2 + step)][Math.floor(view.length / 2)].includes(-1)) {
+        if (!view[Math.floor(view.length / 2 + step)][Math.floor(view.length / 2)]
+          .includes(-1)) {
           viewY += step;
+          characterDirection = 'CharacterDown1';
         }
         break;
 
@@ -194,6 +204,7 @@ class Map extends Component {
           .includes(-1)) {
           viewX -= step;
           this.left += 5;
+          characterDirection = 'CharacterLeft1';
         }
         break;
 
@@ -202,24 +213,20 @@ class Map extends Component {
           .includes(-1)) {
           viewX += step;
           this.left -= 5;
+          characterDirection = 'CharacterRight1';
         }
         break;
 
       default:
         return;
     }
-    this.setState({
-      viewY,
-      viewX,
-    },
-    () => {
+    this.setState({ viewY, viewX, characterDirection }, () => {
       this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
       // this.clean();
       this.lastScroll = performance.now();
       this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 });
     });
   }
-
 
   keyPressed = (e) => {
     const keys = e.keyCode;
@@ -228,7 +235,6 @@ class Map extends Component {
     for (let i = 0; i < size; i += 1) {
       if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
-
         break;
       }
     }
@@ -314,6 +320,7 @@ class Map extends Component {
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
         <Player />
         <Capture winner={winner} />
+        <Player direction={this.state.characterDirection} />
       </div>
     );
   }
