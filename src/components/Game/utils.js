@@ -25,3 +25,18 @@ export const ableToMove = (pos, direction, step, playground) => {
 
   return !playground[newPos.y][newPos.x].includes(-1);
 };
+
+const convertTo2D = (arr) => {
+    const output = [];
+    for(let i = 0; i < arr.length; i += 1){
+        const row = [];
+        for (let j = 0; j < arr[i].length; j += 1){
+            if (arr[i][j].includes(-1))
+                row.push(1)
+            else 
+                row.push(0)
+        }
+        output.push(row);
+    }
+    return output;
+}

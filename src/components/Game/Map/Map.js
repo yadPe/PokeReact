@@ -228,34 +228,37 @@ class Map extends Component {
     return subMatrix;
   }
 
+  addNewPokemon = (amount) => {
+    const { map } = this.state;
+    let { pokemons } = this.state;
+    for (let i = 0; i< amount; i += 1)
+      pokemons.push(new Pokemon(1174, 'greuf', 16, 20, map));
+    this.setState({pokemons});
+  }
+
   run = () => {
     if (!this.loaded) return;
     const {
-      map, viewX, viewY, viewWidth, viewHeight, view
+      viewX, viewY, viewWidth, viewHeight, map
     } = this.state;
-    let { pokemons, visiblePokemons } = this.state;
+    let { pokemons, visiblePokemons, winner, view } = this.state;
     if (this.debugMode) this.loopCounter += 1;
-    if (pokemons.length < 1)
-      pokemons.push(new Pokemon(55, 'greuf', 16, 20, map));
-
-    let { winner } = this.state;
-
+    if (pokemons.length < 1) this.addNewPokemon(1);
 
     if (pokemons.length > 0 && this.loaded) {
       pokemons.map(poke => poke.run())
-
       visiblePokemons = pokemons.filter(poke => poke.y > viewY && poke.y < viewY + viewHeight && poke.x > viewX && poke.x < viewX + viewWidth);
 
-      const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+      view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
 
       visiblePokemons.map(poke => {
-        hop[poke.y - viewY][poke.x - viewX].push(1174);
-        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(1174)) {
+        view[poke.y - viewY][poke.x - viewX].push(poke.id);
+        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
           winner = 'block';
           clearInterval(this.running);
         }
       })
-      this.setState({ view: hop, winner });
+      this.setState({ view: [...view], winner, visiblePokemons });
     }
 
     const { controller } = this.props;

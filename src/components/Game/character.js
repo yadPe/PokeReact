@@ -23,12 +23,17 @@ class Pokemon extends Character {
   constructor(id, name, x, y, playground) {
     super(name, x, y, playground);
     this.id = id;
+    this.speed = 1;
   }
 
   run() {
     if (!this.playground.width) { this.getPlaygroundSize(); return; }
 
     if (!this.direction) { this.direction = this.randomDirection(); return; }
+
+    if (!this.lastMove) { this.lastMove = this.lastMove = performance.now(); return; }
+
+    if ( performance.now() - this.lastMove < 1000 / this.speed) return;
 
     if (ableToMove({ x: this.x, y: this.y }, this.direction, 1, this.playground.matrix)) {
       if ((this.direction === 'up') || (this.direction === 'down')) {
@@ -47,6 +52,7 @@ class Pokemon extends Character {
     } else {
       this.direction = this.randomDirection();
     }
+    this.lastMove = performance.now();
   }
 
   catched() {
