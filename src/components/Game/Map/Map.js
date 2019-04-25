@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
-import Character from './Tiles/Character';
+import Player from './Tiles/Character';
+import { ableToMove } from '../utils';
+import Capture from '../../Pokedex/Capture';
+import { Pokemon } from '../../Game/character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -16,13 +19,8 @@ class Map extends Component {
       viewHeight: 13,
       viewX: 11,
       viewY: 17,
-    };
-
-    this.keys = {
-      keyUp: 38,
-      keyDown: 40,
-      keyLeft: 37,
-      keyRight: 39,
+      winner: 'none',
+      characterDirection: 'CharacterDown0',
     };
 
     this.theme = {
@@ -54,37 +52,63 @@ class Map extends Component {
   }
 
   init = async () => {
+    this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
     await this.loadTiles(reqTiles.keys());
-    for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
-      this.asyncKeys.push(false);
-    }
-    document.body.addEventListener('keydown', this.keyPressed);
-    document.body.addEventListener('keyup', this.keyReleased);
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
   }
 
   end = () => {
-    document.body.removeEventListener('keydown', this.keyPressed);
-    document.body.removeEventListener('keyup', this.keyReleased);
     clearInterval(this.running);
     this.asyncKeys = null;
     this.running = null;
     this.renderCounter = null;
     this.loaded = null;
+    this.config = null;
   }
 
-  run = () => {
-    if (this.debugMode) this.loopCounter += 1;
-
-
-    this.checkKeyboard();
-    this.checkGamepads(this.props.controller);
-
+  configInstance = () => {
+    this.config = {};
+    this.gamepad = this.props.controller;
   }
 
-  checkGamepads = (gamepadId) => {
+  loadMap = async (mapUri) => {
+    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
+      map: [...resJson],
+    }));
+    this.loaded = true;
+
+    // Will move //
+    this.pokemon1 = new Pokemon(55, 'greuf', 16, 20, this.state.map);
+
+    const {
+      viewY, viewX, viewWidth, viewHeight, map,
+    } = this.state;
+    this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+  };
+
+  loadTiles = (tilesKeys) => {
+    const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
+    document.head.childNodes.forEach(node => {
+      if (node.id === 'tileSet') {
+        node.remove();
+        console.log('Cleaned old tilesSet');
+      }
+    });
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.id = 'tileSet';
+    let css = '';
+    for (let i = 0; i < tiles.length; i += 1) {
+      const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
+      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
+    }
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+  }
+
+  checkGamepad = (gamepadId) => {
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     if (!this.gamepads[gamepadId]) {
       return;
@@ -101,19 +125,12 @@ class Map extends Component {
     } else if (gp.buttons[15].pressed) {
       this.moveTo('right', step)
     } else if (gp.axes[0] === 1) {
-
       this.moveTo('right', step)
-    }
-    else if (gp.axes[0] === -1) {
-
+    } else if (gp.axes[0] === -1) {
       this.moveTo('left', step)
-    }
-    else if (gp.axes[1] === 1) {
-
+    } else if (gp.axes[1] === 1) {
       this.moveTo('down', step)
-    }
-    else if (gp.axes[1] === -1) {
-
+    } else if (gp.axes[1] === -1) {
       this.moveTo('up', step)
     }
 
@@ -121,23 +138,27 @@ class Map extends Component {
 
   checkKeyboard = () => {
     const step = 1;
-    for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
-      if (Object.values(this.keys)[i] === this.asyncKeys[i]) {
-
-        if (this.asyncKeys[i] === 38) {
+    for (let i = 0; i < this.props.controls.length; i += 1) {
+      if (this.props.controls[i] === this.props.asyncKeys[i]) {
+        if (this.props.asyncKeys[i] === this.props.controls[0]) {
           this.moveTo('up', step)
           break;
         }
-        if (this.asyncKeys[i] === 40) {
+        if (this.props.asyncKeys[i] === this.props.controls[1]) {
           this.moveTo('down', step)
           break;
         }
-        if (this.asyncKeys[i] === 37) {
+        if (this.props.asyncKeys[i] === this.props.controls[2]) {
           this.moveTo('left', step)
           break;
         }
-        if (this.asyncKeys[i] === 39) {
+        if (this.props.asyncKeys[i] === this.props.controls[3]) {
           this.moveTo('right', step)
+          break;
+        }
+        if (this.asyncKeys[i] === null) {
+          step = 0;
+          this.moveTo('stay', step);
           break;
         }
       }
@@ -147,35 +168,27 @@ class Map extends Component {
   moveTo = (direction, step) => {
     if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return
     const { map, view, viewWidth, viewHeight } = this.state;
-    let { viewY, viewX } = this.state;
+    let { viewY, viewX, characterDirection } = this.state;
+    if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) return
     switch (direction) {
       case 'up':
-        if (!view[Math.floor(view.length / 2 - step)][Math.floor(view.length / 2)]
-          .includes(-1)) {
-          viewY -= step;
-        }
+        viewY -= step;
+        characterDirection = 'CharacterUp1';
         break;
 
       case 'down':
-        if (!view[Math.floor(view.length / 2 + step)][Math.floor(view.length / 2)].includes(-1)) {
-          viewY += step;
-        }
+        viewY += step;
+        characterDirection = 'CharacterDown1';
         break;
 
       case 'left':
-        if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 - step)]
-          .includes(-1)) {
-          viewX -= step;
-          this.left += 5
-        }
+        viewX -= step;
+        characterDirection = 'CharacterLeft1'
         break;
 
       case 'right':
-        if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 + step)]
-          .includes(-1)) {
-          viewX += step;
-          this.left -= 5
-        }
+        viewX += step;
+        characterDirection = 'CharacterRight1'
         break;
 
       default:
@@ -184,66 +197,13 @@ class Map extends Component {
     this.setState({
       viewY,
       viewX,
+      characterDirection,
     },
       () => {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-        //this.clean();
         this.lastScroll = performance.now();
-        this.props.reportPosition({player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6})
+        this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 })
       });
-  }
-
-
-  keyPressed = (e) => {
-    const keys = e.keyCode;
-    const size = Object.keys(this.keys).length;
-
-    for (let i = 0; i < size; i += 1) {
-      if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
-        this.asyncKeys[i] = keys;
-
-        break;
-      }
-    }
-  }
-
-  keyReleased = (e) => {
-    const keys = e.keyCode;
-    const size = Object.keys(this.keys).length;
-
-    for (let i = 0; i < size; i += 1) {
-      if (Object.values(this.keys)[i] === keys && this.asyncKeys[i]) {
-        this.asyncKeys[i] = false;
-        break;
-      }
-    }
-  }
-
-  loadMap = async (mapUri) => {
-    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
-      map: [...resJson],
-    }));
-    this.loaded = true;
-    const {
-      viewY, viewX, viewWidth, viewHeight, map,
-    } = this.state;
-    this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-  };
-
-  loadTiles = (tilesKeys) => {
-    const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
-    console.log(tiles)
-   
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    let css = '';
-    for (let i = 0; i < tiles.length; i += 1) {
-      const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
-      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)))
-      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
-    }
-    style.appendChild(document.createTextNode(css));
-    document.head.appendChild(style);
   }
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
@@ -251,10 +211,43 @@ class Map extends Component {
     if (offsetY + height > matrix.length) return;
     const subMatrix = [];
     for (let i = offsetY; i < height + offsetY; i += 1) {
-      const index = subMatrix.push(matrix[i]) - 1;
+      const index = subMatrix.push(JSON.parse(JSON.stringify(matrix[i]))) - 1;
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
     this.setState({ view: [...subMatrix] });
+    return subMatrix;
+  }
+
+  run = () => {
+    const { map, viewX, viewY, viewWidth, viewHeight, view } = this.state;
+    if (this.debugMode) this.loopCounter += 1;
+
+    let { winner } = this.state;
+
+    if (this.pokemon1 && this.loaded) {
+      this.pokemon1.run();
+
+
+      if (this.pokemon1.y > this.state.viewY && this.pokemon1.y < this.state.viewY + this.state.viewHeight && this.pokemon1.x > this.state.viewX && this.pokemon1.x < this.state.viewX + this.state.viewWidth) {
+        const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        // console.log(hop)
+        hop[this.pokemon1.y - this.state.viewY][this.pokemon1.x - this.state.viewX].push(1174);
+        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(1174)) {
+          winner = 'block';
+          clearInterval(this.running);
+        }
+
+
+        window.map = this.state.map;
+
+
+        this.setState({ view: hop, winner });
+      }
+    }
+
+    this.checkKeyboard();
+    this.checkGamepad(this.props.controller);
+
   }
 
   debug = () => {
@@ -265,14 +258,16 @@ class Map extends Component {
   }
 
   render() {
-    const { view } = this.state;
+    const { view, winner } = this.state;
     return (
       <div style={this.theme}>
         {this.debugMode ? this.debug() : null}
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
-        <Character />
+        <Player />
+        <Capture winner={winner} />
+        <Player activeKeys={this.props.asyncKeys} direction={this.state.characterDirection} />
       </div>
     );
   }

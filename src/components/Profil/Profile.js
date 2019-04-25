@@ -41,15 +41,15 @@ class Profile extends Component {
     if (!profil.trainer) return '';
     switch (profil.trainer[0]) {
       case 'Red':
-        return <img className="RoundBtn FirstPokemonButton" id="Red" src={Red} alt="Red" />;
+        return <img className="Presentation" id="Red" src={Red} alt="Red" />;
       case 'Leaf':
-        return <img className="RoundBtn FirstPokemonButton" id="Leaf" src={Leaf} alt="Leaf" />;
+        return <img className="Presentation" id="Leaf" src={Leaf} alt="Leaf" />;
       case 'Ludwig':
-        return <img className="RoundBtn FirstPokemonButton" id="Ludwig" src={Ludwig} alt="Ludwig" />;
+        return <img className="Presentation" id="Ludwig" src={Ludwig} alt="Ludwig" />;
       case 'Ludvina':
-        return <img className="RoundBtn FirstPokemonButton" id="Ludvina" src={Ludvina} alt="Ludvina" />;
+        return <img className="Presentation" id="Ludvina" src={Ludvina} alt="Ludvina" />;
       default:
-        return <img className="RoundBtn FirstPokemonButton" id="Red" src={Red} alt="Red" />;
+        return <img className="Presentation" id="Red" src={Red} alt="Red" />;
     }
   }
 
@@ -79,7 +79,7 @@ class Profile extends Component {
         <div className="LeftMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faUser} />
+              <FontAwesomeIcon icon={faBars} />
             </button>
           </NavLink>
         </div>
@@ -87,24 +87,33 @@ class Profile extends Component {
         <div className="RightMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faBars} />
+              <FontAwesomeIcon icon={faUser} />
             </button>
           </NavLink>
         </div>
+
         <div>
-        Pseudo :
-          {' '}
-          {profil.name}
+          <p>
+            <span className="Yellow">
+              You're now loged in as
+            </span>
+            {' '}
+            {profil.name}
+          </p>
         </div>
         <div>
-        Trainer:
-          {' '}
-          {this.recupTrainer()}
+          <p>
+            Trainer style:
+            {' '}
+            {this.recupTrainer()}
+          </p>
         </div>
         <div>
-        Pokemon:
-          {' '}
-          {this.recupPokemon()}
+          <p>
+            First Pokemon:
+            {' '}
+            {this.recupPokemon()}
+          </p>
         </div>
       </div>
     );

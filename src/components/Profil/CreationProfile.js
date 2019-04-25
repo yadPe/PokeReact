@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+<<<<<<< HEAD
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+=======
+import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+>>>>>>> dev
 import UserName from './UserName';
 import PremierPokemon from './PremierPokemon';
 import Trainer from './Trainer';
@@ -45,7 +49,10 @@ class CreationProfile extends Component {
         profil,
       }, () => {
         localStorage.setItem(profil.name, JSON.stringify(profil));
+<<<<<<< HEAD
         localStorage.setItem('userActive', profil.name);
+=======
+>>>>>>> dev
         history.push('/menu');
       });
     }
@@ -71,7 +78,11 @@ class CreationProfile extends Component {
     return (
       <div className="Background">
 
+<<<<<<< HEAD
         <div className="RightMenu">
+=======
+        <div className="LeftMenu">
+>>>>>>> dev
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faBars} />
