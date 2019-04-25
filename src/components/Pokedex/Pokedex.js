@@ -71,6 +71,7 @@ class Pokedex extends Component {
     return (
       <div className="Background">
 
+        <Capture />
         <div className="LeftMenu">
           <NavLink to="/profil">
             <button type="button" className="RoundBtn">
@@ -99,10 +100,6 @@ class Pokedex extends Component {
           <DividerButton />
           <h5 className="nextandpreviousbuttons">Next Pokemon</h5>
           <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
-        </div>
-
-        <div>
-          <Capture />
         </div>
       </div>
     );
