@@ -78,7 +78,7 @@ class Profile extends Component {
 
         <div className="LeftMenu">
           <NavLink to="/menu">
-            <button type="button" className="RoundBtn">
+            <button className="RoundBtn" type="button">
               <FontAwesomeIcon icon={faBars} />
             </button>
           </NavLink>
@@ -87,7 +87,7 @@ class Profile extends Component {
         <div>
           <p>
             <span className="Yellow">
-              You're now logged in as
+              You‘re now logged in as
             </span>
             {' '}
             {profil.name}

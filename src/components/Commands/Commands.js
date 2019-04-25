@@ -14,7 +14,7 @@ const Commands = () => (
 
     <div className="LeftMenu">
       <NavLink to="/menu">
-        <button type="button" className="RoundBtn">
+        <button className="RoundBtn" type="button">
           <FontAwesomeIcon icon={faBars} />
         </button>
       </NavLink>
@@ -22,7 +22,7 @@ const Commands = () => (
 
     <div className="RightMenu">
       <NavLink to="/profil">
-        <button type="button" className="RoundBtn">
+        <button className="RoundBtn" type="button">
           <FontAwesomeIcon icon={faUser} />
         </button>
       </NavLink>

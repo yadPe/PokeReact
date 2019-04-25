@@ -7,7 +7,6 @@ class WinnerModal extends Component {
       width: '300px',
       height: '300px',
       margin: '10px auto',
-
     };
   }
 
@@ -27,11 +26,8 @@ class WinnerModal extends Component {
         color: 'black',
       }}
       >
-
-
         <h1>Winner !</h1>
-        <button style={{ width: '200px', height: '100px ' }}>PokeDex</button>
-
+        <button style={{ width: '200px', height: '100px ' }} type="button">PokeDex</button>
       </div>
     );
   }
