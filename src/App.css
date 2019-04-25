@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+@import url(https://fonts.googleapis.com/css?family=Ubuntu:400,700); 
 
 .Home {
   text-align: center;
@@ -8,31 +9,40 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.Flex {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.Background {
+  text-align: center;
+  background-image: linear-gradient(-45deg, #1D2C5E, #395EA9);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.Background p {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 3em;
+  font-weight: 700;
   color: white;
 }
 
-.Background {
-    text-align: center;
-    background-image: linear-gradient(-45deg, #1D2C5E, #395EA9);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-
 .Commands {
-    text-align: center;
-    font-family: 'Press Start 2P', cursive;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    width: 66vw;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  width: 66vw;
 }
 .CommandsImg {
   width: 120px;
@@ -40,39 +50,39 @@
 }
 
 .Logo {
-    width: 66vw;
-    animation-name: Logo;
-    animation-duration: 2s;
+  width: 66vw;
+  animation-name: Logo;
+  animation-duration: 2s;
 }
 @keyframes Logo {
-    0%   {width: 22vw;}
-    75%  {width: 68vw;}
-    90% {width: 66vw;}
+  0%   {width: 22vw;}
+  75%  {width: 68vw;}
+  90% {width: 66vw;}
 }
 
 .MenuLogo {
-    width: 33vw;
-    animation-name: MenuLogo;
-    animation-duration: 2s;
-    position: fixed;
-    top: 24px;
+  width: 33vw;
+  animation-name: MenuLogo;
+  animation-duration: 2s;
+  position: fixed;
+  top: 24px;
 }
 @keyframes MenuLogo {
-    0%   {width: 0vw;}
-    66% {width: 0vw;}
-    100% {width: 33vw;}
+  0%   {width: 0vw;}
+  66% {width: 0vw;}
+  100% {width: 33vw;}
 }
 .ProfileBtn {
-    width: 72px;
-    height: 72px;
-    position: fixed;
-    top: 24px;
-    left: 24px;
-    background-image: url("images/profileBtn.png");
-    background-size: cover;
-  }
+  width: 72px;
+  height: 72px;
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  background-image: url("images/profileBtn.png");
+  background-size: cover;
+}
 .ProfileBtn:hover {
-    background-image: url("images/profileBtn-hover.png");
+  background-image: url("images/profileBtn-hover.png");
 }
 
 .LeftMenu {
@@ -85,6 +95,7 @@
   top: 0px;
   left: 0px;
   padding: 24px;
+  z-index: 1000;
 }
 
 .RightMenu {
@@ -97,21 +108,23 @@
   top: 0px;
   right: 0px;
   padding: 24px;
+  z-index: 1000;
 }
 
 .MenuBtn {
-    width: 72px;
-    height: 72px;
-    margin-bottom: 24px;
-    background-image: url("images/menuBtn.png");
-    background-size: cover;
-  }
+  width: 72px;
+  height: 72px;
+  margin-bottom: 24px;
+  background-image: url("images/menuBtn.png");
+  background-size: cover;
+}
 .MenuBtn:hover {
-    background-image: url("images/menuBtn-hover.png");
+  background-image: url("images/menuBtn-hover.png");
 }
 
 .RoundBtn {
   font-family: 'Press Start 2P', cursive;
+  font-size: 1.6em;
   color: #395EA9;
   background-color: #FFCB05;
   border-radius: 50px;
@@ -120,7 +133,6 @@
   border-width: 8px;
   margin-bottom: 24px;
   box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
-  font-size: 1em;
   animation-name: LogoBtn;
   animation-duration: 2s;
   transition: 0.3s;
@@ -133,6 +145,37 @@
   transition: 0.3s;
 }
 .RoundBtn:active {
+  cursor: pointer;
+  background-color: #FFE000;
+  box-shadow: 0px 0px #1D2C5E;
+  transform: translate(-6px, 6px);
+  transition: 0.3s;
+}
+
+.ChooseBtn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.6em;
+  color: #395EA9;
+  background-color: #FFCB05;
+  border-radius: 50px;
+  border-color: #395EA9;
+  border-style: solid;
+  border-width: 8px;
+  margin: 24px;
+  padding: 24px;
+  box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
+  animation-name: LogoBtn;
+  animation-duration: 2s;
+  transition: 0.3s;
+  width: 72px;
+  height: 72px;
+}
+.ChooseBtn:hover {
+  cursor: pointer;
+  background-color: #FFE000;
+  transition: 0.3s;
+}
+.ChooseBtn:active {
   cursor: pointer;
   background-color: #FFE000;
   box-shadow: 0px 0px #1D2C5E;
@@ -160,21 +203,22 @@
     left: 0px;
     top: 0px;
     box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
-    }
+  }
   50% {
     left: -6px;
     top: 6px;
     box-shadow: 0px 0px #1D2C5E, inset 0px 0px #C7A008;
-    }
+  }
   100% {
     left: 0px;
     top: 0px;
     box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
-    }
   }
+}
 
 .Button {
   font-family: 'Press Start 2P', cursive;
+  font-size: 1.2em;
   color: #395EA9;
   background-color: #FFCB05;
   border-radius: 50px;
@@ -184,7 +228,6 @@
   padding: 12px;
   margin: 24px;
   box-shadow: -6px 6px #1D2C5E, inset -6px 6px #C7A008;
-  font-size: 0.8em;
   width: 33vw;
   min-width: 222px;
   animation-name: LogoBtn;
@@ -209,6 +252,28 @@
   transition: 0.3s;
 }
 
+.Input{
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.2em;
+  color: #1D2C5E;
+  background-color: #FFF;
+  border-radius: 50px;
+  border-color: #395EA9;
+  border-style: solid;
+  border-width: 8px;
+  padding: 12px;
+  margin: 24px;
+  box-shadow: -6px 6px #1D2C5E, inset -6px 6px #D3D3D3;
+  width: 33vw;
+  min-width: 222px;
+  animation-name: LogoBtn;
+  animation-duration: 2s;
+  transition: 0.3s;
+}
+::placeholder {
+  color: #D3D3D3;
+}
+
 .App {
   text-align: center;
 }
@@ -218,33 +283,10 @@
   padding: 30px;
 }
 
-.Input{
-  font-family: 'Press Start 2P', cursive;
-  color: #395EA9;
-  background-color: white;
-  border-radius: 50px;
-  border-color: #395EA9;
-  border-style: solid;
-  border-width: 8px;
-  padding: 12px;
-  margin: 24px;
-  box-shadow: -6px 6px #1D2C5E, inset -6px 6px white;
-  font-size: 0.8em;
-  width: 33vw;
-  min-width: 222px;   
-}
-
 .ButtonCenter{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-}
-
-h1,h2{
-  font-family: 'Press Start 2P', cursive;
-  color: #FFCB05;
-  font-size: 1.3em;
-
 }

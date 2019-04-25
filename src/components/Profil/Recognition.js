@@ -38,21 +38,16 @@ class Recognition extends Component {
 
   render() {
     return (
-      <div className="Background">
-        <h1>
-          We would not have seen each other somewhere ?
-        </h1>
-        <h2>
-          Tell me your beautiful name !
-        </h2>
-        <div className="ButtonCenter">
-          <input className="Input" id="name" type="text" onChange={this.handleChange} />
-          <button id="submitBtn" type="button" className="Button" onClick={this.handleSubmit}>Send</button>
-        </div>
+      <div className="Flex">
+        <p>
+          Hi there!
+          <br />
+          What's your trainer name?
+        </p>
+        <input className="Input" id="name" type="text" placeholder="Your name" onChange={this.handleChange} />
+        <button className="Button" id="submitBtn" type="button" onClick={this.handleSubmit}>Go !</button>
       </div>
     );
   }
 }
-
-
 export default withRouter(Recognition);

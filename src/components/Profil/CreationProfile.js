@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import UserName from './UserName';
 import PremierPokemon from './PremierPokemon';
 import Trainer from './Trainer';
@@ -42,7 +45,8 @@ class CreationProfile extends Component {
         profil,
       }, () => {
         localStorage.setItem(profil.name, JSON.stringify(profil));
-        history.push('/play');
+        localStorage.setItem('userActive', profil.name);
+        history.push('/menu');
       });
     }
   }
@@ -66,6 +70,15 @@ class CreationProfile extends Component {
   render() {
     return (
       <div className="Background">
+
+        <div className="RightMenu">
+          <NavLink to="/menu">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+          </NavLink>
+        </div>
+
         {this.displayStep()}
       </div>
     );

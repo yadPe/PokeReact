@@ -57,18 +57,19 @@ class Profile extends Component {
     const { profil } = this.state;
     if (!profil.pokemon) return '';
     switch (profil.pokemon[0]) {
-      case 'Pikachu':
-        return <img className="pokemon RoundBtn FirstPokemonButton" id="Pikachu" src={Pikachu} alt="Pikachu" />;
-      case 'Bulbizarre':
-        return <img className="pokemon RoundBtn FirstPokemonButton" id="Bulbizarre" src={Bulbizarre} alt="Bulbizarre" />;
-      case 'Salameche':
-        return <img className="pokemon RoundBtn FirstPokemonButton" id="Salamèche" src={Salameche} alt="Salamèche" />;
-      case 'Carapuce':
-        return <img className="pokemon RoundBtn FirstPokemonButton" id="Carapuce" src={Carapuce} alt="Carapuce" />;
+      case '25':
+        return <img className="pokemon RoundBtn FirstPokemonButton" id="25" src={Pikachu} alt="Pikachu" />;
+      case '1':
+        return <img className="pokemon RoundBtn FirstPokemonButton" id="1" src={Bulbizarre} alt="Bulbizarre" />;
+      case '4':
+        return <img className="pokemon RoundBtn FirstPokemonButton" id="4" src={Salameche} alt="Salamèche" />;
+      case '7':
+        return <img className="pokemon RoundBtn FirstPokemonButton" id="7" src={Carapuce} alt="Carapuce" />;
       default:
-        return <img className="pokemon RoundBtn FirstPokemonButton" id="Pikachu" src={Pikachu} alt="Pikachu" />;
+        return <img className="pokemon RoundBtn FirstPokemonButton" id="25" src={Pikachu} alt="Pikachu" />;
     }
   }
+
 
   render() {
     const { profil } = this.state;
