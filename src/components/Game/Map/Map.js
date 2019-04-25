@@ -23,6 +23,7 @@ class Map extends Component {
       winner: 'none',
       characterDirection: 'CharacterDown0',
       pokemons: [],
+      visiblePokemons: [],
     };
 
     this.theme = {
@@ -70,8 +71,11 @@ class Map extends Component {
   }
 
   configInstance = () => {
+    this.config = {};
     const { controller } = this.props;
     this.gamepad = controller;
+    if (controller === 0)
+      this.config.host = true;
   }
 
   loadMap = async (mapUri) => {
@@ -86,7 +90,7 @@ class Map extends Component {
     const {
       viewY, viewX, viewWidth, viewHeight, map,
     } = this.state;
-    this.pokemon1 = new Pokemon(55, 'greuf', 16, 20, map);
+
     this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
   };
 
@@ -203,12 +207,12 @@ class Map extends Component {
       viewX,
       characterDirection,
     },
-    () => {
-      this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-      this.lastScroll = performance.now();
-      const { controller, reportPosition } = this.props;
-      reportPosition({ player: controller, x: viewX + 6, y: viewY + 6 });
-    });
+      () => {
+        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        this.lastScroll = performance.now();
+        const { controller, reportPosition } = this.props;
+        reportPosition({ player: controller, x: viewX + 6, y: viewY + 6 });
+      });
   }
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
@@ -225,28 +229,35 @@ class Map extends Component {
   }
 
   run = () => {
+    if (!this.loaded) return;
     const {
-      map, viewX, viewY, viewWidth, viewHeight, view,
+      map, viewX, viewY, viewWidth, viewHeight, view
     } = this.state;
+    let { pokemons, visiblePokemons } = this.state;
     if (this.debugMode) this.loopCounter += 1;
+    if (pokemons.length < 1)
+      pokemons.push(new Pokemon(55, 'greuf', 16, 20, map));
 
     let { winner } = this.state;
 
-    if (this.pokemon1 && this.loaded) {
-      this.pokemon1.run();
 
+    if (pokemons.length > 0 && this.loaded) {
+      pokemons.map(poke => poke.run())
 
-      if (this.pokemon1.y > viewY && this.pokemon1.y < viewY + viewHeight && this.pokemon1.x > viewX && this.pokemon1.x < viewX + viewWidth) {
-        const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-        // console.log(hop)
-        hop[this.pokemon1.y - viewY][this.pokemon1.x - viewX].push(1174);
+      visiblePokemons = pokemons.filter(poke => poke.y > viewY && poke.y < viewY + viewHeight && poke.x > viewX && poke.x < viewX + viewWidth);
+
+      const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+
+      visiblePokemons.map(poke => {
+        hop[poke.y - viewY][poke.x - viewX].push(1174);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(1174)) {
           winner = 'block';
           clearInterval(this.running);
         }
-        this.setState({ view: hop, winner });
-      }
+      })
+      this.setState({ view: hop, winner });
     }
+
     const { controller } = this.props;
     this.checkKeyboard();
     this.checkGamepad(controller);
