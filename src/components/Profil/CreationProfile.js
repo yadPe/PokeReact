@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import UserName from './UserName';
 import PremierPokemon from './PremierPokemon';
 import Trainer from './Trainer';
@@ -45,6 +45,7 @@ class CreationProfile extends Component {
         profil,
       }, () => {
         localStorage.setItem(profil.name, JSON.stringify(profil));
+        localStorage.setItem('userActive', profil.name);
         history.push('/menu');
       });
     }
@@ -69,7 +70,6 @@ class CreationProfile extends Component {
   render() {
     return (
       <div className="Background">
-
         <div className="LeftMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">

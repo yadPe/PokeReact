@@ -12,7 +12,7 @@ class Game extends Component {
     };
 
     this.asyncKeys = [];
-    this.controls = [ 38, 40, 37, 39, 87, 83, 65, 68]
+    this.controls = [38, 40, 37, 39, 87, 83, 65, 68];
   }
 
   componentDidMount() {
@@ -35,7 +35,7 @@ class Game extends Component {
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
-        this.setState({asyncKeys: this.asyncKeys})
+        this.setState({ asyncKeys: this.asyncKeys });
         break;
       }
     }
@@ -48,7 +48,7 @@ class Game extends Component {
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && this.asyncKeys[i]) {
         this.asyncKeys[i] = false;
-        this.setState({asyncKeys: this.asyncKeys})
+        this.setState({ asyncKeys: this.asyncKeys });
         break;
       }
     }
@@ -57,13 +57,13 @@ class Game extends Component {
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i++) {
-      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4*i, this.controls.length*(0.5*(i+1)))} asyncKeys={this.asyncKeys.slice(4*i, this.controls.length*(0.5*(i+1)))} /></div>)
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
-    return instances
+    return instances;
   }
 
   getPlayersPosition = (data) => {
-    console.log(data)
+    console.log(data);
   }
 
 
@@ -90,7 +90,7 @@ class Game extends Component {
           </NavLink>
         </div>
 
-        <div className='gameContainer'>
+        <div className="gameContainer">
           {this.createGameInstances(this.props.players || 1)}
         </div>
 
