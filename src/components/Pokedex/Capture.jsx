@@ -9,12 +9,9 @@ export default class Capture extends React.Component {
     this.pokemon = [];
   }
 
-
   getLocalStorage = () => {
-    this.setState({
-      userName: localStorage.getItem('userActive'),
-      pokemon: localStorage.getItem(this.userName).pokemon,
-    });
+    this.userName = localStorage.getItem('userActive');
+    this.pokemon = JSON.parse(localStorage.getItem(this.userName)).pokemon;
   }
 
 
