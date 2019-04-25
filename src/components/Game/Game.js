@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Game.css';
@@ -9,15 +10,15 @@ class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playersPos: [],
     };
 
     this.asyncKeys = [];
-    this.controls = [ 38, 40, 37, 39, 87, 83, 65, 68]
+    this.controls = [38, 40, 37, 39, 87, 83, 65, 68];
   }
 
   componentDidMount() {
-    for (let i = 0; i < Object.keys(this.controls[0]).length * (this.props.players || 1); i += 1) {
+    const { players } = this.props;
+    for (let i = 0; i < Object.keys(this.controls[0]).length * (players || 1); i += 1) {
       this.asyncKeys.push(false);
     }
     document.body.addEventListener('keydown', this.keyPressed);
@@ -36,7 +37,7 @@ class Game extends Component {
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
-        this.setState({asyncKeys: this.asyncKeys})
+        this.setState({ asyncKeys: this.asyncKeys });
         break;
       }
     }
@@ -49,7 +50,7 @@ class Game extends Component {
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && this.asyncKeys[i]) {
         this.asyncKeys[i] = false;
-        this.setState({asyncKeys: this.asyncKeys})
+        this.setState({ asyncKeys: this.asyncKeys });
         break;
       }
     }
@@ -58,9 +59,9 @@ class Game extends Component {
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i++) {
-      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4*i, this.controls.length*(0.5*(i+1)))} asyncKeys={this.asyncKeys.slice(4*i, this.controls.length*(0.5*(i+1)))} /></div>)
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
-    return instances
+    return instances;
   }
 
   getPlayersPosition = (data) => {
@@ -72,8 +73,8 @@ class Game extends Component {
     this.setState({playersPos})
   }
 
-
   render() {
+    const { players } = this.props;
     return (
       <div className="Background" style={{ display: 'block' }}>
 
@@ -96,8 +97,8 @@ class Game extends Component {
           </NavLink>
         </div>
 
-        <div className='gameContainer'>
-          {this.createGameInstances(this.props.players || 1)}
+        <div className="gameContainer">
+          {this.createGameInstances(players || 1)}
         </div>
 
       </div>
