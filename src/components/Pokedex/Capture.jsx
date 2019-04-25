@@ -34,7 +34,6 @@ export default class Capture extends React.Component {
   }
 
   render() {
-
     const { modalisopen } = this.state;
     this.getLocalStorage();
 
@@ -72,7 +71,7 @@ export default class Capture extends React.Component {
                 {' '}
                 {this.userName}
                 !
-                Well done! You captured
+                Well done! You captured the pokemon number
                 {' '}
                 {this.pokemon}
                 !
