@@ -36,7 +36,7 @@ render() {
       <p>Please create your profile</p>
       {erreur ? (
         <p>
-Your name can't be
+Your name can‘t be
           {' '}
           {erreur}
         </p>
