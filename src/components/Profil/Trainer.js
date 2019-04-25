@@ -17,7 +17,6 @@ class Trainer extends Component {
   }
 
   render() {
-    const { name } = this.props;
     return (
       <div className="Flex">
         <p>

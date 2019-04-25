@@ -32,17 +32,10 @@ class PremierPokemon extends Component {
           Take a Pokemon whith you!
         </p>
         <div>
-<<<<<<< HEAD
-          <img className="pokemon RoundBtn FirstPokemonButton" id="25" src={Pikachu} alt="Pikachu" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="1" src={Bulbizarre} alt="Bulbizarre" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="4" src={Salameche} alt="Salamèche" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="7" src={Carapuce} alt="Carapuce" type="button" onClick={this.handleChange} />
-=======
           <img className="ChooseBtn" id="Pikachu" src={Pikachu} alt="Pikachu" type="button" onClick={this.handleChange} />
           <img className="ChooseBtn" id="Bulbizarre" src={Bulbizarre} alt="Bulbizarre" type="button" onClick={this.handleChange} />
           <img className="ChooseBtn" id="Salamèche" src={Salameche} alt="Salamèche" type="button" onClick={this.handleChange} />
           <img className="ChooseBtn" id="Carapuce" src={Carapuce} alt="Carapuce" type="button" onClick={this.handleChange} />
->>>>>>> dev
         </div>
       </div>
     );
