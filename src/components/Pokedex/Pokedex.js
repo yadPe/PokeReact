@@ -71,17 +71,17 @@ class Pokedex extends Component {
       <div className="Background">
 
         <div className="LeftMenu">
-          <NavLink to="/profil">
+          <NavLink to="/menu">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faUser} />
+              <FontAwesomeIcon icon={faBars} />
             </button>
           </NavLink>
         </div>
 
         <div className="RightMenu">
-          <NavLink to="/menu">
+          <NavLink to="/profil">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faBars} />
+              <FontAwesomeIcon icon={faUser} />
             </button>
           </NavLink>
         </div>

@@ -19,20 +19,15 @@ class Trainer extends Component {
   render() {
     const { name } = this.props;
     return (
-      <div>
-        <h1>
-          What trainer would you like to be
-          {' '}
-          {`${name}`}
-          ?
-        </h1>
-        <br />
-        <h2>Choose your Trainer</h2>
+      <div className="Flex">
+        <p>
+          Choose your trainer style!
+        </p>
         <div>
-          <img className="RoundBtn FirstPokemonButton" id="Red" src={Red} alt="Red" type="button" onClick={this.handleChange} />
-          <img className="RoundBtn FirstPokemonButton" id="Leaf" src={Leaf} alt="Leaf" type="button" onClick={this.handleChange} />
-          <img className="RoundBtn FirstPokemonButton" id="Ludwig" src={Ludwig} alt="Ludwig" type="button" onClick={this.handleChange} />
-          <img className="RoundBtn FirstPokemonButton" id="Ludvina" src={Ludvina} alt="Ludvina" type="button" onClick={this.handleChange} />
+          <img className="ChooseBtn" id="Red" src={Red} alt="Red" type="button" onClick={this.handleChange} />
+          <img className="ChooseBtn" id="Leaf" src={Leaf} alt="Leaf" type="button" onClick={this.handleChange} />
+          <img className="ChooseBtn" id="Ludwig" src={Ludwig} alt="Ludwig" type="button" onClick={this.handleChange} />
+          <img className="ChooseBtn" id="Ludvina" src={Ludvina} alt="Ludvina" type="button" onClick={this.handleChange} />
         </div>
       </div>
     );
