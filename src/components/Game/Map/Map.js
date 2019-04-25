@@ -7,7 +7,6 @@ import Capture from '../../Pokedex/Capture';
 import { Pokemon } from '../character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
-const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
 
 class Map extends Component {
   constructor(props) {
@@ -57,7 +56,6 @@ class Map extends Component {
   init = async () => {
     this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
-    await this.loadTiles(reqTiles.keys());
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
   }
@@ -93,25 +91,6 @@ class Map extends Component {
 
     this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
   };
-
-  loadTiles = (tilesKeys) => {
-    const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
-    document.head.childNodes.forEach((node) => {
-      if (node.id === 'tileSet') {
-        node.remove();
-      }
-    });
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    style.id = 'tileSet';
-    let css = '';
-    for (let i = 0; i < tiles.length; i += 1) {
-      const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
-      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
-    }
-    style.appendChild(document.createTextNode(css));
-    document.head.appendChild(style);
-  }
 
   checkGamepad = (gamepadId) => {
     this.gamepads = navigator.getGamepads ? navigator.getGamepads()
@@ -228,11 +207,14 @@ class Map extends Component {
     return subMatrix;
   }
 
-  addNewPokemon = (amount) => {
+  addNewPokemon = (amount, id) => {
     const { map } = this.state;
     let { pokemons } = this.state;
-    for (let i = 0; i< amount; i += 1)
-      pokemons.push(new Pokemon(1174, 'greuf', 16, 20, map));
+    for (let i = 0; i< amount; i += 1){
+      const poke = new Pokemon(id, 'greuf', 16, 20, map);
+      poke.init();
+      pokemons.push(poke);
+    }
     this.setState({pokemons});
   }
 
@@ -243,11 +225,11 @@ class Map extends Component {
     } = this.state;
     let { pokemons, visiblePokemons, winner, view } = this.state;
     if (this.debugMode) this.loopCounter += 1;
-    if (pokemons.length < 1) this.addNewPokemon(1);
+    if (pokemons.length < 1) this.addNewPokemon(1, 9001);
 
     if (pokemons.length > 0 && this.loaded) {
       pokemons.map(poke => poke.run())
-      visiblePokemons = pokemons.filter(poke => poke.y > viewY && poke.y < viewY + viewHeight && poke.x > viewX && poke.x < viewX + viewWidth);
+      visiblePokemons = pokemons.filter(poke => poke.y >= viewY && poke.y < viewY + viewHeight && poke.x >= viewX && poke.x < viewX + viewWidth);
 
       view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
 

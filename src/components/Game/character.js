@@ -1,4 +1,5 @@
-import { ableToMove } from './utils';
+import { ableToMove, convertToCollideMap } from './utils';
+import Easystar from 'easystarjs';
 
 class Character {
   constructor(name, y, x, playground) {
@@ -8,14 +9,29 @@ class Character {
     this.playground = { matrix: playground };
   }
 
-  getPlaygroundSize() {
+  init() {
     this.playground.width = this.playground.matrix[0].length;
     this.playground.height = this.playground.matrix.length;
+    this.direction = this.randomDirection();
+    this.collisionMap = convertToCollideMap(this.playground)
+    this.aStar = new Easystar.js();
+    this.aStar.setGrid(this.collisionMap);
+    this.aStar.setAcceptableTiles([0]);
   }
 
   randomDirection = () => {
     const dirs = ['up', 'down', 'right', 'left'];
     return dirs[Math.floor(Math.random() * 4)];
+  }
+
+  goto(destX, destY, callback) {
+    this.aStar.findPath(this.x, this.y, destX, destY, path => {
+      if (path === null) {
+        alert("Path was not found.");
+      } else {
+        alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
+      }
+    })
   }
 }
 
@@ -27,13 +43,9 @@ class Pokemon extends Character {
   }
 
   run() {
-    if (!this.playground.width) { this.getPlaygroundSize(); return; }
-
-    if (!this.direction) { this.direction = this.randomDirection(); return; }
-
     if (!this.lastMove) { this.lastMove = this.lastMove = performance.now(); return; }
 
-    if ( performance.now() - this.lastMove < 1000 / this.speed) return;
+    if (performance.now() - this.lastMove < 1000 / this.speed) return;
 
     if (ableToMove({ x: this.x, y: this.y }, this.direction, 1, this.playground.matrix)) {
       if ((this.direction === 'up') || (this.direction === 'down')) {

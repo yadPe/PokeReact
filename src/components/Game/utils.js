@@ -26,7 +26,7 @@ export const ableToMove = (pos, direction, step, playground) => {
   return !playground[newPos.y][newPos.x].includes(-1);
 };
 
-const convertTo2D = (arr) => {
+export const convertToCollideMap = (arr) => {
     const output = [];
     for(let i = 0; i < arr.length; i += 1){
         const row = [];
