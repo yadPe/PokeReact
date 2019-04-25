@@ -9,6 +9,7 @@ import Pokemon from './Pokemon';
 import Divider from './Divider';
 import DividerButton from './DividerButton';
 
+
 class Pokedex extends Component {
   constructor(props) {
     super(props);
@@ -70,6 +71,7 @@ class Pokedex extends Component {
     return (
       <div className="Background">
 
+
         <div className="LeftMenu">
           <NavLink to="/profil">
             <button type="button" className="RoundBtn">
@@ -94,9 +96,9 @@ class Pokedex extends Component {
 
         <div className="Buttons">
           <button type="button" className="pokedexbuttons" onClick={() => this.previousPokemon()} />
-          <h5>Previous Pokemon</h5>
+          <h5 className="nextandpreviousbuttons">Previous Pokemon</h5>
           <DividerButton />
-          <h5>Next Pokemon</h5>
+          <h5 className="nextandpreviousbuttons">Next Pokemon</h5>
           <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
         </div>
       </div>

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
-import Character from './Tiles/Character';
+import Player from './Tiles/Character';
 import { ableToMove } from '../utils';
+import Capture from '../../Pokedex/Capture';
+import { Pokemon } from '../../Game/character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -17,6 +19,7 @@ class Map extends Component {
       viewHeight: 13,
       viewX: 11,
       viewY: 17,
+      winner: 'none',
     };
 
     this.theme = {
@@ -74,6 +77,10 @@ class Map extends Component {
       map: [...resJson],
     }));
     this.loaded = true;
+
+    // Will move //
+    this.pokemon1 = new Pokemon(55, 'greuf', 16, 20, this.state.map);
+
     const {
       viewY, viewX, viewWidth, viewHeight, map,
     } = this.state;
@@ -193,14 +200,39 @@ class Map extends Component {
     if (offsetY + height > matrix.length) return;
     const subMatrix = [];
     for (let i = offsetY; i < height + offsetY; i += 1) {
-      const index = subMatrix.push(matrix[i]) - 1;
+      const index = subMatrix.push(JSON.parse(JSON.stringify(matrix[i]))) - 1;
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
     this.setState({ view: [...subMatrix] });
+    return subMatrix;
   }
 
   run = () => {
+    const { map, viewX, viewY, viewWidth, viewHeight, view } = this.state;
     if (this.debugMode) this.loopCounter += 1;
+
+    let { winner } = this.state;
+
+    if (this.pokemon1 && this.loaded) {
+      this.pokemon1.run();
+
+
+      if (this.pokemon1.y > this.state.viewY && this.pokemon1.y < this.state.viewY + this.state.viewHeight && this.pokemon1.x > this.state.viewX && this.pokemon1.x < this.state.viewX + this.state.viewWidth) {
+        const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        // console.log(hop)
+        hop[this.pokemon1.y - this.state.viewY][this.pokemon1.x - this.state.viewX].push(1174);
+        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(1174)) {
+          winner = 'block';
+          clearInterval(this.running);
+        }
+
+
+        window.map = this.state.map;
+
+
+        this.setState({ view: hop, winner });
+      }
+    }
 
     this.checkKeyboard();
     this.checkGamepad(this.props.controller);
@@ -215,14 +247,15 @@ class Map extends Component {
   }
 
   render() {
-    const { view } = this.state;
+    const { view, winner } = this.state;
     return (
       <div style={this.theme}>
         {this.debugMode ? this.debug() : null}
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
-        <Character />
+        <Player />
+        <Capture winner={winner} />
       </div>
     );
   }

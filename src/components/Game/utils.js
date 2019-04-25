@@ -21,5 +21,6 @@ export const ableToMove = (pos, direction, step, playground) => {
         default:
             return undefined;
     }
+
     return !playground[newPos.y][newPos.x].includes(-1);
 }
