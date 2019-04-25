@@ -33,12 +33,9 @@
   font-weight: 700;
   color: white;
 }
-<<<<<<< HEAD
-=======
 .Yellow {
   color: #FFCB05;
 }
->>>>>>> dev
 
 .Commands {
   text-align: center;
@@ -283,15 +280,6 @@
   color: #D3D3D3;
 }
 
-<<<<<<< HEAD
-.App {
-  text-align: center;
-}
-
-.FirstPokemonButton {
-  margin: 80px;
-  padding: 30px;
-=======
 .Presentation{
   font-family: 'Press Start 2P', cursive;
   font-size: 1.2em;
@@ -309,7 +297,6 @@
 
 .App {
   text-align: center;
->>>>>>> dev
 }
 
 .ButtonCenter{
