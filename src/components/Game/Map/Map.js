@@ -21,6 +21,7 @@ class Map extends Component {
       viewY: 17,
       winner: 'none',
       characterDirection: 'CharacterDown0',
+      pokemons: [],
     };
 
     this.theme = {
@@ -65,11 +66,9 @@ class Map extends Component {
     this.running = null;
     this.renderCounter = null;
     this.loaded = null;
-    this.config = null;
   }
 
   configInstance = () => {
-    this.config = {};
     this.gamepad = this.props.controller;
   }
 
@@ -226,8 +225,7 @@ class Map extends Component {
 
     if (this.pokemon1 && this.loaded) {
       this.pokemon1.run();
-
-
+      
       if (this.pokemon1.y > this.state.viewY && this.pokemon1.y < this.state.viewY + this.state.viewHeight && this.pokemon1.x > this.state.viewX && this.pokemon1.x < this.state.viewX + this.state.viewWidth) {
         const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
         // console.log(hop)
@@ -236,18 +234,12 @@ class Map extends Component {
           winner = 'block';
           clearInterval(this.running);
         }
-
-
-        window.map = this.state.map;
-
-
         this.setState({ view: hop, winner });
       }
     }
 
     this.checkKeyboard();
     this.checkGamepad(this.props.controller);
-
   }
 
   debug = () => {

@@ -9,6 +9,7 @@ class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      playersPos: [],
     };
 
     this.asyncKeys = [];
@@ -63,7 +64,12 @@ class Game extends Component {
   }
 
   getPlayersPosition = (data) => {
-    console.log(data)
+    const { playersPos } = this.state;
+    if (data.player === 0)
+      playersPos[0] = {x: data.x, y: data.y};
+    if (data.player === 1)
+      playersPos[1] = {x: data.x, y: data.y};
+    this.setState({playersPos})
   }
 
 
