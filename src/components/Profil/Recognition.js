@@ -19,7 +19,7 @@ class Recognition extends Component {
     if (localStorage.getItem(name)) {
       localStorage.setItem('userActive', name);
       history.push({
-        pathname: '/play',
+        pathname: '/menu',
         state: { user: name },
       });
     } else {

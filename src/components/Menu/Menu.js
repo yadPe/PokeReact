@@ -16,14 +16,6 @@ class Menu extends Component {
     return (
       <div className="Background">
 
-        <div className="LeftMenu">
-          <NavLink to="/profil">
-            <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faUser} />
-            </button>
-          </NavLink>
-        </div>
-
         <img src={logo} className="MenuLogo" alt="PokeReact logo" />
 
         <div className="RightMenu">
