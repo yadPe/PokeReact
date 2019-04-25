@@ -20,20 +20,22 @@ class PremierPokemon extends Component {
   render() {
     const { name } = this.props;
     return (
-      <div>
-        <h1>
+      <div className="Flex">
+        <p>
+          <span className="Yellow">
           It is dangerous to go alone
+          </span>
           {' '}
           {`${name}`}
-          !!!
-        </h1>
-        <br />
-        <h2>Choose your Pokemon</h2>
+          .
+          <br />
+          Take a Pokemon whith you!
+        </p>
         <div>
-          <img className="pokemon RoundBtn FirstPokemonButton" id="25" src={Pikachu} alt="Pikachu" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="1" src={Bulbizarre} alt="Bulbasaur" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="4" src={Salameche} alt="Charmander" type="button" onClick={this.handleChange} />
-          <img className="pokemon RoundBtn FirstPokemonButton" id="7" src={Carapuce} alt="Squirtle" type="button" onClick={this.handleChange} />
+          <img className="ChooseBtn" id="Pikachu" src={Pikachu} alt="Pikachu" type="button" onClick={this.handleChange} />
+          <img className="ChooseBtn" id="Bulbizarre" src={Bulbizarre} alt="Bulbizarre" type="button" onClick={this.handleChange} />
+          <img className="ChooseBtn" id="Salamèche" src={Salameche} alt="Salamèche" type="button" onClick={this.handleChange} />
+          <img className="ChooseBtn" id="Carapuce" src={Carapuce} alt="Carapuce" type="button" onClick={this.handleChange} />
         </div>
       </div>
     );

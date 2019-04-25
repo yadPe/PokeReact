@@ -16,6 +16,7 @@ class Map extends Component {
       viewHeight: 13,
       viewX: 11,
       viewY: 17,
+      characterDirection: 'CharacterDown0',
     };
 
     this.keys = {
@@ -77,11 +78,8 @@ class Map extends Component {
 
   run = () => {
     if (this.debugMode) this.loopCounter += 1;
-
-
     this.checkKeyboard();
     this.checkGamepads(this.props.controller);
-
   }
 
   checkGamepads = (gamepadId) => {
@@ -93,51 +91,47 @@ class Map extends Component {
 
     const gp = this.gamepads[gamepadId];
     if (gp.buttons[12].pressed) {
-      this.moveTo('up', step)
+      this.moveTo('up', step);
     } else if (gp.buttons[13].pressed) {
-      this.moveTo('down', step)
+      this.moveTo('down', step);
     } else if (gp.buttons[14].pressed) {
-      this.moveTo('left', step)
+      this.moveTo('left', step);
     } else if (gp.buttons[15].pressed) {
-      this.moveTo('right', step)
+      this.moveTo('right', step);
     } else if (gp.axes[0] === 1) {
-
-      this.moveTo('right', step)
+      this.moveTo('right', step);
+    } else if (gp.axes[0] === -1) {
+      this.moveTo('left', step);
+    } else if (gp.axes[1] === 1) {
+      this.moveTo('down', step);
+    } else if (gp.axes[1] === -1) {
+      this.moveTo('up', step);
     }
-    else if (gp.axes[0] === -1) {
-
-      this.moveTo('left', step)
-    }
-    else if (gp.axes[1] === 1) {
-
-      this.moveTo('down', step)
-    }
-    else if (gp.axes[1] === -1) {
-
-      this.moveTo('up', step)
-    }
-
   }
 
   checkKeyboard = () => {
-    const step = 1;
+    let step = 1;
     for (let i = 0; i < Object.keys(this.keys).length; i += 1) {
       if (Object.values(this.keys)[i] === this.asyncKeys[i]) {
-
         if (this.asyncKeys[i] === 38) {
-          this.moveTo('up', step)
+          this.moveTo('up', step);
           break;
         }
         if (this.asyncKeys[i] === 40) {
-          this.moveTo('down', step)
+          this.moveTo('down', step);
           break;
         }
         if (this.asyncKeys[i] === 37) {
-          this.moveTo('left', step)
+          this.moveTo('left', step);
           break;
         }
         if (this.asyncKeys[i] === 39) {
-          this.moveTo('right', step)
+          this.moveTo('right', step);
+          break;
+        }
+        if (this.asyncKeys[i] === null) {
+          step = 0;
+          this.moveTo('stay', step);
           break;
         }
       }
@@ -145,20 +139,28 @@ class Map extends Component {
   }
 
   moveTo = (direction, step) => {
-    if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return
-    const { map, view, viewWidth, viewHeight } = this.state;
-    let { viewY, viewX } = this.state;
+    if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return;
+    const {
+      map,
+      view,
+      viewWidth,
+      viewHeight,
+    } = this.state;
+    let { viewY, viewX, characterDirection } = this.state;
     switch (direction) {
       case 'up':
         if (!view[Math.floor(view.length / 2 - step)][Math.floor(view.length / 2)]
           .includes(-1)) {
           viewY -= step;
+          characterDirection = 'CharacterUp1';
         }
         break;
 
       case 'down':
-        if (!view[Math.floor(view.length / 2 + step)][Math.floor(view.length / 2)].includes(-1)) {
+        if (!view[Math.floor(view.length / 2 + step)][Math.floor(view.length / 2)]
+          .includes(-1)) {
           viewY += step;
+          characterDirection = 'CharacterDown1';
         }
         break;
 
@@ -166,7 +168,8 @@ class Map extends Component {
         if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 - step)]
           .includes(-1)) {
           viewX -= step;
-          this.left += 5
+          this.left += 5;
+          characterDirection = 'CharacterLeft1';
         }
         break;
 
@@ -174,25 +177,21 @@ class Map extends Component {
         if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2 + step)]
           .includes(-1)) {
           viewX += step;
-          this.left -= 5
+          this.left -= 5;
+          characterDirection = 'CharacterRight1';
         }
         break;
 
       default:
         return;
     }
-    this.setState({
-      viewY,
-      viewX,
-    },
-      () => {
-        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-        //this.clean();
-        this.lastScroll = performance.now();
-        this.props.reportPosition({player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6})
-      });
+    this.setState({ viewY, viewX, characterDirection }, () => {
+      this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+      // this.clean();
+      this.lastScroll = performance.now();
+      this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 });
+    });
   }
-
 
   keyPressed = (e) => {
     const keys = e.keyCode;
@@ -201,7 +200,6 @@ class Map extends Component {
     for (let i = 0; i < size; i += 1) {
       if (Object.values(this.keys)[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
-
         break;
       }
     }
@@ -232,14 +230,14 @@ class Map extends Component {
 
   loadTiles = (tilesKeys) => {
     const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
-    console.log(tiles)
-   
+    console.log(tiles);
+
     const style = document.createElement('style');
     style.type = 'text/css';
     let css = '';
     for (let i = 0; i < tiles.length; i += 1) {
       const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
-      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)))
+      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)));
       css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
     }
     style.appendChild(document.createTextNode(css));
@@ -261,7 +259,15 @@ class Map extends Component {
     if (!this.debugMode) return;
     this.renderCounter += 1;
     // eslint-disable-next-line consistent-return
-    return <h3 style={{ position: 'fixed', bottom: 10, right: 10, zIndex: 1000 }}>{`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}</h3>;
+    return (
+      <h3 style={{
+        position: 'fixed', bottom: 10, right: 10, zIndex: 1000,
+      }}
+      >
+        {`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}
+
+      </h3>
+    );
   }
 
   render() {
@@ -272,7 +278,7 @@ class Map extends Component {
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
-        <Character />
+        <Character direction={this.state.characterDirection} />
       </div>
     );
   }

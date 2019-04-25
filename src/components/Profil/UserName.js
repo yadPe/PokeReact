@@ -32,22 +32,18 @@ handleSubmit = () => {
 render() {
   const { erreur } = this.state;
   return (
-    <div>
-      <h1>It is time to create your trainer !</h1>
+    <div className="Flex">
+      <p>Please create your profile</p>
       {erreur ? (
-        <h2>
-Ne me dis pas que ton nom est
+        <p>
+Your name can't be
           {' '}
           {erreur}
-          {' '}
-???
-        </h2>
+        </p>
       ) : ''}
       <br />
-      <div className="ButtonCenter">
-        <input className="Input" id="name" type="text" onChange={this.handleChange} />
-        <button id="submitBtn" type="button" className="Button" onClick={this.handleSubmit}>Créer</button>
-      </div>
+      <input className="Input" id="name" type="text" placeholder="Your name" onChange={this.handleChange} />
+      <button className="Button" id="submitBtn" type="button" onClick={this.handleSubmit}>Create</button>
     </div>
   );
 }

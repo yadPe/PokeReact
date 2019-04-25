@@ -19,13 +19,13 @@ class Game extends Component {
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i++) {
-      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition}/></div>)
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} /></div>);
     }
-    return instances
+    return instances;
   }
 
   getPlayersPosition = (data) => {
-    console.log(this.data)
+    console.log(this.data);
   }
 
 
@@ -34,17 +34,17 @@ class Game extends Component {
       <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-          <NavLink to="/profil">
+          <NavLink to="/menu">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faUser} />
+              <FontAwesomeIcon icon={faBars} />
             </button>
           </NavLink>
         </div>
 
         <div className="RightMenu">
-          <NavLink to="/menu">
+          <NavLink to="/profil">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faBars} />
+              <FontAwesomeIcon icon={faUser} />
             </button>
           </NavLink>
           <NavLink to="/commands">
@@ -52,7 +52,7 @@ class Game extends Component {
           </NavLink>
         </div>
 
-        <div className='gameContainer'>
+        <div className="gameContainer">
           {this.createGameInstances(this.props.players || 1)}
         </div>
 
