@@ -10,22 +10,60 @@ class Game extends Component {
     super(props);
     this.state = {
     };
+
+    this.asyncKeys = [];
+    this.controls = [ 38, 40, 37, 39, 87, 83, 65, 68]
   }
 
   componentDidMount() {
+    for (let i = 0; i < Object.keys(this.controls[0]).length * (this.props.players || 1); i += 1) {
+      this.asyncKeys.push(false);
+    }
+    document.body.addEventListener('keydown', this.keyPressed);
+    document.body.addEventListener('keyup', this.keyReleased);
+  }
 
+  componentWillUnmount() {
+    document.body.removeEventListener('keydown', this.keyPressed);
+    document.body.removeEventListener('keyup', this.keyReleased);
+  }
+
+  keyPressed = (e) => {
+    const keys = e.keyCode;
+    const size = this.controls.length;
+
+    for (let i = 0; i < size; i += 1) {
+      if (this.controls[i] === keys && !this.asyncKeys[i]) {
+        this.asyncKeys[i] = keys;
+        this.setState({asyncKeys: this.asyncKeys})
+        break;
+      }
+    }
+  }
+
+  keyReleased = (e) => {
+    const keys = e.keyCode;
+    const size = this.controls.length;
+
+    for (let i = 0; i < size; i += 1) {
+      if (this.controls[i] === keys && this.asyncKeys[i]) {
+        this.asyncKeys[i] = false;
+        this.setState({asyncKeys: this.asyncKeys})
+        break;
+      }
+    }
   }
 
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i++) {
-      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} /></div>);
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4*i, this.controls.length*(0.5*(i+1)))} asyncKeys={this.asyncKeys.slice(4*i, this.controls.length*(0.5*(i+1)))} /></div>)
     }
-    return instances;
+    return instances
   }
 
   getPlayersPosition = (data) => {
-    console.log(this.data);
+    console.log(data)
   }
 
 
@@ -34,17 +72,17 @@ class Game extends Component {
       <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-          <NavLink to="/menu">
+          <NavLink to="/profil">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faBars} />
+              <FontAwesomeIcon icon={faUser} />
             </button>
           </NavLink>
         </div>
 
         <div className="RightMenu">
-          <NavLink to="/profil">
+          <NavLink to="/menu">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faUser} />
+              <FontAwesomeIcon icon={faBars} />
             </button>
           </NavLink>
           <NavLink to="/commands">
@@ -52,7 +90,7 @@ class Game extends Component {
           </NavLink>
         </div>
 
-        <div className="gameContainer">
+        <div className='gameContainer'>
           {this.createGameInstances(this.props.players || 1)}
         </div>
 
