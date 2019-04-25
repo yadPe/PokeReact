@@ -13,6 +13,8 @@ import DividerButton from './DividerButton';
 class Pokedex extends Component {
   constructor(props) {
     super(props);
+    this.userName = '';
+    this.pokemon = [];
     this.state = {
       pokemon: {},
       pokemonid: 1,
@@ -23,6 +25,7 @@ class Pokedex extends Component {
   componentWillMount() {
     const { pokemonid } = this.state;
     this.fetchApi(pokemonid);
+    this.checkCapturedPokemon();
   }
 
   fetchApi = (id) => {
@@ -34,6 +37,11 @@ class Pokedex extends Component {
       })
       // eslint-disable-next-line no-console
       .catch(err => console.log(err));
+  }
+
+  checkCapturedPokemon = () => {
+    this.userName = localStorage.getItem('userActive');
+    this.pokemon = JSON.parse(localStorage.getItem(this.userName)).pokemon;
   }
 
   handleOnClick(id) {
@@ -73,14 +81,6 @@ class Pokedex extends Component {
 
 
         <div className="LeftMenu">
-          <NavLink to="/profil">
-            <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faUser} />
-            </button>
-          </NavLink>
-        </div>
-
-        <div className="RightMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faBars} />
@@ -88,8 +88,16 @@ class Pokedex extends Component {
           </NavLink>
         </div>
 
+        <div className="RightMenu">
+          <NavLink to="/profil">
+            <button type="button" className="RoundBtn">
+              <FontAwesomeIcon icon={faUser} />
+            </button>
+          </NavLink>
+        </div>
+
         <div className="Pokedex">
-          <PokeList handleOnClick={this.handleOnClick} />
+          <PokeList handleOnClick={this.handleOnClick} capturedpokemons={this.pokemon || []} />
           <Divider />
           <DetailView pokemon={pokemon} getNewState={this.newPokemon} />
         </div>

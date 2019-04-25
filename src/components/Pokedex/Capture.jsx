@@ -1,6 +1,7 @@
 import React from 'react';
 import './Capture.css';
 import { NavLink } from 'react-router-dom';
+import '../../App.css';
 
 export default class Capture extends React.Component {
   constructor(props) {
@@ -9,12 +10,9 @@ export default class Capture extends React.Component {
     this.pokemon = [];
   }
 
-
   getLocalStorage = () => {
-    this.setState({
-      userName: localStorage.getItem('userActive'),
-      pokemon: localStorage.getItem(this.userName).pokemon,
-    });
+    this.userName = localStorage.getItem('userActive');
+    this.pokemon = JSON.parse(localStorage.getItem(this.userName)).pokemon;
   }
 
 
@@ -35,12 +33,12 @@ export default class Capture extends React.Component {
       >
 
         <div className="footer">
-          <h1>
+          <h1 className="textModal">
                 Hello
             {' '}
             {this.userName}
                 !
-                Well done! You captured
+                Well done! You captured the pokemon number
             {' '}
             {this.pokemon}
                 !

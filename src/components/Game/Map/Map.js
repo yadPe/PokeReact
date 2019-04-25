@@ -20,6 +20,7 @@ class Map extends Component {
       viewX: 11,
       viewY: 17,
       winner: 'none',
+      characterDirection: 'CharacterDown0',
     };
 
     this.theme = {
@@ -155,6 +156,11 @@ class Map extends Component {
           this.moveTo('right', step)
           break;
         }
+        if (this.asyncKeys[i] === null) {
+          step = 0;
+          this.moveTo('stay', step);
+          break;
+        }
       }
     }
   }
@@ -162,23 +168,27 @@ class Map extends Component {
   moveTo = (direction, step) => {
     if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return
     const { map, view, viewWidth, viewHeight } = this.state;
-    let { viewY, viewX } = this.state;
+    let { viewY, viewX, characterDirection } = this.state;
     if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) return
     switch (direction) {
       case 'up':
         viewY -= step;
+        characterDirection = 'CharacterUp1';
         break;
 
       case 'down':
         viewY += step;
+        characterDirection = 'CharacterDown1';
         break;
 
       case 'left':
         viewX -= step;
+        characterDirection = 'CharacterLeft1'
         break;
 
       case 'right':
         viewX += step;
+        characterDirection = 'CharacterRight1'
         break;
 
       default:
@@ -187,6 +197,7 @@ class Map extends Component {
     this.setState({
       viewY,
       viewX,
+      characterDirection,
     },
       () => {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
@@ -256,6 +267,7 @@ class Map extends Component {
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
         <Player />
         <Capture winner={winner} />
+        <Player activeKeys={this.props.asyncKeys} direction={this.state.characterDirection} />
       </div>
     );
   }
