@@ -30,7 +30,7 @@ class Pokemon extends Character {
 
     if (!this.direction) { this.direction = this.randomDirection(); console.log('mk pos'); return; }
 
-    if (ableToMove({x: this.x, y: this.y}, this.direction, 1, this.playground.matrix)) {
+    if (ableToMove({ x: this.x, y: this.y }, this.direction, 1, this.playground.matrix)) {
       if ((this.direction === 'up') || (this.direction === 'down')) {
         if (this.direction === 'up') {
           this.y -= 1;
@@ -46,8 +46,6 @@ class Pokemon extends Character {
       }
     } else {
       this.direction = this.randomDirection();
-      console.log(`pokemon blok :${this.x} ${this.y}`);
-      console.log(this.direction);
     }
   }
 
