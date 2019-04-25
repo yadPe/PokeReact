@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
-import Character from './Tiles/Character';
+import Player from './Tiles/Character';
+import { Character, Pokemon } from '../character';
 import Capture from '../../Pokedex/Capture';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
@@ -17,7 +18,7 @@ class Map extends Component {
       viewHeight: 13,
       viewX: 11,
       viewY: 17,
-      winner: true,
+      winner: 'none',
     };
 
     this.keys = {
@@ -25,6 +26,8 @@ class Map extends Component {
       keyDown: 40,
       keyLeft: 37,
       keyRight: 39,
+      echap: 27,
+      enter: 13,
     };
 
     this.theme = {
@@ -51,6 +54,7 @@ class Map extends Component {
     this.init();
   }
 
+
   componentWillUnmount() {
     this.end();
   }
@@ -63,8 +67,10 @@ class Map extends Component {
     }
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
-    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-    this.running = setInterval(this.run, 1000 / 30);
+    // eslint-disable-next-line no-nested-ternary
+    this.gamepads = navigator.getGamepads ? navigator.getGamepads()
+      : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    this.running = setInterval(this.run, 1000 / 10);
   }
 
   end = () => {
@@ -78,15 +84,40 @@ class Map extends Component {
   }
 
   run = () => {
+    const {
+      view, map, viewX, viewY, viewWidth, viewHeight,
+    } = this.state;
+    let { winner } = this.state;
     if (this.debugMode) this.loopCounter += 1;
+    if (this.pokemon1 && this.loaded) {
+      this.pokemon1.run();
 
+
+      if (this.pokemon1.y > this.state.viewY && this.pokemon1.y < this.state.viewY + this.state.viewHeight && this.pokemon1.x > this.state.viewX && this.pokemon1.x < this.state.viewX + this.state.viewWidth) {
+        const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        // console.log(hop)
+        hop[this.pokemon1.y - this.state.viewY][this.pokemon1.x - this.state.viewX].push(1174);
+        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(1174)) {
+          winner = 'block';
+          clearInterval(this.running);
+        }
+
+
+        window.map = this.state.map;
+
+
+        this.setState({ view: hop, winner });
+      }
+    }
 
     this.checkKeyboard();
     this.checkGamepads(this.props.controller);
   }
 
   checkGamepads = (gamepadId) => {
-    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    // eslint-disable-next-line no-nested-ternary
+    this.gamepads = navigator.getGamepads ? navigator.getGamepads()
+      : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     if (!this.gamepads[gamepadId]) {
       return;
     }
@@ -132,9 +163,11 @@ class Map extends Component {
           this.moveTo('right', step);
           break;
         }
+      
       }
     }
   }
+
 
   moveTo = (direction, step) => {
     if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return;
@@ -214,10 +247,15 @@ class Map extends Component {
   }
 
   loadMap = async (mapUri) => {
-    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
-      map: [...resJson],
-    }));
+    await fetch(mapUri)
+      .then(res => res.json())
+      .then((resJson) => {
+        console.log('resJson', resJson); this.setState({
+          map: [...resJson],
+        });
+      });
     this.loaded = true;
+    this.pokemon1 = new Pokemon(55, 'greug', 16, 20, this.state.map);
     const {
       viewY, viewX, viewWidth, viewHeight, map,
     } = this.state;
@@ -226,14 +264,12 @@ class Map extends Component {
 
   loadTiles = (tilesKeys) => {
     const tiles = tilesKeys.sort((a, b) => a.split('-')[0].substring(2, a.split('-')[0].lenght) - b.split('-')[0].substring(2, b.split('-')[0].lenght));
-    console.log(tiles);
 
     const style = document.createElement('style');
     style.type = 'text/css';
     let css = '';
     for (let i = 0; i < tiles.length; i += 1) {
       const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
-      console.log(parseInt(fileZIndex.substring(1, fileZIndex.length)));
       css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
     }
     style.appendChild(document.createTextNode(css));
@@ -245,10 +281,11 @@ class Map extends Component {
     if (offsetY + height > matrix.length) return;
     const subMatrix = [];
     for (let i = offsetY; i < height + offsetY; i += 1) {
-      const index = subMatrix.push(matrix[i]) - 1;
+      const index = subMatrix.push(JSON.parse(JSON.stringify(matrix[i]))) - 1;
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
-    this.setState({ view: [...subMatrix] });
+    this.setState({ view: subMatrix });
+    return subMatrix;
   }
 
   debug = () => {
@@ -266,16 +303,17 @@ class Map extends Component {
     );
   }
 
+
   render() {
-    const { view } = this.state;
+    const { view, winner } = this.state;
     return (
       <div style={this.theme}>
         {this.debugMode ? this.debug() : null}
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
-        <Character />
-        <Capture winner={this.state.winner} />
+        <Player />
+        <Capture winner={winner} />
       </div>
     );
   }

@@ -8,7 +8,7 @@ import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
 import DividerButton from './DividerButton';
-import Capture from './Capture';
+
 
 class Pokedex extends Component {
   constructor(props) {
@@ -71,7 +71,7 @@ class Pokedex extends Component {
     return (
       <div className="Background">
 
-        <Capture />
+
         <div className="LeftMenu">
           <NavLink to="/profil">
             <button type="button" className="RoundBtn">
