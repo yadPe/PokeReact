@@ -84,9 +84,6 @@ class Map extends Component {
     if (this.debugMode) this.loopCounter += 1;
     if (this.pokemon1 && this.loaded) {
       this.pokemon1.run();
-      // console.log(this.pokemon1);
-      // console.log(this.pokemon1.x, this.pokemon1.y);
-      // console.log(`perso : x=${this.state.viewX + 6} y=${this.state.viewY + 6}`);
 
 
 
