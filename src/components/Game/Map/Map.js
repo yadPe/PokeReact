@@ -66,7 +66,7 @@ class Map extends Component {
     // eslint-disable-next-line no-nested-ternary
     this.gamepads = navigator.getGamepads ? navigator.getGamepads()
       : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-    this.running = setInterval(this.run, 1000 / 30);
+    this.running = setInterval(this.run, 1000 / 10);
   }
 
   end = () => {
@@ -80,19 +80,67 @@ class Map extends Component {
   }
 
   run = () => {
+    const { view, map, viewX, viewY, viewWidth, viewHeight } = this.state;
     if (this.debugMode) this.loopCounter += 1;
-    if (this.pokemon1) {
+    if (this.pokemon1 && this.loaded) {
       this.pokemon1.run();
       // console.log(this.pokemon1);
       // console.log(this.pokemon1.x, this.pokemon1.y);
       // console.log(`perso : x=${this.state.viewX + 6} y=${this.state.viewY + 6}`);
 
-      if ((this.pokemon1.x < this.state.viewX && this.pokemon1.x < this.state.viewX + 13) && (this.pokemon1.y >= this.state.viewY && this.pokemon1.y < this.state.viewY + 13)) {
-        console.log(this.state.viewX - this.pokemon1.x, this.pokemon1.y - this.state.viewY);
-        this.state.view[this.pokemon1.y - this.state.viewY][this.state.viewX - this.pokemon1.x].push(1174);
 
-        // console.log('pont visible');
+
+
+
+
+      // if ((this.pokemon1.x < this.state.viewX && this.pokemon1.x < this.state.viewX + 13) && (this.pokemon1.y >= this.state.viewY && this.pokemon1.y < this.state.viewY + 13)) {
+      //   console.log(this.state.viewX - this.pokemon1.x, this.pokemon1.y - this.state.viewY);
+      //   this.state.view[this.pokemon1.y - this.state.viewY][this.state.viewX - this.pokemon1.x].push(1174);
+
+      //   // console.log('pont visible');
+      // }
+
+
+      if (this.pokemon1.y > this.state.viewY && this.pokemon1.y < this.state.viewY + this.state.viewHeight && this.pokemon1.x > this.state.viewX && this.pokemon1.x < this.state.viewX + this.state.viewWidth) {
+        // console.log('immmm')
+        // console.log('value  = ' + (this.pokemon1.x - this.state.viewX) + ' : ' + (this.pokemon1.y - this.state.viewY))
+        //view[this.pokemon1.y - this.state.viewY][this.pokemon1.x - this.state.viewX].push(1174);
+
+
+        const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        // console.log(hop)
+        hop[this.pokemon1.y - this.state.viewY][this.pokemon1.x - this.state.viewX].push(1174);
+
+
+        // const filtered = hop.filter(function (value, index, arr) {
+
+        //   for (let i = 0; i < value.length; i++) {
+        //     for (let j = 0; j < value[i].length; j++) {
+        //       return value[i][j] !== 1174;
+        //     }
+        //   }
+        // })
+
+        window.map = this.state.map
+
+
+
+
+        this.setState({ view: hop })
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     this.checkKeyboard();
@@ -195,12 +243,12 @@ class Map extends Component {
       viewY,
       viewX,
     },
-    () => {
-      this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-      // this.clean();
-      this.lastScroll = performance.now();
-      this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 });
-    });
+      () => {
+        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        // this.clean();
+        this.lastScroll = performance.now();
+        this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 });
+      });
   }
 
 
@@ -230,9 +278,11 @@ class Map extends Component {
   }
 
   loadMap = async (mapUri) => {
-    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
+    await fetch(mapUri)
+      .then(res => res.json())
+      .then(resJson =>{console.log('resJson',resJson); this.setState({
       map: [...resJson],
-    }));
+    })});
     this.loaded = true;
     this.pokemon1 = new Pokemon(55, 'greug', 16, 20, this.state.map);
     const {
@@ -262,10 +312,11 @@ class Map extends Component {
     if (offsetY + height > matrix.length) return;
     const subMatrix = [];
     for (let i = offsetY; i < height + offsetY; i += 1) {
-      const index = subMatrix.push(matrix[i]) - 1;
+      const index = subMatrix.push(JSON.parse(JSON.stringify(matrix[i]))) - 1;
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
-    this.setState({ view: [...subMatrix] });
+    this.setState({ view: subMatrix });
+    return subMatrix
   }
 
   debug = () => {

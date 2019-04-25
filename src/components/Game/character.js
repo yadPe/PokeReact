@@ -13,39 +13,20 @@ class Character {
 
     switch (direction) {
       case 'up':
-        if (!this.playground.matrix[this.y - 1][this.x].includes(-1)) {
           newPos.y -= step;
           break;
-        } else {
-          return null;
-        }
 
       case 'down':
-        if (!this.playground.matrix[this.y + 1][this.x].includes(-1)) {
           newPos.y = step;
           break;
-        } else {
-          return null;
-        }
-
 
       case 'right':
-        if (!this.playground.matrix[this.y][this.x + 1].includes(-1)) {
           newPos.x += step;
           break;
-        } else {
-          return null;
-        }
-
 
       case 'left':
-        if (!this.playground.matrix[this.y][this.x - 1].includes(-1)) {
           newPos.x -= step;
           break;
-        } else {
-          return null;
-        }
-
 
       default:
         return undefined;
@@ -78,14 +59,13 @@ class Pokemon extends Character {
     if (!this.direction) { this.direction = this.randomDirection(); console.log('mk pos'); return; }
 
     if (this.ableToMove(this.direction, 1)) {
-      if (this.direction === 'up' || 'down') {
+      if ((this.direction === 'up') ||(this.direction === 'down')) {
         if (this.direction === 'up') {
           this.y -= 1;
         } else {
           this.y += 1;
         }
-      }
-      if (this.direction === 'right' || 'left') {
+      } else if ((this.direction === 'right') ||( this.direction === 'left')) {
         if (this.direction === 'right') {
           this.x += 1;
         } else {
@@ -94,10 +74,13 @@ class Pokemon extends Character {
       }
     } else {
       this.direction = this.randomDirection();
-      console.log('pokemon blok');
+      console.log('pokemon blok :' + this.x + ' ' + this.y);
+      console.log(this.direction) 
     }
-  }
 
+    
+  }
+  
   catched() {
     this.wasCatched = true;
   }
