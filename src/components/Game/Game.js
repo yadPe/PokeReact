@@ -4,7 +4,6 @@ import './Game.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import Map from './Map/Map';
-import { storeAsyncKeys } from './utils';
 
 class Game extends Component {
   constructor(props) {
@@ -20,7 +19,6 @@ class Game extends Component {
     for (let i = 0; i < Object.keys(this.controls[0]).length * (this.props.players || 1); i += 1) {
       this.asyncKeys.push(false);
     }
-    storeAsyncKeys({type: 'set', value: this.asyncKeys});
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
   }
@@ -37,8 +35,7 @@ class Game extends Component {
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
-        console.log(this.asyncKeys)
-        storeAsyncKeys({type: 'set', value: this.asyncKeys});
+        this.setState({asyncKeys: this.asyncKeys})
         break;
       }
     }
@@ -51,7 +48,7 @@ class Game extends Component {
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && this.asyncKeys[i]) {
         this.asyncKeys[i] = false;
-        console.log(this.asyncKeys)
+        this.setState({asyncKeys: this.asyncKeys})
         break;
       }
     }
@@ -60,7 +57,7 @@ class Game extends Component {
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i++) {
-      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls[i]} asyncKeys={this.asyncKeys} /></div>)
+      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4*i, this.controls.length*(0.5*(i+1)))} asyncKeys={this.asyncKeys.slice(4*i, this.controls.length*(0.5*(i+1)))} /></div>)
     }
     return instances
   }

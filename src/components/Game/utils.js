@@ -23,13 +23,3 @@ export const ableToMove = (pos, direction, step, playground) => {
     }
     return !playground[newPos.y][newPos.x].includes(-1);
 }
-
-export function storeAsyncKeys(action) {
-    if (action.type === 'get'){
-        return this.data;
-    }
-    if (action.type === 'set'){
-        this.data = action.value;
-        return
-    }
-}

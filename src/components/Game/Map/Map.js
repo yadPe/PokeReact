@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MapRow from './MapRow';
 import Character from './Tiles/Character';
-import { ableToMove, storeAsyncKeys } from '../utils';
+import { ableToMove } from '../utils';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -51,19 +51,11 @@ class Map extends Component {
     this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
     await this.loadTiles(reqTiles.keys());
-    // for (let i = 0; i < Object.keys(this.config.keys).length; i += 1) {
-    //   this.asyncKeys.push(false);
-    // }
-    // document.body.addEventListener('keydown', this.keyPressed);
-    // document.body.addEventListener('keyup', this.keyReleased);
-    this.asyncKeys = this.props.asyncKeys;
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
   }
 
   end = () => {
-    // document.body.removeEventListener('keydown', this.keyPressed);
-    // document.body.removeEventListener('keyup', this.keyReleased);
     clearInterval(this.running);
     this.asyncKeys = null;
     this.running = null;
@@ -75,7 +67,6 @@ class Map extends Component {
   configInstance = () => {
     this.config = {};
     this.gamepad = this.props.controller;
-    this.config.keys = this.props.controls;
   }
 
   loadMap = async (mapUri) => {
@@ -109,30 +100,6 @@ class Map extends Component {
     document.head.appendChild(style);
   }
 
-  // keyPressed = (e) => {
-  //   const keys = e.keyCode;
-  //   const size = Object.keys(this.config.keys).length;
-
-  //   for (let i = 0; i < size; i += 1) {
-  //     if (Object.values(this.config.keys)[i] === keys && !this.asyncKeys[i]) {
-  //       this.asyncKeys[i] = keys;
-  //       break;
-  //     }
-  //   }
-  // }
-
-  // keyReleased = (e) => {
-  //   const keys = e.keyCode;
-  //   const size = Object.keys(this.config.keys).length;
-
-  //   for (let i = 0; i < size; i += 1) {
-  //     if (Object.values(this.config.keys)[i] === keys && this.asyncKeys[i]) {
-  //       this.asyncKeys[i] = false;
-  //       break;
-  //     }
-  //   }
-  // }
-
   checkGamepad = (gamepadId) => {
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     if (!this.gamepads[gamepadId]) {
@@ -163,21 +130,21 @@ class Map extends Component {
 
   checkKeyboard = () => {
     const step = 1;
-    for (let i = 0; i < Object.keys(this.config.keys).length; i += 1) {
-      if (Object.values(this.config.keys)[i] === this.asyncKeys[i]) {
-        if (this.asyncKeys[i] === 38) {
+    for (let i = 0; i < this.props.controls.length; i += 1) {
+      if (this.props.controls[i] === this.props.asyncKeys[i]) {
+        if (this.props.asyncKeys[i] === this.props.controls[0]) {
           this.moveTo('up', step)
           break;
         }
-        if (this.asyncKeys[i] === 40) {
+        if (this.props.asyncKeys[i] === this.props.controls[1]) {
           this.moveTo('down', step)
           break;
         }
-        if (this.asyncKeys[i] === 37) {
+        if (this.props.asyncKeys[i] === this.props.controls[2]) {
           this.moveTo('left', step)
           break;
         }
-        if (this.asyncKeys[i] === 39) {
+        if (this.props.asyncKeys[i] === this.props.controls[3]) {
           this.moveTo('right', step)
           break;
         }
@@ -234,9 +201,6 @@ class Map extends Component {
 
   run = () => {
     if (this.debugMode) this.loopCounter += 1;
-
-    this.asyncKeys = storeAsyncKeys({type: 'get'});
-
 
     this.checkKeyboard();
     this.checkGamepad(this.props.controller);
