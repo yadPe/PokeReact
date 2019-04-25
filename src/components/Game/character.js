@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+
 
 class Character {
   constructor(name, y, x, playground) {
@@ -13,20 +13,20 @@ class Character {
 
     switch (direction) {
       case 'up':
-          newPos.y -= step;
-          break;
+        newPos.y -= step;
+        break;
 
       case 'down':
-          newPos.y = step;
-          break;
+        newPos.y += step;
+        break;
 
       case 'right':
-          newPos.x += step;
-          break;
+        newPos.x += step;
+        break;
 
       case 'left':
-          newPos.x -= step;
-          break;
+        newPos.x -= step;
+        break;
 
       default:
         return undefined;
@@ -59,13 +59,13 @@ class Pokemon extends Character {
     if (!this.direction) { this.direction = this.randomDirection(); console.log('mk pos'); return; }
 
     if (this.ableToMove(this.direction, 1)) {
-      if ((this.direction === 'up') ||(this.direction === 'down')) {
+      if ((this.direction === 'up') || (this.direction === 'down')) {
         if (this.direction === 'up') {
           this.y -= 1;
         } else {
           this.y += 1;
         }
-      } else if ((this.direction === 'right') ||( this.direction === 'left')) {
+      } else if ((this.direction === 'right') || (this.direction === 'left')) {
         if (this.direction === 'right') {
           this.x += 1;
         } else {
@@ -74,13 +74,11 @@ class Pokemon extends Character {
       }
     } else {
       this.direction = this.randomDirection();
-      console.log('pokemon blok :' + this.x + ' ' + this.y);
-      console.log(this.direction) 
+      console.log(`pokemon blok :${this.x} ${this.y}`);
+      console.log(this.direction);
     }
-
-    
   }
-  
+
   catched() {
     this.wasCatched = true;
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MapRow from './MapRow';
 import Player from './Tiles/Character';
 import { Character, Pokemon } from '../character';
+import WinnerModal from '../WinnerModal';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 const reqTiles = require.context('../../../assets/tiles', true, /\.png$/);
@@ -17,6 +18,7 @@ class Map extends Component {
       viewHeight: 13,
       viewX: 11,
       viewY: 17,
+      display: 'none',
     };
 
     this.keys = {
@@ -80,64 +82,29 @@ class Map extends Component {
   }
 
   run = () => {
-    const { view, map, viewX, viewY, viewWidth, viewHeight } = this.state;
+    const {
+      view, map, viewX, viewY, viewWidth, viewHeight,
+    } = this.state;
+    let { display } = this.state;
     if (this.debugMode) this.loopCounter += 1;
     if (this.pokemon1 && this.loaded) {
       this.pokemon1.run();
 
 
-
-
-
-
-      // if ((this.pokemon1.x < this.state.viewX && this.pokemon1.x < this.state.viewX + 13) && (this.pokemon1.y >= this.state.viewY && this.pokemon1.y < this.state.viewY + 13)) {
-      //   console.log(this.state.viewX - this.pokemon1.x, this.pokemon1.y - this.state.viewY);
-      //   this.state.view[this.pokemon1.y - this.state.viewY][this.state.viewX - this.pokemon1.x].push(1174);
-
-      //   // console.log('pont visible');
-      // }
-
-
       if (this.pokemon1.y > this.state.viewY && this.pokemon1.y < this.state.viewY + this.state.viewHeight && this.pokemon1.x > this.state.viewX && this.pokemon1.x < this.state.viewX + this.state.viewWidth) {
-        // console.log('immmm')
-        // console.log('value  = ' + (this.pokemon1.x - this.state.viewX) + ' : ' + (this.pokemon1.y - this.state.viewY))
-        //view[this.pokemon1.y - this.state.viewY][this.pokemon1.x - this.state.viewX].push(1174);
-
-
         const hop = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
         // console.log(hop)
         hop[this.pokemon1.y - this.state.viewY][this.pokemon1.x - this.state.viewX].push(1174);
+        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(1174)) {
+          display = 'block';
+        }
 
 
-        // const filtered = hop.filter(function (value, index, arr) {
-
-        //   for (let i = 0; i < value.length; i++) {
-        //     for (let j = 0; j < value[i].length; j++) {
-        //       return value[i][j] !== 1174;
-        //     }
-        //   }
-        // })
-
-        window.map = this.state.map
+        window.map = this.state.map;
 
 
-
-
-        this.setState({ view: hop })
+        this.setState({ view: hop, display });
       }
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     this.checkKeyboard();
@@ -240,12 +207,12 @@ class Map extends Component {
       viewY,
       viewX,
     },
-      () => {
-        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-        // this.clean();
-        this.lastScroll = performance.now();
-        this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 });
-      });
+    () => {
+      this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+      // this.clean();
+      this.lastScroll = performance.now();
+      this.props.reportPosition({ player: this.props.controller, x: this.state.viewX + 6, y: this.state.viewY + 6 });
+    });
   }
 
 
@@ -277,9 +244,11 @@ class Map extends Component {
   loadMap = async (mapUri) => {
     await fetch(mapUri)
       .then(res => res.json())
-      .then(resJson =>{console.log('resJson',resJson); this.setState({
-      map: [...resJson],
-    })});
+      .then((resJson) => {
+        console.log('resJson', resJson); this.setState({
+          map: [...resJson],
+        });
+      });
     this.loaded = true;
     this.pokemon1 = new Pokemon(55, 'greug', 16, 20, this.state.map);
     const {
@@ -313,7 +282,7 @@ class Map extends Component {
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
     this.setState({ view: subMatrix });
-    return subMatrix
+    return subMatrix;
   }
 
   debug = () => {
@@ -341,6 +310,7 @@ class Map extends Component {
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
         <Player />
+        <WinnerModal winner={this.state.display} />
       </div>
     );
   }
