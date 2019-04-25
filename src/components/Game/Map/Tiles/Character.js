@@ -1,21 +1,17 @@
-import React from 'react';
-import front from '../../../../images/sacha/front.png';
+import React, { Component } from 'react';
+import './Character.css';
 
-const Character = () => (
-  <div className='character' style={{
-    backgroundImage: `url(${front})`,
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    width: '64px',
-    height: '64px',
-    position: 'absolute',
-    justifyContent: 'center',
-    transform: 'translate(-50%, -50%)',
-    top: '50%',
-    left: '50%',
-  }}
-  />
+class Character extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-);
+  render() {
+    return (
+      <div className={this.props.direction} />
+    );
+  }
+}
 
 export default Character;
