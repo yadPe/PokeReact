@@ -49,7 +49,7 @@ class Game extends Component {
     let css = '';
     for (let i = 0; i < tiles.length; i += 1) {
       const fileZIndex = tiles[i].split('-')[2].split('.').slice()[0];
-      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
+      css += `.tile-${i} {background-image: url(${reqTiles(tiles[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length), 10)}}\n`;
     }
     style.appendChild(document.createTextNode(css));
     document.head.appendChild(style);
@@ -67,7 +67,7 @@ class Game extends Component {
     let css = '';
     for (let i = 0; i < pokeKeys.length; i += 1) {
       const fileZIndex = pokeKeys[i].split('-')[2].split('.').slice()[0];
-      css += `.tile-${i+9000} {background-image: url(${reqPokemons(pokeKeys[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length))}}\n`;
+      css += `.tile-${i + 9000} {background-image: url(${reqPokemons(pokeKeys[i], true)});\n z-index: ${parseInt(fileZIndex.substring(1, fileZIndex.length), 10)}}\n`;
     }
     style.appendChild(document.createTextNode(css));
     document.head.appendChild(style);
@@ -77,8 +77,8 @@ class Game extends Component {
     const keys = e.keyCode;
     const size = this.controls.length;
 
-    // Testing // 
-    //if (keys === 66) this.state.pokemons[0].goto(this.state.viewX+6, this.state.viewY+6);
+    // Testing //
+    // if (keys === 66) this.state.pokemons[0].goto(this.state.viewX+6, this.state.viewY+6);
 
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && !this.asyncKeys[i]) {
@@ -104,7 +104,7 @@ class Game extends Component {
 
   createGameInstances = (num) => {
     const instances = [];
-    for (let i = 0; i < num; i++) {
+    for (let i = 0; i < num; i += 1) {
       instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
     return instances;
@@ -112,11 +112,9 @@ class Game extends Component {
 
   getPlayersPosition = (data) => {
     const { playersPos } = this.state;
-    if (data.player === 0)
-      playersPos[0] = {x: data.x, y: data.y};
-    if (data.player === 1)
-      playersPos[1] = {x: data.x, y: data.y};
-    this.setState({playersPos})
+    if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; }
+    if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; }
+    this.setState({ playersPos });
   }
 
   render() {
