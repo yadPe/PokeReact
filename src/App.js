@@ -31,6 +31,7 @@ class App extends Component {
               <Route path="/commands" component={Commands} />
               <Route path="/creation" component={CreationProfile} />
               <Route path="/profil" component={Profile} />
+
             </Switch>
           </BrowserRouter>
         </div>

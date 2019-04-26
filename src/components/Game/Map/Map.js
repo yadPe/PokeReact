@@ -21,7 +21,7 @@ class Map extends Component {
       viewY: 17,
       characterDirection: 'CharacterDown0',
       pokemons: [],
-      visiblePokemons: [],
+      visiblePokemons: [],  
     };
 
     this.theme = {
@@ -55,7 +55,7 @@ class Map extends Component {
   init = async () => {
     this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
-    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson => this.pokeBase = resJson.results);
+    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson=> this.pokeBase = resJson.results);
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
   }
@@ -73,7 +73,7 @@ class Map extends Component {
     const { controller } = this.props;
     this.gamepad = controller;
     if (controller === 0)
-      {this.config.host = true;}
+      this.config.host = true;
   }
 
   loadMap = async (mapUri) => {
@@ -186,12 +186,12 @@ class Map extends Component {
       viewX,
       characterDirection,
     },
-    () => {
-      this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-      this.lastScroll = performance.now();
-      const { controller, reportPosition } = this.props;
-      reportPosition({ player: controller, x: viewX + 6, y: viewY + 6 });
-    });
+      () => {
+        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        this.lastScroll = performance.now();
+        const { controller, reportPosition } = this.props;
+        reportPosition({ player: controller, x: viewX + 6, y: viewY + 6 });
+      });
   }
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
@@ -209,37 +209,37 @@ class Map extends Component {
 
   addNewPokemon = (amount, id) => {
     const { map } = this.state;
-    const { pokemons } = this.state;
-    for (let i = 0; i < amount; i += 1) {
+    let { pokemons } = this.state;
+    for (let i = 0; i< amount; i += 1){
       const poke = new Pokemon(id, 'greuf', 16, 20, map);
       poke.init();
       pokemons.push(poke);
     }
-    this.setState({ pokemons });
+    this.setState({pokemons});
   }
 
   run = () => {
     if (!this.loaded) return;
     const {
-      viewX, viewY, viewWidth, viewHeight, map,
+      viewX, viewY, viewWidth, viewHeight, map
     } = this.state;
     let { pokemons, visiblePokemons, view } = this.state;
     if (this.debugMode) this.loopCounter += 1;
     if (pokemons.length < 1) this.addNewPokemon(1, 9001);
 
     if (pokemons.length > 0 && this.loaded) {
-      pokemons.map(poke => poke.run());
+      pokemons.map(poke => poke.run())
       visiblePokemons = pokemons.filter(poke => poke.y >= viewY && poke.y < viewY + viewHeight && poke.x >= viewX && poke.x < viewX + viewWidth);
 
       view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
 
-      visiblePokemons.map((poke) => {
+      visiblePokemons.map(poke => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
           this.catched = (this.pokeBase[poke.id - 8999]);
           clearInterval(this.running);
         }
-      });
+      })
       this.setState({ view: [...view], visiblePokemons });
     }
 
@@ -264,9 +264,7 @@ class Map extends Component {
   }
 
   render() {
-    const {
- view, winner, characterDirection, catched 
-} = this.state;
+    const { view, winner, characterDirection, catched } = this.state;
     const { asyncKeys } = this.props;
     return (
       <div style={this.theme}>
@@ -276,8 +274,8 @@ class Map extends Component {
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
         <Player />
 
-        {this.catched ? <Capture winner={winner} catched={this.catched} /> : null}
-
+        {this.catched ? <Capture winner={winner} catched={this.catched}/> : null}
+        
         <Player activeKeys={asyncKeys} direction={characterDirection} />
       </div>
     );

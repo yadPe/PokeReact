@@ -29,11 +29,17 @@
 }
 
 .data-name1{
+  font-size: 28px;
+  letter-spacing: 3px;
   height: 60px;
   box-sizing: border-box;
   border: inset grey 5px;
   background-color: #A5A5A4;
+  color: black;
   padding: 1vh;
+}
+
+.data-name1, .data-name2 {
   margin: 0 0 6px;
   font-size: 3vh;
   text-transform: capitalize;
