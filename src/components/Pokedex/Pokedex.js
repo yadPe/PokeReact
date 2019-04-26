@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import './Pokedex.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+
 import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
 import DividerButton from './DividerButton';
-import { withRouter } from 'react-router-dom';
 
 
 class Pokedex extends Component {
@@ -26,9 +26,9 @@ class Pokedex extends Component {
   componentWillMount() {
     const { pokemonid } = this.state;
     const { history } = this.props;
-    if (!localStorage.getItem('userActive')){
+    if (!localStorage.getItem('userActive')) {
       history.push('/');
-      return
+      return;
     }
     this.fetchApi(pokemonid);
     this.checkCapturedPokemon();
