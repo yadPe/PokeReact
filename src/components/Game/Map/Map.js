@@ -34,7 +34,7 @@ class Map extends Component {
 
     this.loaded = false;
     this.asyncKeys = [];
-    this.debugMode = true;
+    this.debugMode = false;
     this.gamepads = [];
     this.scrollSpeed = 8;
     this.lastScroll = 0;
@@ -225,7 +225,7 @@ class Map extends Component {
     } = this.state;
     let { pokemons, visiblePokemons, view } = this.state;
     if (this.debugMode) this.loopCounter += 1;
-    if (pokemons.length < 1) this.addNewPokemon(1, 9001);
+    if (pokemons.length < 1) this.addNewPokemon(1, 9025);
 
     if (pokemons.length > 0 && this.loaded) {
       pokemons.map(poke => poke.run())
@@ -236,8 +236,15 @@ class Map extends Component {
       visiblePokemons.map(poke => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
-          this.catched = (this.pokeBase[poke.id - 8999]);
+          this.catched = (this.pokeBase[poke.id - 9001]);
           clearInterval(this.running);
+          this.userProfile = {};
+          this.user = localStorage.getItem('userActive');
+          console.log(this.user)
+          this.userProfile = JSON.parse(localStorage.getItem(this.user));
+          console.log(JSON.parse(localStorage.getItem(this.user)))
+          this.userProfile.pokemon.push((poke.id - 9000).toString());
+          localStorage.setItem(this.user, JSON.stringify(this.userProfile));
         }
       })
       this.setState({ view: [...view], visiblePokemons });

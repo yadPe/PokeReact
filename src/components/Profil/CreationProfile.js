@@ -77,7 +77,6 @@ class CreationProfile extends Component {
             </button>
           </NavLink>
         </div>
-
         {this.displayStep()}
       </div>
     );

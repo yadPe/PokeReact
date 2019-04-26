@@ -33,6 +33,7 @@
   font-weight: 700;
   color: white;
 }
+
 .Yellow {
   color: #FFCB05;
 }
@@ -305,4 +306,9 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+}
+
+.changeProfil{
+  font-size : 1.5em;
+  color: white;
 }
