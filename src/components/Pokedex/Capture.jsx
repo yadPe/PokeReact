@@ -17,7 +17,7 @@ export default class Capture extends React.Component {
 
 
   render() {
-    const { winner } = this.props;
+    const { catched } = this.props;
 
 
     return (
@@ -28,21 +28,12 @@ export default class Capture extends React.Component {
 
         contentLabel=""
         style={{
-          position: 'absolute', top: '35%', zIndex: '100', display: winner, backgroundColor: 'rgb(44, 88, 177)', border: '10px solid black',
+          position: 'absolute', top: '35%', zIndex: '100', display: 'block', backgroundColor: 'rgb(44, 88, 177)', border: '10px solid black',
         }}
       >
 
         <div className="footer">
-          <h1 className="textModal">
-                Hello
-            {' '}
-            {this.userName}
-                !
-                Well done! You captured the pokemon number
-            {' '}
-            {this.pokemon}
-                !
-          </h1>
+          <h1 className="textModal">{`Well done ! You captured ${catched.name} !!!!!`}</h1>
           <NavLink to="/pokedex">
             <button type="button" className="Button"> Go to Pokedex </button>
           </NavLink>
