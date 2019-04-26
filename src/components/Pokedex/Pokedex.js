@@ -27,7 +27,7 @@ class Pokedex extends Component {
     const { pokemonid } = this.state;
     const { history } = this.props;
     if (!localStorage.getItem('userActive')){
-      history.push('/menu');
+      history.push('/');
       return
     }
     this.fetchApi(pokemonid);
