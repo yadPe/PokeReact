@@ -1,5 +1,5 @@
-import { ableToMove, convertToCollideMap } from './utils';
 import Easystar from 'easystarjs';
+import { ableToMove, convertToCollideMap } from './utils';
 
 class Character {
   constructor(name, y, x, playground) {
@@ -13,7 +13,7 @@ class Character {
     this.playground.width = this.playground.matrix[0].length;
     this.playground.height = this.playground.matrix.length;
     this.direction = this.randomDirection();
-    this.collisionMap = convertToCollideMap(this.playground)
+    this.collisionMap = convertToCollideMap(this.playground);
     this.aStar = new Easystar.js();
     this.aStar.setGrid(this.collisionMap);
     this.aStar.setAcceptableTiles([0]);
@@ -25,13 +25,13 @@ class Character {
   }
 
   goto(destX, destY, callback) {
-    this.aStar.findPath(this.x, this.y, destX, destY, path => {
+    this.aStar.findPath(this.x, this.y, destX, destY, (path) => {
       if (path === null) {
-        alert("Path was not found.");
+        alert('Path was not found.');
       } else {
-        alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
+        alert('Path was found. The first Point is ' + path[0].x + ' ' + path[0].y);
       }
-    })
+    });
   }
 }
 

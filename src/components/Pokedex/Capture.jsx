@@ -1,7 +1,6 @@
 import React from 'react';
-import './Capture.css';
-import { NavLink } from 'react-router-dom';
 import '../../App.css';
+import { NavLink } from 'react-router-dom';
 
 export default class Capture extends React.Component {
   constructor(props) {
@@ -15,29 +14,19 @@ export default class Capture extends React.Component {
     this.pokemon = JSON.parse(localStorage.getItem(this.userName)).pokemon;
   }
 
-
   render() {
     const { catched } = this.props;
 
-
     return (
-
-      <div
-        className="blblblblbl"
-
-
-        contentLabel=""
-        style={{
-          position: 'absolute', top: '35%', zIndex: '100', display: 'block', backgroundColor: 'rgb(44, 88, 177)', border: '10px solid black',
-        }}
-      >
-
-        <div className="footer">
-          <h1 className="textModal">{`Well done ! You captured ${catched.name} !!!!!`}</h1>
+      <div className="Caught" style={{ display: winner }}>
+        <div>
+          <p>{`Well done ! You captured ${catched.name} !!!!!`}</p>
           <NavLink to="/pokedex">
             <button type="button" className="Button"> Go to Pokedex </button>
           </NavLink>
-
+          <NavLink to="/play">
+            <button type="button" className="Button"> Play again </button>
+          </NavLink>
         </div>
       </div>
     );
