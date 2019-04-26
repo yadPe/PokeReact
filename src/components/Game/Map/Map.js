@@ -225,7 +225,7 @@ class Map extends Component {
     } = this.state;
     let { pokemons, visiblePokemons, view } = this.state;
     if (this.debugMode) this.loopCounter += 1;
-    if (pokemons.length < 1) this.addNewPokemon(150, 9130);
+    if (pokemons.length < 1) this.addNewPokemon(1, 9025);
 
     if (pokemons.length > 0 && this.loaded) {
       pokemons.map(poke => poke.run())
