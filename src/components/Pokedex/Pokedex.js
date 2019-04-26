@@ -8,6 +8,7 @@ import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
 import DividerButton from './DividerButton';
+import { withRouter } from 'react-router-dom';
 
 
 class Pokedex extends Component {
@@ -24,6 +25,11 @@ class Pokedex extends Component {
 
   componentWillMount() {
     const { pokemonid } = this.state;
+    const { history } = this.props;
+    if (!localStorage.getItem('userActive')){
+      history.push('/menu');
+      return
+    }
     this.fetchApi(pokemonid);
     this.checkCapturedPokemon();
   }
@@ -114,4 +120,4 @@ class Pokedex extends Component {
   }
 }
 
-export default Pokedex;
+export default withRouter(Pokedex);
