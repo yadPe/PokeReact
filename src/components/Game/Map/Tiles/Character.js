@@ -8,7 +8,7 @@ class Player extends Component {
   }
 
   render() {
-    console.log(this.props.activeKeys)
+    //console.log(this.props.activeKeys)
     return (
       <div className={this.props.direction} />
     );

@@ -15,21 +15,12 @@ export default class Capture extends React.Component {
   }
 
   render() {
-    const { winner } = this.props;
+    const { catched } = this.props;
 
     return (
       <div className="Caught" style={{ display: winner }}>
         <div>
-          <p>
-            Well done
-            {' '}
-            {this.userName}
-            !
-            <br />
-            You caught the pokemon
-            {' '}
-            {this.pokemon}
-          </p>
+          <p>{`Well done ! You captured ${catched.name} !!!!!`}</p>
           <NavLink to="/pokedex">
             <button type="button" className="Button"> Go to Pokedex </button>
           </NavLink>

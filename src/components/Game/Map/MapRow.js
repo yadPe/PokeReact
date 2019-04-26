@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import Tile from './Tiles/Tile';
 import Tile3D from './Tiles/Tile3D';
@@ -20,12 +21,12 @@ class MapRow extends Component {
 
       const tilesSet = data.map((tiles, i) => {
         if (tiles.length > 1 && tiles.includes('-1')) {
-          return <Tile data={tiles}  key={`tile-${i}-${index}`} position={`tile-${i}-${index}`}/>;
+          return <Tile data={tiles} key={`tile-${i}-${index}`} position={`tile-${i}-${index}`} />;
         } if (tiles.length > 1) {
-          return <Tile3D data={tiles}  key={`tile-${i}-${index}`} position={`tile-${i}-${index}`}/>;
+          return <Tile3D data={tiles} key={`tile-${i}-${index}`} position={`tile-${i}-${index}`} />;
         }
 
-        return <Tile data={tiles} key={`tile-${i}-${index}`} position={`tile-${i}-${index}`}/>;
+        return <Tile data={tiles} key={`tile-${i}-${index}`} position={`tile-${i}-${index}`} />;
       });
       return (
         <div className={`row row-${index}`} style={this.theme}>
