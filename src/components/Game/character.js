@@ -1,3 +1,4 @@
+import React from 'react';
 import { ableToMove } from './utils';
 
 class Character {
@@ -27,10 +28,8 @@ class Pokemon extends Character {
 
   run() {
     if (!this.playground.width) { this.getPlaygroundSize(); console.log('mk playground'); return; }
-
     if (!this.direction) { this.direction = this.randomDirection(); console.log('mk pos'); return; }
-
-    if (ableToMove({x: this.x, y: this.y}, this.direction, 1, this.playground.matrix)) {
+    if (ableToMove({ x: this.x, y: this.y }, this.direction, 1, this.playground.matrix)) {
       if ((this.direction === 'up') || (this.direction === 'down')) {
         if (this.direction === 'up') {
           this.y -= 1;

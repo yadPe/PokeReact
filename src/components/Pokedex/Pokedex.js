@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Pokedex.css';
+import '../../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import PokeList from './PokeList';
@@ -78,8 +79,6 @@ class Pokedex extends Component {
     const { pokemon } = this.state;
     return (
       <div className="Background">
-
-
         <div className="LeftMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
@@ -104,9 +103,9 @@ class Pokedex extends Component {
 
         <div className="Buttons">
           <button type="button" className="pokedexbuttons" onClick={() => this.previousPokemon()} />
-          <h5 className="nextandpreviousbuttons">Previous Pokemon</h5>
+          <h1 className="Pokedexx">Previous Pokemon</h1>
           <DividerButton />
-          <h5 className="nextandpreviousbuttons">Next Pokemon</h5>
+          <h1 className="Pokedexx">Next Pokemon</h1>
           <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
         </div>
       </div>
