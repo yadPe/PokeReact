@@ -45,6 +45,7 @@ class CreationProfile extends Component {
         profil,
       }, () => {
         localStorage.setItem(profil.name, JSON.stringify(profil));
+        localStorage.setItem('userActive', profil.name);
         history.push('/menu');
       });
     }

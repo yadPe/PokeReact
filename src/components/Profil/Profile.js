@@ -58,15 +58,15 @@ class Profile extends Component {
     if (!profil.pokemon) return '';
     switch (profil.pokemon[0]) {
       case 'Pikachu':
-        return <img className="Presentation" id="Pikachu" src={Pikachu} alt="Pikachu" />;
+        return <img className="Presentation" id="25" src={Pikachu} alt="Pikachu" />;
       case 'Bulbizarre':
-        return <img className="Presentation" id="Bulbizarre" src={Bulbizarre} alt="Bulbizarre" />;
+        return <img className="Presentation" id="1" src={Bulbizarre} alt="Bulbizarre" />;
       case 'Salameche':
-        return <img className="Presentation" id="Salamèche" src={Salameche} alt="Salamèche" />;
+        return <img className="Presentation" id="4" src={Salameche} alt="Salamèche" />;
       case 'Carapuce':
-        return <img className="Presentation" id="Carapuce" src={Carapuce} alt="Carapuce" />;
+        return <img className="Presentation" id="7" src={Carapuce} alt="Carapuce" />;
       default:
-        return <img className="Presentation" id="Pikachu" src={Pikachu} alt="Pikachu" />;
+        return <img className="Presentation" id="25" src={Pikachu} alt="Pikachu" />;
     }
   }
 
