@@ -19,10 +19,9 @@ class Map extends Component {
       viewHeight: 13,
       viewX: 11,
       viewY: 17,
-      winner: 'none',
       characterDirection: 'CharacterDown0',
       pokemons: [],
-      visiblePokemons: [],
+      visiblePokemons: [],  
     };
 
     this.theme = {
@@ -56,6 +55,7 @@ class Map extends Component {
   init = async () => {
     this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
+    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson=> this.pokeBase = resJson.results);
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
   }
@@ -223,7 +223,7 @@ class Map extends Component {
     const {
       viewX, viewY, viewWidth, viewHeight, map
     } = this.state;
-    let { pokemons, visiblePokemons, winner, view } = this.state;
+    let { pokemons, visiblePokemons, view } = this.state;
     if (this.debugMode) this.loopCounter += 1;
     if (pokemons.length < 1) this.addNewPokemon(1, 9001);
 
@@ -236,11 +236,11 @@ class Map extends Component {
       visiblePokemons.map(poke => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
-          winner = 'block';
+          this.catched = (this.pokeBase[poke.id - 8999]);
           clearInterval(this.running);
         }
       })
-      this.setState({ view: [...view], winner, visiblePokemons });
+      this.setState({ view: [...view], visiblePokemons });
     }
 
     const { controller } = this.props;
@@ -264,7 +264,7 @@ class Map extends Component {
   }
 
   render() {
-    const { view, winner, characterDirection } = this.state;
+    const { view, winner, characterDirection, catched } = this.state;
     const { asyncKeys } = this.props;
     return (
       <div style={this.theme}>
@@ -273,7 +273,9 @@ class Map extends Component {
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
         <Player />
-        <Capture winner={winner} />
+
+        {this.catched ? <Capture winner={winner} catched={this.catched}/> : null}
+        
         <Player activeKeys={asyncKeys} direction={characterDirection} />
       </div>
     );
