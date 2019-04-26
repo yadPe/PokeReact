@@ -62,6 +62,12 @@
   );
 }
 
-.nextandpreviousbuttons {
-  color: black;
+.pokedexbuttons:active {
+  background: radial-gradient(
+      circle farthest-corner at 40% 25%,
+      rgb(229, 255, 181) 9%,
+      rgb(204, 237, 124) 20%,
+      rgb(103, 165, 64) 62%,
+      rgb(66, 204, 40) 100%
+  );
 }
