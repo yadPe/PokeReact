@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React, { Component } from 'react';
+import { faBinoculars } from '@fortawesome/free-solid-svg-icons';
 import MapRow from './MapRow';
 import Player from './Tiles/Character';
 import { ableToMove } from '../utils';
@@ -159,6 +160,7 @@ class Map extends Component {
     let {
       viewY, viewX, characterDirection,
     } = this.state;
+    const { bonus, bonus2 } = this.props;
     if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) return;
     switch (direction) {
       case 'up':
@@ -179,20 +181,22 @@ class Map extends Component {
       case 'right':
         viewX += step;
         characterDirection = 'CharacterRight1';
+
         break;
 
       default:
         return;
     }
 
-    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
+    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
       this.scrollSpeed += 1;
-      setTimeout(() => { this.scrollSpeed = 0; }, 30000);
-    }
-    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
+      bonus(0);
+    } if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
       pokemons[0].speed = 4;
-      setTimeout(() => { pokemons[0].speed = 1; }, 30000);
+      bonus2(0);
     }
+
+
     this.setState({
       viewY,
       viewX,
