@@ -21,6 +21,7 @@ class Map extends Component {
       viewY: 17,
       characterDirection: 'CharacterDown0',
       pokemons: [],
+      payerGhosts: [],
       visiblePokemons: [],
     };
 
@@ -34,7 +35,7 @@ class Map extends Component {
 
     this.loaded = false;
     this.asyncKeys = [];
-    this.debugMode = false;
+    this.debugMode = true;
     this.gamepads = [];
     this.scrollSpeed = 8;
     this.lastScroll = 0;
@@ -76,6 +77,10 @@ class Map extends Component {
     this.gamepad = controller;
     if (controller === 0) { this.config.host = true; }
     if (players > 1) this.config.multiplayerMode = true;
+
+    this.userProfile = {};
+    this.user = localStorage.getItem(`userActive${controller}`);
+    this.userProfile = JSON.parse(localStorage.getItem(this.user));
   }
 
   loadMap = async (mapUri) => {
@@ -186,14 +191,14 @@ class Map extends Component {
         return;
     }
 
-    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
-      this.scrollSpeed += 1;
-      setTimeout(() => { this.scrollSpeed = 0; }, 30000);
-    }
-    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
-      pokemons[0].speed = 4;
-      setTimeout(() => { pokemons[0].speed = 1; }, 30000);
-    }
+    // if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
+    //   this.scrollSpeed += 1;
+    //   setTimeout(() => { this.scrollSpeed = 0; }, 30000);
+    // }
+    // if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
+    //   pokemons[0].speed = 4;
+    //   setTimeout(() => { pokemons[0].speed = 1; }, 30000);
+    // }
     this.setState({
       viewY,
       viewX,
@@ -205,7 +210,7 @@ class Map extends Component {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
         this.lastScroll = performance.now();
         const { controller, reportPosition } = this.props;
-        reportPosition({ player: controller, x: viewX + 6, y: viewY + 6 });
+        reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
       });
   }
 
@@ -226,7 +231,7 @@ class Map extends Component {
     const { map } = this.state;
     const { pokemons } = this.state;
     for (let i = 0; i < amount; i += 1) {
-      const poke = new Pokemon(id, this.pokeBase[id-9001].name, 16, 20, map);
+      const poke = new Pokemon(id, this.pokeBase[id - 9001].name, 16, 20, map);
       poke.init();
       pokemons.push(poke);
     }
@@ -240,11 +245,14 @@ class Map extends Component {
     const {
       viewX, viewY, viewWidth, viewHeight, map, pokemons,
     } = this.state;
-    let { visiblePokemons, view } = this.state;
+    let { visiblePokemons, view, payerGhosts } = this.state;
     if (this.debugMode) this.loopCounter += 1;
-    if (pokemons.length < 1) this.addNewPokemon(1, pokemonRandom);
+    if (pokemons.length < 1 && this.config.host) this.addNewPokemon(1, pokemonRandom);
 
-    if (pokemons.length > 0 && this.loaded) {
+
+
+    if (pokemons.length > 0 && this.loaded && this.config.host) {
+
       pokemons.map(poke => poke.run());
       visiblePokemons = pokemons.filter(poke => poke.y
         >= viewY && poke.y < viewY + viewHeight && poke.x
@@ -260,22 +268,58 @@ class Map extends Component {
           // End game
           clearInterval(this.running);
           // save new pokemon to local storage
-          this.userProfile = {};
-          this.user = localStorage.getItem('userActive');
-          this.userProfile = JSON.parse(localStorage.getItem(this.user));
           this.userProfile.pokemon.push((poke.id - 9000).toString());
           localStorage.setItem(this.user, JSON.stringify(this.userProfile));
         }
       });
-      this.setState({ view: [...view], visiblePokemons });
+      
     }
 
-    if (this.config.multiplayerMode){
+    // if (payerGhosts[0].position){
+    //   view[payerGhosts[0].position.y - viewY][payerGhosts[0].position.x - viewX].push(1174);
+    // }
+
+    
+
+    if (this.config.multiplayerMode) {
       // get other players location 
-      if (this.config.host){
+      if (this.config.host) {
+        const player1 = this.props.getPlayerPosition(1);
+        if (player1.position){
+          //console.log(player1)
+          if (player1.position.y >= viewY && player1.position.y < viewY + viewHeight && player1.position.x >= viewX && player1.position.x < viewX + viewWidth) {
+            payerGhosts[0] = player1;
+            view[player1.position.y - viewY][player1.position.x - viewX].push(1174);
+            //console.log(payerGhosts[0])
+          }
+        }
+
+      } else {
+        const player0 = this.props.getPlayerPosition(0);
+        if (player0.position){
+          view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+          //console.log(player0)
+          if (player0.position.y >= viewY && player0.position.y < viewY + viewHeight && player0.position.x >= viewX && player0.position.x < viewX + viewWidth) {
+            payerGhosts[0] = player0;
+            view[player0.position.y - viewY][player0.position.x - viewX].push(1174);
+            //console.log(payerGhosts[0])
+          }
+          //console.log(player0.pokemons[0].x)
+          if (player0.pokemons[0].y >= viewY && player0.pokemons[0].y < viewY + viewHeight && player0.pokemons[0].x >= viewX && player0.pokemons[0].x < viewX + viewWidth) {
+            payerGhosts[0] = player0;
+            view[player0.pokemons[0].y - viewY][player0.pokemons[0].x - viewX].push(player0.pokemons[0].id);
+            //console.log(payerGhosts[0])
+          }
+        }
+
+      }
+      //console.log(`map ${this.props.controller} - received : `, this.props.getPlayerPosition(this.config.host ? 1 : 0))
+      if (this.config.host) {
         // spawn first pokemon and report its position to other players each loop
       }
     }
+
+    this.setState({ view: [...view], visiblePokemons });
 
     const { controller } = this.props;
     this.checkKeyboard();
@@ -301,7 +345,7 @@ class Map extends Component {
     const {
       view, characterDirection,
     } = this.state;
-    const { asyncKeys } = this.props;
+    const { asyncKeys, controller } = this.props;
     return (
       <div style={this.theme}>
         {this.debugMode ? this.debug() : null}
@@ -309,7 +353,7 @@ class Map extends Component {
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
 
-        {this.catched ? <Capture catched={this.catched} /> : null}
+        {this.catched ? <Capture catched={this.catched} player={controller} /> : null}
 
         <Player activeKeys={asyncKeys} direction={characterDirection} />
       </div>

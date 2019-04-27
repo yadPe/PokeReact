@@ -14,10 +14,12 @@ class Game extends Component {
     super(props);
     this.state = {
       playersPos: [],
+      playersInfos: [],
+      pokemons: [],
     };
 
     this.asyncKeys = [];
-    this.controls = [38, 40, 37, 39, 67, 87, 83, 65, 68, 67];
+    this.controls = [38, 40, 37, 39, 96, 110, 90, 83, 81, 68, 67, 86];
   }
 
   componentDidMount() {
@@ -102,19 +104,20 @@ class Game extends Component {
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i += 1) {
-      instances.push(<div className="instanceContainer"><Map controller={i} players={num} reportPosition={this.getPlayersPosition} getPlayersPosition={this.sendPlayerPositions} controls={this.controls.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
+      instances.push(<div className="instanceContainer"><Map controller={i} players={num} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
     return instances;
   }
 
-  getPlayersPosition = (data) => {
-    const { playersPos } = this.state;
-    if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; }
-    if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; }
-    this.setState({ playersPos });
+  getPlayersPosition = (data, poke) => {
+    const { playersPos, playersInfos } = this.state;
+    let { pokemons } = this.state;
+    if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; playersInfos[0] = data.profile; pokemons = poke || []}
+    if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; playersInfos[1] = data.profile}
+    this.setState({ playersPos, playersInfos, pokemons });
   }
 
-  sendPlayerPositions = player => this.state.playersPos[player];
+  sendPlayerPositions = player => {return {position: this.state.playersPos[player], profil: this.state.playersInfos[player], pokemons: this.state.pokemons}};
 
   render() {
     const { players } = this.props;
