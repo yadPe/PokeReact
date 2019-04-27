@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Pikachu from '../../images/Pikachu.png';
 import Bulbizarre from '../../images/Bulbizarre.png';
 import Salameche from '../../images/Salameche.png';
@@ -11,7 +11,6 @@ import Leaf from '../../images/Leaf.png';
 import Ludwig from '../../images/Ludwig.png';
 import Ludvina from '../../images/Ludvina.png';
 import '../../App.css';
-
 
 class Profile extends Component {
   constructor(props) {
@@ -70,7 +69,6 @@ class Profile extends Component {
     }
   }
 
-
   render() {
     const { profil } = this.state;
     return (
@@ -92,6 +90,19 @@ class Profile extends Component {
             {' '}
             {profil.name}
           </p>
+          <div className="changeProfil">
+            <span>
+              I'm not
+            </span>
+            {' '}
+            {profil.name}
+              .
+            {' '}
+            <NavLink to="./" className="Yellow">
+              {' '}
+                Use an other profil.
+            </NavLink>
+          </div>
         </div>
         <div>
           <p>
