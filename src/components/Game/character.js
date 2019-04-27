@@ -26,6 +26,7 @@ class Character {
     return dirs[Math.floor(Math.random() * 4)];
   }
 
+
   goto(destX, destY) {
     this.aStar.findPath(this.x, this.y, destX, destY, (path) => {
       if (path === null) {
@@ -46,9 +47,9 @@ class Pokemon extends Character {
     this.speed = 1;
   }
 
+
   run() {
     if (!this.lastMove) { this.lastMove = this.lastMove = performance.now(); return; }
-
     if (performance.now() - this.lastMove < 1000 / this.speed) return;
 
     if (ableToMove({ x: this.x, y: this.y }, this.direction, 1, this.playground.matrix)) {
