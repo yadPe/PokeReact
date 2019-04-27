@@ -155,9 +155,11 @@ class Map extends Component {
   moveTo = (direction, step) => {
     if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return;
     const {
-      map, viewWidth, viewHeight,
+      map, viewWidth, viewHeight, view, pokemons,
     } = this.state;
-    let { viewY, viewX, characterDirection } = this.state;
+    let {
+      viewY, viewX, characterDirection,
+    } = this.state;
     if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) return;
     switch (direction) {
       case 'up':
@@ -183,10 +185,21 @@ class Map extends Component {
       default:
         return;
     }
+
+    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
+      this.scrollSpeed += 1;
+      setTimeout(() => { this.scrollSpeed = 0; }, 30000);
+    }
+    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
+      pokemons[0].speed = 4;
+      setTimeout(() => { pokemons[0].speed = 1; }, 30000);
+    }
     this.setState({
       viewY,
       viewX,
       characterDirection,
+      pokemons,
+
     },
       () => {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
@@ -222,12 +235,14 @@ class Map extends Component {
 
   run = () => {
     if (!this.loaded) return;
+    const { asyncKeys, controls } = this.props;
+    const pokemonRandom = Math.floor(Math.random() * 151) + 9001;
     const {
       viewX, viewY, viewWidth, viewHeight, map, pokemons,
     } = this.state;
     let { visiblePokemons, view } = this.state;
     if (this.debugMode) this.loopCounter += 1;
-    if (pokemons.length < 1) this.addNewPokemon(1, 9025);
+    if (pokemons.length < 1) this.addNewPokemon(1, pokemonRandom);
 
     if (pokemons.length > 0 && this.loaded) {
       pokemons.map(poke => poke.run());
@@ -240,7 +255,7 @@ class Map extends Component {
       // eslint-disable-next-line array-callback-return
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
-        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
+        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id) && asyncKeys[4] === controls[4]) {
           this.catched = poke.name
           // End game
           clearInterval(this.running);
