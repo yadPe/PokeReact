@@ -56,7 +56,7 @@ class Map extends Component {
     this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
     // eslint-disable-next-line no-return-assign
-    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson => this.pokeBase = resJson.results);
+    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson => this.pokeBase = resJson.results)
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads
       ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
@@ -72,9 +72,10 @@ class Map extends Component {
 
   configInstance = () => {
     this.config = {};
-    const { controller } = this.props;
+    const { controller, players } = this.props;
     this.gamepad = controller;
     if (controller === 0) { this.config.host = true; }
+    if (players > 1) this.config.multiplayerMode = true;
   }
 
   loadMap = async (mapUri) => {
@@ -187,12 +188,12 @@ class Map extends Component {
       viewX,
       characterDirection,
     },
-    () => {
-      this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-      this.lastScroll = performance.now();
-      const { controller, reportPosition } = this.props;
-      reportPosition({ player: controller, x: viewX + 6, y: viewY + 6 });
-    });
+      () => {
+        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        this.lastScroll = performance.now();
+        const { controller, reportPosition } = this.props;
+        reportPosition({ player: controller, x: viewX + 6, y: viewY + 6 });
+      });
   }
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
@@ -212,7 +213,7 @@ class Map extends Component {
     const { map } = this.state;
     const { pokemons } = this.state;
     for (let i = 0; i < amount; i += 1) {
-      const poke = new Pokemon(id, 'greuf', 16, 20, map);
+      const poke = new Pokemon(id, this.pokeBase[id-9001].name, 16, 20, map);
       poke.init();
       pokemons.push(poke);
     }
@@ -231,7 +232,7 @@ class Map extends Component {
     if (pokemons.length > 0 && this.loaded) {
       pokemons.map(poke => poke.run());
       visiblePokemons = pokemons.filter(poke => poke.y
-         >= viewY && poke.y < viewY + viewHeight && poke.x
+        >= viewY && poke.y < viewY + viewHeight && poke.x
         >= viewX && poke.x < viewX + viewWidth);
 
       view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
@@ -240,18 +241,25 @@ class Map extends Component {
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
-          this.catched = (this.pokeBase[poke.id - 9001]);
+          this.catched = poke.name
+          // End game
           clearInterval(this.running);
+          // save new pokemon to local storage
           this.userProfile = {};
           this.user = localStorage.getItem('userActive');
-
           this.userProfile = JSON.parse(localStorage.getItem(this.user));
-
           this.userProfile.pokemon.push((poke.id - 9000).toString());
           localStorage.setItem(this.user, JSON.stringify(this.userProfile));
         }
       });
       this.setState({ view: [...view], visiblePokemons });
+    }
+
+    if (this.config.multiplayerMode){
+      // get other players location 
+      if (this.config.host){
+        // spawn first pokemon and report its position to other players each loop
+      }
     }
 
     const { controller } = this.props;
@@ -276,7 +284,7 @@ class Map extends Component {
 
   render() {
     const {
-      view, winner, characterDirection,
+      view, characterDirection,
     } = this.state;
     const { asyncKeys } = this.props;
     return (
@@ -285,9 +293,8 @@ class Map extends Component {
         {this.loaded ? view.map((row, i) => (
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
-        <Player />
 
-        {this.catched ? <Capture winner={winner} catched={this.catched} /> : null}
+        {this.catched ? <Capture catched={this.catched} /> : null}
 
         <Player activeKeys={asyncKeys} direction={characterDirection} />
       </div>

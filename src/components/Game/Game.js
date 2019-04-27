@@ -77,9 +77,6 @@ class Game extends Component {
     const keys = e.keyCode;
     const size = this.controls.length;
 
-    // Testing //
-    // if (keys === 66) this.state.pokemons[0].goto(this.state.viewX+6, this.state.viewY+6);
-
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
@@ -105,7 +102,7 @@ class Game extends Component {
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i += 1) {
-      instances.push(<div className="instanceContainer"><Map controller={i} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
+      instances.push(<div className="instanceContainer"><Map controller={i} players={num} reportPosition={this.getPlayersPosition} getPlayersPosition={this.sendPlayerPositions} controls={this.controls.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
     return instances;
   }
@@ -116,6 +113,8 @@ class Game extends Component {
     if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; }
     this.setState({ playersPos });
   }
+
+  sendPlayerPositions = player => this.state.playersPos[player];
 
   render() {
     const { players } = this.props;
