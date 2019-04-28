@@ -14,7 +14,7 @@ class Character {
     this.playground.width = this.playground.matrix[0].length;
     this.playground.height = this.playground.matrix.length;
     this.direction = this.randomDirection();
-    this.collisionMap = convertToCollideMap(this.playground);
+    this.collisionMap = convertToCollideMap(this.playground.matrix);
     // eslint-disable-next-line new-cap
     this.aStar = new Easystar.js();
     this.aStar.setGrid(this.collisionMap);
@@ -28,13 +28,18 @@ class Character {
 
 
   goto(destX, destY) {
+    this.moving = true;
     this.aStar.findPath(this.x, this.y, destX, destY, (path) => {
       if (path === null) {
         // eslint-disable-next-line no-alert
-        alert('Path was not found.');
+        this.moving = false
+        console.log('Path was not found.');
       } else {
         // eslint-disable-next-line no-alert
-        alert(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
+        this.moving = true
+        this.path = path;
+        console.log(path)
+        console.log(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
       }
     });
   }
@@ -52,6 +57,22 @@ class Pokemon extends Character {
   run() {
     if (!this.lastMove) { this.lastMove = this.lastMove = performance.now(); return; }
     if (performance.now() - this.lastMove < 1000 / this.speed) return;
+
+    if (this.moving){
+      this.aStar.calculate();
+      if (!this.path) return;
+      if (this.path.length > 0){
+        const step = this.path[0];
+        this.x = step.x;
+        this.y = step.y;
+        this.path.shift();
+        console.log(this.path)
+        this.lastMove = performance.now();
+      } else {
+        this.moving = false;
+      }
+      return
+    }
 
     if (ableToMove({ x: this.x, y: this.y }, this.direction, 1, this.playground.matrix)) {
       if ((this.direction === 'up') || (this.direction === 'down')) {

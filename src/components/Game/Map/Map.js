@@ -153,6 +153,10 @@ class Map extends Component {
           this.moveTo('stay', step);
           break;
         }
+        if (asyncKeys[i] === controls[5]) {
+          this.state.pokemons[0].goto(this.state.viewX + 6, this.state.viewY + 6)
+          break;
+        }
       }
     }
   }
@@ -191,6 +195,7 @@ class Map extends Component {
         return;
     }
 
+    // Crash //
     // if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
     //   this.scrollSpeed += 1;
     //   setTimeout(() => { this.scrollSpeed = 0; }, 30000);
@@ -199,6 +204,8 @@ class Map extends Component {
     //   pokemons[0].speed = 4;
     //   setTimeout(() => { pokemons[0].speed = 1; }, 30000);
     // }
+
+
     this.setState({
       viewY,
       viewX,
@@ -237,6 +244,7 @@ class Map extends Component {
       poke.init();
       pokemons.push(poke);
     }
+    console.log(pokemons)
     this.setState({ pokemons });
   }
 
@@ -278,14 +286,12 @@ class Map extends Component {
       visiblePokemons = pokemons.filter(poke => poke.y
         >= viewY && poke.y < viewY + viewHeight && poke.x
         >= viewX && poke.x < viewX + viewWidth);
-
-        //reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
     }
 
     if (pokemons.length > 0){
       pokemons = pokemons.filter(poke => !poke.catched)
     }
-    //console.log(pokemons)
+
     if (payerGhosts.length > 0) {
       payerGhosts.map(player => view[player.pos.y - viewY][player.pos.x - viewX].push(1174))
     }
@@ -296,12 +302,12 @@ class Map extends Component {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id) && asyncKeys[4] === controls[4]) {
           this.catched = poke.name
-          console.log(pokemons)
-          //poke.catched = true;
           pokemons = this.catch(poke.id)
           reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
+
           // End game
           //clearInterval(this.running);
+
           // save new pokemon to local storage
           this.userProfile.pokemon.push((poke.id - 9000).toString());
           localStorage.setItem(this.user, JSON.stringify(this.userProfile));
@@ -318,23 +324,13 @@ class Map extends Component {
 
   catch = (pokeId) => {
     let { pokemons } = this.state;
-    const { viewY, viewX } = this.props;
-    const { reportPosition, controller } = this.props;
-    //console.log(pokemons);
+
     pokemons.map(poke => {
       if (poke.id === pokeId){
         poke.catched = true;
       }
     })
-    //console.log(pokemons);
 
-    
-
-    // visiblePokemons = pokemons.filter(poke => poke.y
-    //   >= viewY && poke.y < viewY + viewHeight && poke.x
-    //   >= viewX && poke.x < viewX + viewWidth);
-
-    //this.setState({pokemons, visiblePokemons});
     return pokemons
   }
 
