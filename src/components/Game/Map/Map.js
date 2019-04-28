@@ -355,7 +355,7 @@ class Map extends Component {
 
         {this.catched ? <Capture catched={this.catched} player={controller} /> : null}
 
-        <Player activeKeys={asyncKeys} direction={characterDirection} />
+        <Player activeKeys={asyncKeys} direction={characterDirection} username={this.user}/>
       </div>
     );
   }
