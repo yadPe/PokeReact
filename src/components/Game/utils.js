@@ -36,7 +36,6 @@ export const convertToCollideMap = (arr) => {
       if (arr[i][j].includes(-1))
         row.push(1);
       else
-        // eslint-disable-next-line nonblock-statement-body-position
         row.push(0);
     }
     output.push(row);

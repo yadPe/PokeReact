@@ -45,6 +45,7 @@ class Pokemon extends Character {
     super(name, x, y, playground);
     this.id = id;
     this.speed = 1;
+    this.catched = false;
   }
 
 
@@ -72,8 +73,8 @@ class Pokemon extends Character {
     this.lastMove = performance.now();
   }
 
-  catched() {
-    this.wasCatched = true;
+  catch() {
+    this.catched = true;
   }
 }
 

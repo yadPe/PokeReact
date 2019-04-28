@@ -13,6 +13,7 @@ class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      players: [],
       playersPos: [],
       playersInfos: [],
       pokemons: [],
@@ -109,15 +110,31 @@ class Game extends Component {
     return instances;
   }
 
-  getPlayersPosition = (data, poke) => {
-    const { playersPos, playersInfos } = this.state;
-    let { pokemons } = this.state;
-    if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; playersInfos[0] = data.profile; pokemons = poke || []}
-    if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; playersInfos[1] = data.profile}
-    this.setState({ playersPos, playersInfos, pokemons });
+  getPlayersPosition = (data, poke, updated) => {
+    let { pokemons, players } = this.state;
+    if (data.player === 0) {
+      players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile }
+      if (poke) pokemons = poke;
+      if (updated) this.queued = false;
+    } else {
+      players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile }
+      if (poke) {
+        pokemons = poke;
+        this.queued = true;
+      }
+    }
+    // if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; playersInfos[0] = data.profile; pokemons = poke || []}
+    // if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; playersInfos[1] = data.profile}
+    //console.log(players)
+    this.setState({ pokemons, players });
   }
 
-  sendPlayerPositions = player => {return {position: this.state.playersPos[player], profil: this.state.playersInfos[player], pokemons: this.state.pokemons}};
+  sendPlayerPositions = player => {
+    const { players, pokemons } = this.state;
+    const joueurs = players.filter(p => p.profile.name !== player);
+    const out = { joueurs, pokemons, update: this.queued }
+    return out;
+  };
 
   render() {
     const { players } = this.props;

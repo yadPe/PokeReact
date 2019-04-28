@@ -210,7 +210,10 @@ class Map extends Component {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
         this.lastScroll = performance.now();
         const { controller, reportPosition } = this.props;
-        reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
+        if (this.config.host)
+          reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
+        else 
+          reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile });
       });
   }
 
@@ -222,7 +225,6 @@ class Map extends Component {
       const index = subMatrix.push(JSON.parse(JSON.stringify(matrix[i]))) - 1;
       subMatrix[index] = subMatrix[index].slice(offsetX, offsetX + width);
     }
-    this.setState({ view: [...subMatrix] });
     // eslint-disable-next-line consistent-return
     return subMatrix;
   }
@@ -240,90 +242,100 @@ class Map extends Component {
 
   run = () => {
     if (!this.loaded) return;
-    const { asyncKeys, controls } = this.props;
+    const { asyncKeys, controls, reportPosition } = this.props;
     const pokemonRandom = Math.floor(Math.random() * 151) + 9001;
     const {
-      viewX, viewY, viewWidth, viewHeight, map, pokemons,
+      viewX, viewY, viewWidth, viewHeight, map
     } = this.state;
-    let { visiblePokemons, view, payerGhosts } = this.state;
+    let { visiblePokemons, view, payerGhosts, pokemons } = this.state;
     if (this.debugMode) this.loopCounter += 1;
     if (pokemons.length < 1 && this.config.host) this.addNewPokemon(1, pokemonRandom);
 
+    view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
 
+    if (this.config.multiplayerMode) {
+      // get other players location 
+      const players = this.props.getPlayerPosition(this.user);
+      if (players) {
+        payerGhosts = players.joueurs.filter(player => player.pos.y
+          >= viewY && player.pos.y < viewY + viewHeight && player.pos.x
+          >= viewX && player.pos.x < viewX + viewWidth);
+        if (!this.config.host) {
 
-    if (pokemons.length > 0 && this.loaded && this.config.host) {
+          visiblePokemons = players.pokemons.filter(poke => poke.y
+            >= viewY && poke.y < viewY + viewHeight && poke.x
+            >= viewX && poke.x < viewX + viewWidth);
+        }
+        if (this.config.host && players.update){
+          pokemons = players.pokemons;
+          reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, undefined, true);
+        }
+      }
+    }
 
+    if (pokemons.length > 0 && this.config.host) {
       pokemons.map(poke => poke.run());
       visiblePokemons = pokemons.filter(poke => poke.y
         >= viewY && poke.y < viewY + viewHeight && poke.x
         >= viewX && poke.x < viewX + viewWidth);
 
-      view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        //reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
+    }
 
+    if (pokemons.length > 0){
+      pokemons = pokemons.filter(poke => !poke.catched)
+    }
+    //console.log(pokemons)
+    if (payerGhosts.length > 0) {
+      payerGhosts.map(player => view[player.pos.y - viewY][player.pos.x - viewX].push(1174))
+    }
+
+    if (visiblePokemons.length > 0) {
       // eslint-disable-next-line array-callback-return
-      visiblePokemons.map((poke) => {
+      visiblePokemons.map(poke => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id) && asyncKeys[4] === controls[4]) {
           this.catched = poke.name
+          console.log(pokemons)
+          //poke.catched = true;
+          pokemons = this.catch(poke.id)
+          reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
           // End game
-          clearInterval(this.running);
+          //clearInterval(this.running);
           // save new pokemon to local storage
           this.userProfile.pokemon.push((poke.id - 9000).toString());
           localStorage.setItem(this.user, JSON.stringify(this.userProfile));
         }
       });
-      
     }
 
-    // if (payerGhosts[0].position){
-    //   view[payerGhosts[0].position.y - viewY][payerGhosts[0].position.x - viewX].push(1174);
-    // }
-
-    
-
-    if (this.config.multiplayerMode) {
-      // get other players location 
-      if (this.config.host) {
-        const player1 = this.props.getPlayerPosition(1);
-        if (player1.position){
-          //console.log(player1)
-          if (player1.position.y >= viewY && player1.position.y < viewY + viewHeight && player1.position.x >= viewX && player1.position.x < viewX + viewWidth) {
-            payerGhosts[0] = player1;
-            view[player1.position.y - viewY][player1.position.x - viewX].push(1174);
-            //console.log(payerGhosts[0])
-          }
-        }
-
-      } else {
-        const player0 = this.props.getPlayerPosition(0);
-        if (player0.position){
-          view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-          //console.log(player0)
-          if (player0.position.y >= viewY && player0.position.y < viewY + viewHeight && player0.position.x >= viewX && player0.position.x < viewX + viewWidth) {
-            payerGhosts[0] = player0;
-            view[player0.position.y - viewY][player0.position.x - viewX].push(1174);
-            //console.log(payerGhosts[0])
-          }
-          //console.log(player0.pokemons[0].x)
-          if (player0.pokemons[0].y >= viewY && player0.pokemons[0].y < viewY + viewHeight && player0.pokemons[0].x >= viewX && player0.pokemons[0].x < viewX + viewWidth) {
-            payerGhosts[0] = player0;
-            view[player0.pokemons[0].y - viewY][player0.pokemons[0].x - viewX].push(player0.pokemons[0].id);
-            //console.log(payerGhosts[0])
-          }
-        }
-
-      }
-      //console.log(`map ${this.props.controller} - received : `, this.props.getPlayerPosition(this.config.host ? 1 : 0))
-      if (this.config.host) {
-        // spawn first pokemon and report its position to other players each loop
-      }
-    }
-
-    this.setState({ view: [...view], visiblePokemons });
+    this.setState({ view: [...view], visiblePokemons, payerGhosts, pokemons });
 
     const { controller } = this.props;
     this.checkKeyboard();
     this.checkGamepad(controller);
+  }
+
+  catch = (pokeId) => {
+    let { pokemons } = this.state;
+    const { viewY, viewX } = this.props;
+    const { reportPosition, controller } = this.props;
+    //console.log(pokemons);
+    pokemons.map(poke => {
+      if (poke.id === pokeId){
+        poke.catched = true;
+      }
+    })
+    //console.log(pokemons);
+
+    
+
+    // visiblePokemons = pokemons.filter(poke => poke.y
+    //   >= viewY && poke.y < viewY + viewHeight && poke.x
+    //   >= viewX && poke.x < viewX + viewWidth);
+
+    //this.setState({pokemons, visiblePokemons});
+    return pokemons
   }
 
   debug = () => {
@@ -353,9 +365,9 @@ class Map extends Component {
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
 
-        {this.catched ? <Capture catched={this.catched} player={controller} /> : null}
+        {/* {this.catched ? <Capture catched={this.catched} player={controller} /> : null} */}
 
-        <Player activeKeys={asyncKeys} direction={characterDirection} username={this.user}/>
+        <Player activeKeys={asyncKeys} direction={characterDirection} username={this.user} />
       </div>
     );
   }
