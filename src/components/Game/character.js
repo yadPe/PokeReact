@@ -77,4 +77,11 @@ class Pokemon extends Character {
   }
 }
 
+class Player extends Character{
+  constructor(name, y, x){
+    super(name, y, x);
+    
+  }
+}
+
 export { Character, Pokemon };

@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Character.css';
 
 const Player = (props) => {
-  const { direction } = props;
+  const { direction, username } = props;
   return (
-    <div className={direction} />
+    <div className='characterContainer'>
+      <div className='username'>{username}</div>
+      <div className={direction} />
+    </div>
+    
   );
 }
 
