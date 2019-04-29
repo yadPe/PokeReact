@@ -47,29 +47,29 @@ class Profile extends Component {
   recupTrainer = (profil) => {
     if (!profil.trainer) return '';
     switch (profil.trainer[0]) {
-      case 'Percila':
+      case '1':
         return <img className="Presentation" id="1" src={Percila} alt="Percila" />;
-      case 'Kunz':
+      case '2':
         return <img className="Presentation" id="2" src={Kunz} alt="Kunz" />;
-      case 'Iris':
+      case '3':
         return <img className="Presentation" id="3" src={Iris} alt="Iris" />;
-      case 'Matis':
+      case '4':
         return <img className="Presentation" id="4" src={Matis} alt="Matis" />;
-      case 'Bardane':
+      case '5':
         return <img className="Presentation" id="5" src={Bardane} alt="Bardane" />;
-      case 'Inezia':
+      case '6':
         return <img className="Presentation" id="6" src={Inezia} alt="Inezia" />;
-      case 'Artie':
+      case '7':
         return <img className="Presentation" id="7" src={Artie} alt="Artie" />;
-      case 'Strykna':
+      case '8':
         return <img className="Presentation" id="8" src={Strykna} alt="Strykna" />;
-      case 'Tcheren':
+      case '9':
         return <img className="Presentation" id="9" src={Tcheren} alt="Tcheren" />;
-      case 'Carolina':
+      case '10':
         return <img className="Presentation" id="10" src={Carolina} alt="Carolina" />;
-      case 'Amana':
+      case '11':
         return <img className="Presentation" id="11" src={Amana} alt="Amana" />;
-      case 'Watson':
+      case '12':
         return <img className="Presentation" id="12" src={Watson} alt="Watson" />;
       default:
         return <img className="Presentation" id="4" src={Matis} alt="Matis" />;
