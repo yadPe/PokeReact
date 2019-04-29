@@ -32,7 +32,7 @@ class App extends Component {
             <Route path="/pokedex" component={Pokedex} />
             <Route path="/commands" component={Commands} />
             <Route path="/creation" component={CreationProfile} />
-            <Route path="/profil" component={Profile} />
+            <Route path="/profil:multiplayer?" component={Profile} />
             <Route path="/connection2Players" component={Connection2Players} />
             <Route path="/recognitionPlayer2" component={RecognitionPlayer2} />
             <Route path="/anotherName" component={AnotherName} />
