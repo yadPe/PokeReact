@@ -9,6 +9,7 @@ class Recognition extends Component {
     super(props);
     this.state = {
       name: '',
+      erreur: false,
     };
   }
 
@@ -18,16 +19,13 @@ class Recognition extends Component {
     } = this.props;
     const { name } = this.state;
     if (localStorage.getItem('userActive0') === name) {
-      history.push({
-        pathname: '/anotherName',
-      });
+      this.setState({ erreur: name });
     } else if (localStorage.getItem(name)) {
       localStorage.setItem('userActive1', name);
       history.push({
         pathname: '/playvs',
       });
-    }
-    else {
+    } else {
       const input = {};
       input.type = 'testSubmit';
       input.value = name;
@@ -42,6 +40,7 @@ class Recognition extends Component {
   }
 
   render() {
+    const { erreur } = this.state;
     return (
       <div className="Flex">
         <p>
@@ -49,6 +48,17 @@ class Recognition extends Component {
           <br />
           What's your trainer name ?
         </p>
+        {erreur ? (
+          <p>
+          Your name is not avaible,
+            {' '}
+          please choose another one
+            {' '}
+            {erreur}
+            {' '}
+          !
+          </p>
+        ) : ''}
         <input className="Input" id="name" type="text" placeholder="Your name" onChange={this.handleChange} />
         <button className="Button" id="submitBtn" type="button" onClick={this.handleSubmit}>Go !</button>
       </div>

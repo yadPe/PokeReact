@@ -172,7 +172,7 @@ class Game extends Component {
       <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-          <NavLink to="/profil">
+          <NavLink to="/profil:">
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faUser} />
             </button>

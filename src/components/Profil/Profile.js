@@ -47,29 +47,29 @@ class Profile extends Component {
   recupTrainer = (profil) => {
     if (!profil.trainer) return '';
     switch (profil.trainer[0]) {
-      case '1':
+      case 'Percila':
         return <img className="Presentation" id="1" src={Percila} alt="Percila" />;
-      case '2':
+      case 'Kunz':
         return <img className="Presentation" id="2" src={Kunz} alt="Kunz" />;
-      case '3':
+      case 'Iris':
         return <img className="Presentation" id="3" src={Iris} alt="Iris" />;
-      case '4':
+      case 'Matis':
         return <img className="Presentation" id="4" src={Matis} alt="Matis" />;
-      case '5':
+      case 'Bardane':
         return <img className="Presentation" id="5" src={Bardane} alt="Bardane" />;
-      case '6':
+      case 'Inezia':
         return <img className="Presentation" id="6" src={Inezia} alt="Inezia" />;
-      case '7':
+      case 'Artie':
         return <img className="Presentation" id="7" src={Artie} alt="Artie" />;
-      case '8':
+      case 'Strykna':
         return <img className="Presentation" id="8" src={Strykna} alt="Strykna" />;
-      case '9':
+      case 'Tcheren':
         return <img className="Presentation" id="9" src={Tcheren} alt="Tcheren" />;
-      case '10':
+      case 'Carolina':
         return <img className="Presentation" id="10" src={Carolina} alt="Carolina" />;
-      case '11':
+      case 'Amana':
         return <img className="Presentation" id="11" src={Amana} alt="Amana" />;
-      case '12':
+      case 'Watson':
         return <img className="Presentation" id="12" src={Watson} alt="Watson" />;
       default:
         return <img className="Presentation" id="4" src={Matis} alt="Matis" />;
@@ -96,12 +96,15 @@ class Profile extends Component {
     const { profils } = this.state;
     const profilInformation = (userProfils) => {
       const out = [];
-      const template = profil => (
+      const template = (profil, index) => (
         <div>
           <div>
             <p>
               <span className="Yellow">
-                You're now loged in as
+                {`Player ${index + 1}`}
+,
+                {' '}
+you're now loged in as
               </span>
               {' '}
               {profil.name}
@@ -137,7 +140,7 @@ class Profile extends Component {
         </div>
       );
 
-      userProfils.map(profil => out.push(template(profil)));
+      userProfils.map((profil, index) => out.push(template(profil, index)));
       return out;
     };
 
