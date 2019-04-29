@@ -21,7 +21,13 @@ class Recognition extends Component {
       history.push({
         pathname: '/anotherName',
       });
-    } else {
+    } else if (localStorage.getItem(name)) {
+      localStorage.setItem('userActive1', name);
+      history.push({
+        pathname: '/playvs',
+      });
+    }
+    else {
       const input = {};
       input.type = 'testSubmit';
       input.value = name;
