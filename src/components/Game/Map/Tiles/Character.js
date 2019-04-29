@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Character.css';
 
-class Player extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    const { direction } = this.props;
-    return (
+const Player = (props) => {
+  const { direction, username } = props;
+  return (
+    <div className='characterContainer'>
+      <div className='username'>{username}</div>
       <div className={direction} />
-    );
-  }
+    </div>
+    
+  );
 }
 
 export default Player;

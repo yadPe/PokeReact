@@ -13,13 +13,16 @@ class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      players: [],
       playersPos: [],
+      playersInfos: [],
+      pokemons: [],
       bonus: 1,
       bonus2: 1,
     };
 
     this.asyncKeys = [];
-    this.controls = [38, 40, 37, 39, 67, 87, 83, 65, 68, 67];
+    this.controls = [38, 40, 37, 39, 96, 110, 90, 83, 81, 68, 67, 86];
   }
 
   componentDidMount() {
@@ -79,10 +82,6 @@ class Game extends Component {
     const keys = e.keyCode;
     const size = this.controls.length;
 
-
-    // Testing //
-    // if (keys === 66) this.state.pokemons[0].goto(this.state.viewX+6, this.state.viewY+6);
-
     for (let i = 0; i < size; i += 1) {
       if (this.controls[i] === keys && !this.asyncKeys[i]) {
         this.asyncKeys[i] = keys;
@@ -135,17 +134,36 @@ class Game extends Component {
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i += 1) {
-      instances.push(<div className="instanceContainer"><Map controller={i} bonus={this.bonusGreyScale} bonus2={this.bonusGreyScale2} reportPosition={this.getPlayersPosition} controls={this.controls.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(4 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
+      instances.push(<div className="instanceContainer"><Map controller={i} players={num} bonus={this.bonusGreyScale} bonus2={this.bonusGreyScale2} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
     return instances;
   }
 
-  getPlayersPosition = (data) => {
-    const { playersPos } = this.state;
-    if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; }
-    if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; }
-    this.setState({ playersPos });
+  getPlayersPosition = (data, poke, updated) => {
+    let { pokemons, players } = this.state;
+    if (data.player === 0) {
+      players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile };
+      if (poke) pokemons = poke;
+      if (updated) this.queued = false;
+    } else {
+      players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile };
+      if (poke) {
+        pokemons = poke;
+        this.queued = true;
+      }
+    }
+    // if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; playersInfos[0] = data.profile; pokemons = poke || []}
+    // if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; playersInfos[1] = data.profile}
+    // console.log(players)
+    this.setState({ pokemons, players });
   }
+
+  sendPlayerPositions = (player) => {
+    const { players, pokemons } = this.state;
+    const joueurs = players.filter(p => p.profile.name !== player);
+    const out = { joueurs, pokemons, update: this.queued };
+    return out;
+  };
 
   render() {
     const { players } = this.props;
@@ -171,14 +189,12 @@ class Game extends Component {
             <button type="button" className="RoundBtn"> ? </button>
           </NavLink>
         </div>
-
         <button type="button" className="RoundBtn Bonus" style={{ filter: `grayscale(${bonus})` }}> C </button>
         <button type="button" className="RoundBtn Bonus1" style={{ filter: `grayscale(${bonus2})` }}> S </button>
 
         <div className="gameContainer">
           {this.createGameInstances(players || 1)}
         </div>
-
 
       </div>
     );
