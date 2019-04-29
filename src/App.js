@@ -29,7 +29,7 @@ class App extends Component {
             <Route path="/recognition" component={Recognition} />
             <Route path="/play" component={Game} />
             <Route path="/playvs" render={props => <Game {...props} players={2} />} />
-            <Route path="/pokedex:player" component={Pokedex} />
+            <Route path="/pokedex:player?" component={Pokedex} />
             <Route path="/commands" component={Commands} />
             <Route path="/creation" component={CreationProfile} />
             <Route path="/profil:multiplayer?" component={Profile} />
