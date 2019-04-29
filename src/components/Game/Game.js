@@ -152,12 +152,6 @@ class Game extends Component {
         this.queued = true;
       }
     }
-<<<<<<< HEAD
-    // if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; playersInfos[0] = data.profile; pokemons = poke || []}
-    // if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; playersInfos[1] = data.profile}
-    // //console.log(players)
-=======
->>>>>>> dev
     this.setState({ pokemons, players });
   }
 
@@ -175,11 +169,7 @@ class Game extends Component {
       <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-<<<<<<< HEAD
-          <NavLink to={`/profil${players > 1 ? ':multi' : ''}`}>
-=======
           <NavLink to="/menu">
->>>>>>> dev
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faBars} />
             </button>
