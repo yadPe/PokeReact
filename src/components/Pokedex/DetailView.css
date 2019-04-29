@@ -71,7 +71,7 @@
   border: outset rgb(248, 187, 187) 6px;
   transform: rotate(180deg);
   cursor: pointer;
-  background-color: #44749C;
+  background-color: #5ed75e;
 }
 
 .controlbutton:hover {
