@@ -125,7 +125,7 @@ class Game extends Component {
     }
     // if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; playersInfos[0] = data.profile; pokemons = poke || []}
     // if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; playersInfos[1] = data.profile}
-    //console.log(players)
+    ////console.log(players)
     this.setState({ pokemons, players });
   }
 

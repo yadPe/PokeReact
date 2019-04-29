@@ -363,8 +363,8 @@ class Map extends Component {
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
 
-        {/* { {this.catched ? <Capture pokemon={this.catched} player={controller} /> : null} } */}
-        <MemorizedAlert pokemon={this.catched} player={controller} />
+        {this.catched ? <MemorizedAlert pokemon={this.catched} player={controller} name={this.user}/> : null}
+        
 
         <Player activeKeys={asyncKeys} direction={characterDirection} username={this.user} />
       </div>
