@@ -21,7 +21,7 @@ class Map extends Component {
       viewHeight: 13,
       viewX: 11,
       viewY: 17,
-      characterDirection: 'CharacterDown0',
+      characterDirection: 'character',
       pokemons: [],
       payerGhosts: [],
       visiblePokemons: [],
@@ -35,7 +35,7 @@ class Map extends Component {
       textAlign: 'center',
     };
 
-    this.loaded = false;
+    this.loaded = 0;
     this.asyncKeys = [];
     this.debugMode = true;
     this.gamepads = [];
@@ -60,7 +60,7 @@ class Map extends Component {
     this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
     // eslint-disable-next-line no-return-assign
-    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson => this.pokeBase = resJson.results)
+    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson => this.pokeBase = resJson.results).then(() => this.loaded += 1)
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads
       ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
@@ -77,6 +77,7 @@ class Map extends Component {
   configInstance = () => {
     this.config = {};
     const { controller, players } = this.props;
+    let { characterDirection } = this.state;
     this.gamepad = controller;
     if (controller === 0) { this.config.host = true; }
     if (players > 1) this.config.multiplayerMode = true;
@@ -84,13 +85,15 @@ class Map extends Component {
     this.userProfile = {};
     this.user = localStorage.getItem(`userActive${controller}`);
     this.userProfile = JSON.parse(localStorage.getItem(this.user));
+    characterDirection = `character_${this.userProfile.trainer[0]}_down0`;
+    this.setState({characterDirection}, () => this.loaded += 1);
   }
 
   loadMap = async (mapUri) => {
     await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
       map: [...resJson],
     }));
-    this.loaded = true;
+    this.loaded += 1;
 
     // Will move //
 
@@ -178,22 +181,22 @@ class Map extends Component {
     switch (direction) {
       case 'up':
         viewY -= step;
-        characterDirection = 'CharacterUp1';
+        characterDirection = `character_${this.userProfile.trainer[0]}_up0`;
         break;
 
       case 'down':
         viewY += step;
-        characterDirection = 'CharacterDown1';
+        characterDirection = `character_${this.userProfile.trainer[0]}_down0`;
         break;
 
       case 'left':
         viewX -= step;
-        characterDirection = 'CharacterLeft1';
+        characterDirection = `character_${this.userProfile.trainer[0]}_left0`;
         break;
 
       case 'right':
         viewX += step;
-        characterDirection = 'CharacterRight1';
+        characterDirection = `character_${this.userProfile.trainer[0]}_right0`;
         break;
 
       default:
@@ -270,7 +273,7 @@ class Map extends Component {
   }
 
   run = () => {
-    if (!this.loaded) return;
+    if (this.loaded < 3) return;
     if (!this.pokeBase) return;
     const { asyncKeys, controls, reportPosition } = this.props;
     const pokemonRandom = Math.floor(Math.random() * 151) + 9001;
