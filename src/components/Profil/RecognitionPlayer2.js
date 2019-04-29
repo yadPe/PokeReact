@@ -17,11 +17,9 @@ class Recognition extends Component {
       sendInput, history,
     } = this.props;
     const { name } = this.state;
-    if (localStorage.getItem(name)) {
-      localStorage.setItem('userActive0', name);
+    if (localStorage.getItem('userActive0') === name) {
       history.push({
-        pathname: '/menu',
-        state: { user: name },
+        pathname: '/anotherName',
       });
     } else {
       const input = {};
@@ -41,9 +39,9 @@ class Recognition extends Component {
     return (
       <div className="Flex">
         <p>
-          Hi there!
+          Hi Player 2 !
           <br />
-          What's your trainer name?
+          What's your trainer name ?
         </p>
         <input className="Input" id="name" type="text" placeholder="Your name" onChange={this.handleChange} />
         <button className="Button" id="submitBtn" type="button" onClick={this.handleSubmit}>Go !</button>
