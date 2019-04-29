@@ -30,24 +30,24 @@ class Character {
     this.aStar.findPath(this.x, this.y, destX, destY, (path) => {
       if (path === null) {
         // eslint-disable-next-line no-alert
-        this.moving = false
-        //console.log('Path was not found.');
+        this.moving = false;
+        // console.log('Path was not found.');
       } else {
         // eslint-disable-next-line no-alert
-        this.moving = true
+        this.moving = true;
         this.path = path;
-        //console.log(path)
-        //console.log(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
+        // console.log(path)
+        // console.log(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
       }
     });
   }
 }
 
 class Pokemon extends Character {
-  constructor(id, name, x, y, playground) {
+  constructor(id, name, x, y, playground, speed) {
     super(name, x, y, playground);
     this.id = id;
-    this.speed = 1;
+    this.speed = speed;
     this.catched = false;
   }
 
@@ -56,20 +56,20 @@ class Pokemon extends Character {
     if (!this.lastMove) { this.lastMove = this.lastMove = performance.now(); return; }
     if (performance.now() - this.lastMove < 1000 / this.speed) return;
 
-    if (this.moving){
+    if (this.moving) {
       this.aStar.calculate();
       if (!this.path) return;
-      if (this.path.length > 0){
+      if (this.path.length > 0) {
         const step = this.path[0];
         this.x = step.x;
         this.y = step.y;
         this.path.shift();
-        //console.log(this.path)
+        // console.log(this.path)
         this.lastMove = performance.now();
       } else {
         this.moving = false;
       }
-      return
+      return;
     }
 
     if (ableToMove({ x: this.x, y: this.y }, this.direction, 1, this.playground.matrix)) {
@@ -97,10 +97,9 @@ class Pokemon extends Character {
   }
 }
 
-class Player extends Character{
-  constructor(name, y, x){
+class Player extends Character {
+  constructor(name, y, x) {
     super(name, y, x);
-    
   }
 }
 
