@@ -3,12 +3,10 @@ import { NavLink, withRouter } from 'react-router-dom';
 import './Pokedex.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
-
 import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
-import DividerButton from './DividerButton';
 
 
 class Pokedex extends Component {
@@ -50,6 +48,11 @@ class Pokedex extends Component {
     this.pokemon = JSON.parse(localStorage.getItem(this.userName)).pokemon;
   }
 
+
+  reloadingPage = () => {
+    window.location.reload();
+  }
+
   handleOnClick(id) {
     this.setState({
       pokemonid: id / 1,
@@ -84,8 +87,10 @@ class Pokedex extends Component {
     const { pokemon } = this.state;
     return (
       <div className="Background">
-
-
+        <button type="button" className="pokedextitle" onClick={() => this.reloadingPage()}>
+          {this.userName}
+          's Pokedex
+        </button>
         <div className="LeftMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
@@ -110,9 +115,6 @@ class Pokedex extends Component {
 
         <div className="Buttons">
           <button type="button" className="pokedexbuttons" onClick={() => this.previousPokemon()} />
-          <h5 className="nextandpreviousbuttons">Previous Pokemon</h5>
-          <DividerButton />
-          <h5 className="nextandpreviousbuttons">Next Pokemon</h5>
           <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
         </div>
       </div>
