@@ -142,11 +142,11 @@ class Game extends Component {
   getPlayersPosition = (data, poke, updated) => {
     let { pokemons, players } = this.state;
     if (data.player === 0) {
-      players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile }
+      players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile };
       if (poke) pokemons = poke;
       if (updated) this.queued = false;
     } else {
-      players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile }
+      players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile };
       if (poke) {
         pokemons = poke;
         this.queued = true;
@@ -154,14 +154,14 @@ class Game extends Component {
     }
     // if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; playersInfos[0] = data.profile; pokemons = poke || []}
     // if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; playersInfos[1] = data.profile}
-    ////console.log(players)
+    // //console.log(players)
     this.setState({ pokemons, players });
   }
 
-  sendPlayerPositions = player => {
+  sendPlayerPositions = (player) => {
     const { players, pokemons } = this.state;
     const joueurs = players.filter(p => p.profile.name !== player);
-    const out = { joueurs, pokemons, update: this.queued }
+    const out = { joueurs, pokemons, update: this.queued };
     return out;
   };
 
@@ -172,7 +172,7 @@ class Game extends Component {
       <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-          <NavLink to={`/profil${players > 1 ? `:multi` : ''}`}>
+          <NavLink to={`/profil${players > 1 ? ':multi' : ''}`}>
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faUser} />
             </button>
