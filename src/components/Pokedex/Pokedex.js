@@ -24,7 +24,7 @@ class Pokedex extends Component {
   componentWillMount() {
     const { pokemonid } = this.state;
     const { history } = this.props;
-    if (!localStorage.getItem('userActive')) {
+    if (!localStorage.getItem('userActive0')) {
       history.push('/');
       return;
     }
@@ -45,7 +45,7 @@ class Pokedex extends Component {
   }
 
   checkCapturedPokemon = () => {
-    this.userName = localStorage.getItem('userActive');
+    this.userName = localStorage.getItem('userActive0');
     this.pokemon = JSON.parse(localStorage.getItem(this.userName)).pokemon;
   }
 
