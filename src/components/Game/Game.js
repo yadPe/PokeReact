@@ -123,13 +123,12 @@ class Game extends Component {
       <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-          <NavLink to="/profil">
+          <NavLink to={`${(players > 1) ? '/profil:multiplayer' : '/profil'}`}>
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faUser} />
             </button>
           </NavLink>
         </div>
-
         <div className="RightMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
