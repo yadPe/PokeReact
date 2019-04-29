@@ -201,8 +201,9 @@ class Map extends Component {
     }
 
     if (!this.config.multiplayerMode) {
-      if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+      if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2) - 1].includes(2173)) {
         const randomBonus = Math.floor(Math.random() * 5);
+        console.log(randomBonus);
         if (randomBonus === 0) {
           this.scrollSpeed += 1;
           bonus(0);
