@@ -52,15 +52,13 @@
   width: 120px;
   margin: 24px;
 }
-.textModal {
-  font-family: 'Press Start 2P', cursive;
-  color: #FFCB05;
-}
+
 .Logo {
   width: 66vw;
   animation-name: Logo;
   animation-duration: 2s;
 }
+
 @keyframes Logo {
   0%   {width: 22vw;}
   75%  {width: 68vw;}
@@ -306,7 +304,6 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-<<<<<<< HEAD
 }
 
 .changeProfil{
@@ -341,6 +338,4 @@ h1 {
   0%   {width: 22vw;}
   75%  {width: 68vw;}
   90% {width: 66vw;}
-=======
->>>>>>> dev
 }
