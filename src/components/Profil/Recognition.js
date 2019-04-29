@@ -18,7 +18,7 @@ class Recognition extends Component {
     } = this.props;
     const { name } = this.state;
     if (localStorage.getItem(name)) {
-      localStorage.setItem('userActive', name);
+      localStorage.setItem('userActive0', name);
       history.push({
         pathname: '/menu',
         state: { user: name },
