@@ -272,17 +272,19 @@ class Map extends Component {
 
   addNewPokemon = (amount, id) => {
     let randomPosition = Math.floor(Math.random() * 30);
-
+    let speed = 1;
     const { map } = this.state;
     const { pokemons } = this.state;
-
+    if (id - 9001 < 120) {
+      speed += 2;
+    }
     if (randomPosition < 5) {
       randomPosition += 5;
     } if (randomPosition > 30) {
       randomPosition -= 5;
     } if (!map[randomPosition][randomPosition].includes(-1)) {
       for (let i = 0; i < amount; i += 1) {
-        const poke = new Pokemon(id, this.pokeBase[id - 9001].name, randomPosition, randomPosition, map);
+        const poke = new Pokemon(id, this.pokeBase[id - 9001].name, randomPosition, randomPosition, map, speed);
         poke.init();
         pokemons.push(poke);
       }
