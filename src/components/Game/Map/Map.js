@@ -203,17 +203,35 @@ class Map extends Component {
       if (randomBonus === 0) {
         this.scrollSpeed += 1;
         bonus(0);
+        setTimeout(() => {
+          this.scrollSpeed -= 1;
+        }, 3000);
       } if (randomBonus === 1) {
         pokemons[0].speed = 4;
         bonus2(0);
+        setTimeout(() => {
+          pokemons[0].speed = 2;
+          this.setState({
+            pokemons,
+          });
+        }, 3000);
       }
       if (randomBonus === 2) {
         pokemons[0].speed = 1;
         bonus2(0);
+        setTimeout(() => {
+          pokemons[0].speed = 2;
+          this.setState({
+            pokemons,
+          });
+        }, 3000);
       }
       if (randomBonus === 3) {
         this.scrollSpeed = 4;
         bonus(0);
+        setTimeout(() => {
+          this.scrollSpeed = 8;
+        }, 3000);
       }
       if (randomBonus === 4) {
         this.catchBonus = 1;
