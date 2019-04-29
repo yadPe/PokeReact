@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Pikachu from '../../images/Pikachu.png';
 import Bulbizarre from '../../images/Bulbizarre.png';
 import Salameche from '../../images/Salameche.png';
@@ -11,7 +11,6 @@ import Leaf from '../../images/Leaf.png';
 import Ludwig from '../../images/Ludwig.png';
 import Ludvina from '../../images/Ludvina.png';
 import '../../App.css';
-
 
 class Profile extends Component {
   constructor(props) {
@@ -57,13 +56,13 @@ class Profile extends Component {
     const { profil } = this.state;
     if (!profil.pokemon) return '';
     switch (profil.pokemon[0]) {
-      case 'Pikachu':
+      case '25':
         return <img className="Presentation" id="25" src={Pikachu} alt="Pikachu" />;
-      case 'Bulbizarre':
+      case '1':
         return <img className="Presentation" id="1" src={Bulbizarre} alt="Bulbizarre" />;
-      case 'Salameche':
+      case '4':
         return <img className="Presentation" id="4" src={Salameche} alt="Salamèche" />;
-      case 'Carapuce':
+      case '7':
         return <img className="Presentation" id="7" src={Carapuce} alt="Carapuce" />;
       default:
         return <img className="Presentation" id="25" src={Pikachu} alt="Pikachu" />;
@@ -83,14 +82,6 @@ class Profile extends Component {
           </NavLink>
         </div>
 
-        <div className="RightMenu">
-          <NavLink to="/menu">
-            <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faUser} />
-            </button>
-          </NavLink>
-        </div>
-
         <div>
           <p>
             <span className="Yellow">
@@ -99,6 +90,19 @@ class Profile extends Component {
             {' '}
             {profil.name}
           </p>
+          <div className="changeProfil">
+            <span>
+              I'm not
+            </span>
+            {' '}
+            {profil.name}
+              .
+            {' '}
+            <NavLink to="./" className="Yellow">
+              {' '}
+                Use an other profil.
+            </NavLink>
+          </div>
         </div>
         <div>
           <p>

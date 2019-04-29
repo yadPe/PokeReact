@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
 import '../../App.css';
 import { withRouter } from 'react-router-dom';
@@ -19,7 +20,7 @@ class Recognition extends Component {
     if (localStorage.getItem(name)) {
       localStorage.setItem('userActive', name);
       history.push({
-        pathname: '/play',
+        pathname: '/menu',
         state: { user: name },
       });
     } else {
@@ -50,5 +51,4 @@ class Recognition extends Component {
     );
   }
 }
-
 export default withRouter(Recognition);

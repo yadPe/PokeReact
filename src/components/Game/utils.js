@@ -1,4 +1,6 @@
-// eslint-disable-next-line import/prefer-default-export
+/* eslint-disable curly */
+/* eslint-disable nonblock-statement-body-position */
+
 export const ableToMove = (pos, direction, step, playground) => {
   const newPos = { x: pos.x, y: pos.y };
 
@@ -27,16 +29,17 @@ export const ableToMove = (pos, direction, step, playground) => {
 };
 
 export const convertToCollideMap = (arr) => {
-    const output = [];
-    for(let i = 0; i < arr.length; i += 1){
-        const row = [];
-        for (let j = 0; j < arr[i].length; j += 1){
-            if (arr[i][j].includes(-1))
-                row.push(1)
-            else 
-                row.push(0)
-        }
-        output.push(row);
+  const output = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    const row = [];
+    for (let j = 0; j < arr[i].length; j += 1) {
+      if (arr[i][j].includes(-1))
+        row.push(1);
+      else
+        // eslint-disable-next-line nonblock-statement-body-position
+        row.push(0);
     }
-    return output;
-}
+    output.push(row);
+  }
+  return output;
+};

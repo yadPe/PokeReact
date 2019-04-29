@@ -9,6 +9,8 @@
   border-radius: 4px;
   background: #460f0f;
   margin-right: 50px;
+  position: absolute;
+  left: 946px;
 }
 
 .dividerbutton>* {
