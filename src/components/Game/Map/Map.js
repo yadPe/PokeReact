@@ -202,8 +202,13 @@ class Map extends Component {
     }
 
     if (!this.config.multiplayerMode) {
+<<<<<<< HEAD
       if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+=======
+      if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2) - 1].includes(2173)) {
+>>>>>>> dev
         const randomBonus = Math.floor(Math.random() * 5);
+        console.log(randomBonus);
         if (randomBonus === 0) {
           this.scrollSpeed += 1;
           bonus(0);
@@ -274,6 +279,7 @@ class Map extends Component {
 
     const { map } = this.state;
     const { pokemons } = this.state;
+    let randomPosition = Math.floor(Math.random() * 30);
     if (randomPosition < 5) {
       randomPosition += 5;
     } if (randomPosition > 30) {
@@ -286,7 +292,7 @@ class Map extends Component {
       }
       this.setState({ pokemons });
     } else {
-      randomPosition = Math.floor(Math.random() * 20);
+      randomPosition = Math.floor(Math.random() * 30);
     }
   }
 
