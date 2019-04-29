@@ -1,5 +1,5 @@
 .Pokedex {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', sans-serif !important;
   align-items: center;
   justify-content: center;
   width: 50%;
