@@ -35,7 +35,7 @@ class Menu extends Component {
         <NavLink to="/playvs">
           <button type="button" className="Button"> Versus </button>
         </NavLink>
-        <NavLink to="/pokedex">
+        <NavLink to="/pokedex:">
           <button type="button" className="Button"> Pokedex </button>
         </NavLink>
       </div>

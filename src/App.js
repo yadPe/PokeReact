@@ -20,18 +20,18 @@ class App extends Component {
     return (
       <div className="App">
         <div>
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/menu" component={Menu} />
-              <Route path="/recognition" component={Recognition} />
-              <Route path="/play" component={Game} />
-              <Route path="/playvs" render={props => <Game {...props} players={2} />} />
-              <Route path="/pokedex" component={Pokedex} />
-              <Route path="/commands" component={Commands} />
-              <Route path="/creation" component={CreationProfile} />
-              <Route path="/profil" component={Profile} />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/menu" component={Menu} />
+            <Route path="/recognition" component={Recognition} />
+            <Route path="/play" component={Game} />
+            <Route path="/playvs" render={props => <Game {...props} players={2} />} />
+            <Route path="/pokedex:player" component={Pokedex} />
+            <Route path="/commands" component={Commands} />
+            <Route path="/creation" component={CreationProfile} />
+            <Route path="/profil" component={Profile} />
 
-            </Switch>
+          </Switch>
         </div>
       </div>
     );

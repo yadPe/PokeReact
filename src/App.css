@@ -241,6 +241,7 @@
   animation-duration: 2s;
   transition: 0.3s;
 }
+
 @keyframes LogoBtn {
   0% {opacity: 0;}
   80% {opacity: 0;}
