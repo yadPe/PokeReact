@@ -34,7 +34,11 @@ render() {
   const { erreur } = this.state;
   return (
     <div className="Flex">
-      <p>Please create your profile</p>
+      <p>
+        It's seems you don't have any profile yet!
+        <br />
+        Please create one
+      </p>
       {erreur ? (
         <p>
 Your name can't be
