@@ -2,15 +2,12 @@
   display: flex;
   flex-direction: column;
   width: 30px;
-  height: 98px;
+  height: 6vh;
   margin: 0;
   align-items: center;
   border: inset #460f0f 4px;
   border-radius: 4px;
   background: #460f0f;
-  margin-right: 50px;
-  position: absolute;
-  left: 946px;
 }
 
 .dividerbutton>* {
