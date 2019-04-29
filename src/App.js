@@ -8,6 +8,9 @@ import Pokedex from './components/Pokedex/Pokedex';
 import Recognition from './components/Profil/Recognition';
 import CreationProfile from './components/Profil/CreationProfile';
 import Profile from './components/Profil/Profile';
+import Connection2Players from './components/Profil/Connection2players';
+import RecognitionPlayer2 from './components/Profil/RecognitionPlayer2';
+import AnotherName from './components/Profil/AnotherName';
 import './App.css';
 
 class App extends Component {
@@ -30,7 +33,9 @@ class App extends Component {
             <Route path="/commands" component={Commands} />
             <Route path="/creation" component={CreationProfile} />
             <Route path="/profil" component={Profile} />
-
+            <Route path="/connection2Players" component={Connection2Players} />
+            <Route path="/recognitionPlayer2" component={RecognitionPlayer2} />
+            <Route path="/anotherName" component={AnotherName} />
           </Switch>
         </div>
       </div>

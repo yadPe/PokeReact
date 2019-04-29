@@ -7,7 +7,6 @@ import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
-import DividerButton from './DividerButton';
 
 
 class Pokedex extends Component {

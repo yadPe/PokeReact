@@ -32,7 +32,7 @@ class Menu extends Component {
         <NavLink to="/play">
           <button type="button" className="Button"> Catch ‘em all! </button>
         </NavLink>
-        <NavLink to="/playvs">
+        <NavLink to="/connection2players">
           <button type="button" className="Button"> Versus </button>
         </NavLink>
         <NavLink to="/pokedex:">

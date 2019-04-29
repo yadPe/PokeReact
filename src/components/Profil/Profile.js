@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,8 +23,8 @@ class Profile extends Component {
 
   componentDidMount() {
     const { history } = this.props;
-    const name = localStorage.getItem('userActive');
-    if (localStorage.getItem('userActive')) {
+    const name = localStorage.getItem('userActive0');
+    if (localStorage.getItem('userActive0')) {
       this.setState({ profil: JSON.parse(localStorage.getItem(name)) }, this.getProfil);
     } else {
       history.push('/Creation');
