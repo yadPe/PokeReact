@@ -11,7 +11,8 @@ export default class Capture extends React.Component {
   }
 
   getLocalStorage = () => {
-    this.userName = localStorage.getItem('userActive');
+    this.userName = localStorage.getItem(`userActive${this.props.player}`);
+    console.log(`userActive${this.props.player}`)
     this.pokemon = JSON.parse(localStorage.getItem(this.userName)).pokemon;
   }
 
@@ -24,16 +25,13 @@ export default class Capture extends React.Component {
 
       <div
         className="blblblblbl"
-
-
-        contentLabel=""
         style={{
           position: 'absolute', top: '35%', zIndex: '100', display: 'block', backgroundColor: 'rgb(44, 88, 177)', border: '10px solid black',
         }}
       >
 
         <div className="footer">
-          <h1 className="textModal">{`Well done ! You captured ${catched.name} !!!!!`}</h1>
+          <h1 className="textModal">{`Well done ! You captured ${catched} !!!!!`}</h1>
           <NavLink to="/pokedex">
             <button type="button" className="Button"> Go to Pokedex </button>
           </NavLink>
