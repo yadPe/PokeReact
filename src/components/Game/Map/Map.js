@@ -23,6 +23,7 @@ class Map extends Component {
       pokemons: [],
       payerGhosts: [],
       visiblePokemons: [],
+
     };
 
     this.theme = {
@@ -197,26 +198,28 @@ class Map extends Component {
         return;
     }
 
-    if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
-      this.scrollSpeed += 1;
-      bonus(0);
-    } if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
-      pokemons[0].speed = 4;
-      bonus2(0);
-    }
-    if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
-      pokemons[0].speed = 1;
-      bonus2(0);
-    }
-    if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
-      this.scrollSpeed = 4;
-      bonus(0);
-    }
     if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
-      this.catchBonus = 1;
-      bonus(0);
+      const randomBonus = Math.floor(Math.random() * 5);
+      if (randomBonus === 0) {
+        this.scrollSpeed += 1;
+        bonus(0);
+      } if (randomBonus === 1) {
+        pokemons[0].speed = 4;
+        bonus2(0);
+      }
+      if (randomBonus === 2) {
+        pokemons[0].speed = 1;
+        bonus2(0);
+      }
+      if (randomBonus === 3) {
+        this.scrollSpeed = 4;
+        bonus(0);
+      }
+      if (randomBonus === 4) {
+        this.catchBonus = 1;
+        bonus(0);
+      }
     }
-
 
     this.setState({
       viewY,
@@ -269,11 +272,13 @@ class Map extends Component {
 
   run = () => {
     if (!this.loaded) return;
-    const { asyncKeys, controls, reportPosition } = this.props;
+    const { asyncKeys, reportPosition } = this.props;
     const pokemonRandom = Math.floor(Math.random() * 151) + 9001;
     const {
       viewX, viewY, viewWidth, viewHeight, map,
+
     } = this.state;
+
     let {
       visiblePokemons, view, payerGhosts, pokemons,
     } = this.state;
@@ -322,21 +327,22 @@ class Map extends Component {
       // eslint-disable-next-line array-callback-return
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
-        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)
-        && asyncKeys[4] === controls[4] || view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id) && this.catchBonus === 1) {
-          this.catched = poke.name;
-          pokemons = this.catch(poke.id);
-          reportPosition({
+        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
+          if (asyncKeys[4] === 67 || this.catchBonus === 1) {
+            this.catched = poke.name;
+            pokemons = this.catch(poke.id);
+            reportPosition({
             // eslint-disable-next-line no-use-before-define
-            player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
-          }, pokemons);
+              player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
+            }, pokemons);
 
-          // End game
-          // clearInterval(this.running);
 
-          // save new pokemon to local storage
-          this.userProfile.pokemon.push((poke.id - 9000).toString());
-          localStorage.setItem(this.user, JSON.stringify(this.userProfile));
+            clearInterval(this.running);
+
+            // save new pokemon to local storage
+            this.userProfile.pokemon.push((poke.id - 9000).toString());
+            localStorage.setItem(this.user, JSON.stringify(this.userProfile));
+          }
         }
       });
     }

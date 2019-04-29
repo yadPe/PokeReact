@@ -22,7 +22,7 @@ class Game extends Component {
     };
 
     this.asyncKeys = [];
-    this.controls = [38, 40, 37, 39, 96, 110, 90, 83, 81, 68, 67, 86];
+    this.controls = [38, 40, 37, 39, 67, 96, 110, 90, 83, 81, 68, 86];
   }
 
   componentDidMount() {
