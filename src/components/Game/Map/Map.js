@@ -8,6 +8,8 @@ import { Pokemon } from '../character';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 
+const MemorizedAlert = React.memo(Capture);
+
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -244,12 +246,12 @@ class Map extends Component {
       poke.init();
       pokemons.push(poke);
     }
-    console.log(pokemons)
     this.setState({ pokemons });
   }
 
   run = () => {
     if (!this.loaded) return;
+    if (!this.pokeBase) return;
     const { asyncKeys, controls, reportPosition } = this.props;
     const pokemonRandom = Math.floor(Math.random() * 151) + 9001;
     const {
@@ -361,7 +363,8 @@ class Map extends Component {
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
 
-        {/* {this.catched ? <Capture catched={this.catched} player={controller} /> : null} */}
+        {/* { {this.catched ? <Capture pokemon={this.catched} player={controller} /> : null} } */}
+        <MemorizedAlert pokemon={this.catched} player={controller} />
 
         <Player activeKeys={asyncKeys} direction={characterDirection} username={this.user} />
       </div>
