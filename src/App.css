@@ -322,6 +322,11 @@
   color: white;
 }
 
+.Error{
+  font-size : 24px;
+  color: #C40000;
+}
+
 h1 {
   font-family: 'Ubuntu', sans-serif;
   font-size: 1.2em;

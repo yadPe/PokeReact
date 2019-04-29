@@ -101,7 +101,7 @@ class Profile extends Component {
           <div>
             <p>
               <span className="Yellow">
-                You're now loged in as
+                You're now logged in as
               </span>
               {' '}
               {profil.name}
