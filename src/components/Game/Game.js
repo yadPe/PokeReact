@@ -167,6 +167,7 @@ class Game extends Component {
 
   render() {
     const { players } = this.props;
+    const { bonus, bonus2 } = this.state;
     return (
       <div className="Background" style={{ display: 'block' }}>
 

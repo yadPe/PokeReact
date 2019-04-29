@@ -223,6 +223,7 @@ class Map extends Component {
           bonus(0);
         }
       }
+    }
 
 
     this.setState({
@@ -238,10 +239,11 @@ class Map extends Component {
         const { controller, reportPosition } = this.props;
         if (this.config.host)
           reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
-        else 
+        else
           reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile });
       });
   }
+
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
     if (offsetX + width > matrix[0].length) return;
@@ -293,7 +295,7 @@ class Map extends Component {
             >= viewY && poke.y < viewY + viewHeight && poke.x
             >= viewX && poke.x < viewX + viewWidth);
         }
-        if (this.config.host && players.update){
+        if (this.config.host && players.update) {
           pokemons = players.pokemons;
           reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, undefined, true);
         }
@@ -307,7 +309,7 @@ class Map extends Component {
         >= viewX && poke.x < viewX + viewWidth);
     }
 
-    if (pokemons.length > 0){
+    if (pokemons.length > 0) {
       pokemons = pokemons.filter(poke => !poke.catched)
     }
 
@@ -320,15 +322,15 @@ class Map extends Component {
       visiblePokemons.map(poke => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
-          if (asyncKeys[4] === 67 || this.catchBonus === 1) {
+          if (asyncKeys[4] === controls[4] || this.catchBonus === 1) {
 
             this.catched = poke.name
             pokemons = this.catch(poke.id)
             reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
-  
+
             // End game
             //clearInterval(this.running);
-  
+
             // save new pokemon to local storage
             this.userProfile.pokemon.push((poke.id - 9000).toString());
             localStorage.setItem(this.user, JSON.stringify(this.userProfile));
@@ -348,7 +350,7 @@ class Map extends Component {
     let { pokemons } = this.state;
 
     pokemons.map(poke => {
-      if (poke.id === pokeId){
+      if (poke.id === pokeId) {
         poke.catched = true;
       }
     })
@@ -383,8 +385,8 @@ class Map extends Component {
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
 
-        {this.catched ? <MemorizedAlert pokemon={this.catched} player={controller} name={this.user}/> : null}
-        
+        {this.catched ? <MemorizedAlert pokemon={this.catched} player={controller} name={this.user} /> : null}
+
 
         <Player activeKeys={asyncKeys} direction={characterDirection} username={this.user} />
       </div>
