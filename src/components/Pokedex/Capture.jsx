@@ -42,10 +42,8 @@ export default class Capture extends React.Component {
     const { x } = this.state;
     let pos = {};
     if (player === 1) {
-      //this.theme.left = `${x}px`;
       pos.right = `${x}px`;
     } else {
-      //this.theme.right = `${x}px`;
       pos.left = `${x}px`;
     }
 
