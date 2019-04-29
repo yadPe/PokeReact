@@ -200,29 +200,30 @@ class Map extends Component {
         return;
     }
 
-    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
-      const randomBonus = Math.floor(Math.random() * 5);
-      if (randomBonus === 0) {
-        this.scrollSpeed += 1;
-        bonus(0);
-      } if (randomBonus === 1) {
-        pokemons[0].speed = 4;
-        bonus2(0);
-      }
-      if (randomBonus === 2) {
-        pokemons[0].speed = 1;
-        bonus2(0);
-      }
-      if (randomBonus === 3) {
-        this.scrollSpeed = 4;
-        bonus(0);
-      }
-      if (randomBonus === 4) {
-        this.catchBonus = 1;
-        bonus(0);
+    if (!this.config.multiplayerMode) {
+      if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+        const randomBonus = Math.floor(Math.random() * 5);
+        if (randomBonus === 0) {
+          this.scrollSpeed += 1;
+          bonus(0);
+        } if (randomBonus === 1) {
+          pokemons[0].speed = 4;
+          bonus2(0);
+        }
+        if (randomBonus === 2) {
+          pokemons[0].speed = 1;
+          bonus2(0);
+        }
+        if (randomBonus === 3) {
+          this.scrollSpeed = 4;
+          bonus(0);
+        }
+        if (randomBonus === 4) {
+          this.catchBonus = 1;
+          bonus(0);
+        }
       }
     }
-
     this.setState({
       viewY,
       viewX,
@@ -333,7 +334,7 @@ class Map extends Component {
               player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
             }, pokemons);
 
-            clearInterval(this.running);
+            // clearInterval(this.running);
 
 
             this.userProfile.pokemon.push((poke.id - 9000).toString());
