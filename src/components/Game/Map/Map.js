@@ -323,8 +323,7 @@ class Map extends Component {
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)
-        && asyncKeys[4] === controls[4] || view[Math.floor(view.length / 2)]
-          [Math.floor(view.length / 2)].includes(poke.id) && this.catchBonus === 1) {
+        && asyncKeys[4] === controls[4] || view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id) && this.catchBonus === 1) {
           this.catched = poke.name;
           pokemons = this.catch(poke.id);
           reportPosition({
