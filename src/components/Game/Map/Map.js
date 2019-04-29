@@ -166,6 +166,7 @@ class Map extends Component {
 
   moveTo = (direction, step) => {
     if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return;
+
     const {
       map, viewWidth, viewHeight, view, pokemons,
     } = this.state;
@@ -201,8 +202,9 @@ class Map extends Component {
     }
 
     if (!this.config.multiplayerMode) {
-      if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+      if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2) - 1].includes(2173)) {
         const randomBonus = Math.floor(Math.random() * 5);
+        console.log(randomBonus);
         if (randomBonus === 0) {
           this.scrollSpeed += 1;
           bonus(0);
@@ -210,12 +212,12 @@ class Map extends Component {
           pokemons[0].speed = 4;
           bonus2(0);
         }
-        if (randomBonus === 2) {
+        if (randomBonus === 2 && pokemons) {
           pokemons[0].speed = 1;
           bonus2(0);
         }
         if (randomBonus === 3) {
-          this.scrollSpeed = 4;
+          this.scrollSpeed = 15;
           bonus(0);
         }
         if (randomBonus === 4) {
@@ -224,6 +226,14 @@ class Map extends Component {
         }
       }
     }
+    if (this.lastScroll > this.lastScroll + 3000 && this.scrollSpeed === 4) {
+      this.scrollSpeed = 8;
+    }
+    if (this.lastScroll > this.lastScroll + 3000 && this.scrollSpeed < 8 && this.scrollSpeed > 8) {
+      this.scrollSpeed = 8;
+    }
+
+
     this.setState({
       viewY,
       viewX,
@@ -247,6 +257,7 @@ class Map extends Component {
     });
   }
 
+
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
     if (offsetX + width > matrix[0].length) return;
     if (offsetY + height > matrix.length) return;
@@ -260,15 +271,29 @@ class Map extends Component {
   }
 
   addNewPokemon = (amount, id) => {
+    let randomPosition = Math.floor(Math.random() * 30);
+    let speed = 1;
     const { map } = this.state;
     const { pokemons } = this.state;
-    for (let i = 0; i < amount; i += 1) {
-      const poke = new Pokemon(id, this.pokeBase[id - 9001].name, 16, 20, map);
-      poke.init();
-      pokemons.push(poke);
+    if (id - 9001 < 120) {
+      speed += 2;
     }
-    this.setState({ pokemons });
+    if (randomPosition < 5) {
+      randomPosition += 5;
+    } if (randomPosition > 30) {
+      randomPosition -= 5;
+    } if (!map[randomPosition][randomPosition].includes(-1)) {
+      for (let i = 0; i < amount; i += 1) {
+        const poke = new Pokemon(id, this.pokeBase[id - 9001].name, randomPosition, randomPosition, map, speed);
+        poke.init();
+        pokemons.push(poke);
+      }
+      this.setState({ pokemons });
+    } else {
+      randomPosition = Math.floor(Math.random() * 30);
+    }
   }
+
 
   run = () => {
     if (!this.loaded) return;
@@ -327,16 +352,17 @@ class Map extends Component {
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
-          if (asyncKeys[4] === 67 || this.catchBonus === 1) {
+          if (asyncKeys[4] === controls[4] || this.catchBonus === 1) {
             this.catched = poke.name;
             pokemons = this.catch(poke.id);
             reportPosition({
               player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
             }, pokemons);
 
+            // End game
             // clearInterval(this.running);
 
-
+            // save new pokemon to local storage
             this.userProfile.pokemon.push((poke.id - 9000).toString());
             localStorage.setItem(this.user, JSON.stringify(this.userProfile));
           }
@@ -392,8 +418,8 @@ class Map extends Component {
           <MapRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
 
-        {/* { {this.catched ? <Capture pokemon={this.catched} player={controller} /> : null} } */}
-        <MemorizedAlert pokemon={this.catched} player={controller} />
+        {this.catched ? <MemorizedAlert pokemon={this.catched} player={controller} name={this.user} /> : null}
+
 
         <Player activeKeys={asyncKeys} direction={characterDirection} username={this.user} />
       </div>

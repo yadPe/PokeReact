@@ -31,23 +31,23 @@ class Character {
       if (path === null) {
         // eslint-disable-next-line no-alert
         this.moving = false;
-        console.log('Path was not found.');
+        // console.log('Path was not found.');
       } else {
         // eslint-disable-next-line no-alert
         this.moving = true;
         this.path = path;
-        console.log(path);
-        console.log(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
+        // console.log(path)
+        // console.log(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
       }
     });
   }
 }
 
 class Pokemon extends Character {
-  constructor(id, name, x, y, playground) {
+  constructor(id, name, x, y, playground, speed) {
     super(name, x, y, playground);
     this.id = id;
-    this.speed = 1;
+    this.speed = speed;
     this.catched = false;
   }
 
@@ -64,7 +64,7 @@ class Pokemon extends Character {
         this.x = step.x;
         this.y = step.y;
         this.path.shift();
-        console.log(this.path);
+        // console.log(this.path)
         this.lastMove = performance.now();
       } else {
         this.moving = false;

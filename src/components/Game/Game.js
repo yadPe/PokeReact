@@ -22,7 +22,7 @@ class Game extends Component {
     };
 
     this.asyncKeys = [];
-    this.controls = [38, 40, 37, 39, 67, 96, 110, 90, 83, 81, 68, 86];
+    this.controls = [38, 40, 37, 39, 96, 110, 90, 83, 81, 68, 67, 86];
   }
 
   componentDidMount() {
@@ -152,9 +152,6 @@ class Game extends Component {
         this.queued = true;
       }
     }
-    // if (data.player === 0) { playersPos[0] = { x: data.x, y: data.y }; playersInfos[0] = data.profile; pokemons = poke || []}
-    // if (data.player === 1) { playersPos[1] = { x: data.x, y: data.y }; playersInfos[1] = data.profile}
-    // console.log(players)
     this.setState({ pokemons, players });
   }
 
@@ -174,15 +171,15 @@ class Game extends Component {
         <div className="LeftMenu">
           <NavLink to="/profil:">
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faUser} />
+              <FontAwesomeIcon icon={faBars} />
             </button>
           </NavLink>
         </div>
 
         <div className="RightMenu">
-          <NavLink to="/menu">
+          <NavLink to={`/profil${players > 1 ? ':multi' : ''}`}>
             <button type="button" className="RoundBtn">
-              <FontAwesomeIcon icon={faBars} />
+              <FontAwesomeIcon icon={faUser} />
             </button>
           </NavLink>
           <NavLink to="/commands">

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 import '../../App.css';
-import { withRouter } from 'react-router-dom';
 
 
 class Recognition extends Component {
@@ -19,7 +19,13 @@ class Recognition extends Component {
     } = this.props;
     const { name } = this.state;
     if (localStorage.getItem('userActive0') === name) {
+<<<<<<< HEAD
       this.setState({ erreur: name });
+=======
+      this.setState({
+        erreur: name,
+      });
+>>>>>>> dev
     } else if (localStorage.getItem(name)) {
       localStorage.setItem('userActive1', name);
       history.push({
@@ -41,23 +47,39 @@ class Recognition extends Component {
 
   render() {
     const { erreur } = this.state;
+<<<<<<< HEAD
+=======
+    const profil = localStorage.getItem('userActive0');
+>>>>>>> dev
     return (
       <div className="Flex">
         <p>
-          Hi Player 2 !
+          <span className="Yellow">Player 1:</span>
+          <br />
+          {' '}
+          {profil}
+        </p>
+        <div className="changeProfil">
+          <NavLink to="./creation" className="Yellow">
+            {' '}
+            Use another profil.
+          </NavLink>
+        </div>
+        <p>
+          <br />
+          <span className="Yellow">Player 2:</span>
           <br />
           What's your trainer name ?
         </p>
         {erreur ? (
           <p>
-          Your name is not avaible,
-            {' '}
-          please choose another one
-            {' '}
-            {erreur}
-            {' '}
-          !
+            <span className="Error">
+This name is not available,
+<br />
+            Please, choose another one!
+            </span>
           </p>
+
         ) : ''}
         <input className="Input" id="name" type="text" placeholder="Your name" onChange={this.handleChange} />
         <button className="Button" id="submitBtn" type="button" onClick={this.handleSubmit}>Go !</button>

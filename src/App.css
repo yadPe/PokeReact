@@ -249,6 +249,7 @@
   animation-duration: 2s;
   transition: 0.3s;
 }
+
 @keyframes LogoBtn {
   0% {opacity: 0;}
   80% {opacity: 0;}
@@ -319,6 +320,11 @@
 .changeProfil{
   font-size : 1.5em;
   color: white;
+}
+
+.Error{
+  font-size : 24px;
+  color: #C40000;
 }
 
 h1 {
