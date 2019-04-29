@@ -1,4 +1,3 @@
-/* eslint-disable no-multi-assign */
 import Easystar from 'easystarjs';
 import { ableToMove, convertToCollideMap } from './utils';
 
@@ -15,7 +14,6 @@ class Character {
     this.playground.height = this.playground.matrix.length;
     this.direction = this.randomDirection();
     this.collisionMap = convertToCollideMap(this.playground);
-    // eslint-disable-next-line new-cap
     this.aStar = new Easystar.js();
     this.aStar.setGrid(this.collisionMap);
     this.aStar.setAcceptableTiles([0]);
@@ -26,14 +24,12 @@ class Character {
     return dirs[Math.floor(Math.random() * 4)];
   }
 
-  goto(destX, destY) {
+  goto(destX, destY, callback) {
     this.aStar.findPath(this.x, this.y, destX, destY, (path) => {
       if (path === null) {
-        // eslint-disable-next-line no-alert
         alert('Path was not found.');
       } else {
-        // eslint-disable-next-line no-alert
-        alert(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
+        alert('Path was found. The first Point is ' + path[0].x + ' ' + path[0].y);
       }
     });
   }

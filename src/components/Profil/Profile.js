@@ -7,10 +7,18 @@ import Pikachu from '../../images/Pikachu.png';
 import Bulbizarre from '../../images/Bulbizarre.png';
 import Salameche from '../../images/Salameche.png';
 import Carapuce from '../../images/Carapuce.png';
-import Red from '../../images/Red.png';
-import Leaf from '../../images/Leaf.png';
-import Ludwig from '../../images/Ludwig.png';
-import Ludvina from '../../images/Ludvina.png';
+import Percila from '../../assets/characters/character_1__Percila.png';
+import Kunz from '../../assets/characters/character_2__Kunz.png';
+import Iris from '../../assets/characters/character_3__Iris.png';
+import Matis from '../../assets/characters/character_4__Matis.png';
+import Bardane from '../../assets/characters/character_5__Bardane.png';
+import Inezia from '../../assets/characters/character_6__Inezia.png';
+import Artie from '../../assets/characters/character_7__Artie.png';
+import Strykna from '../../assets/characters/character_8__Strykna.png';
+import Tcheren from '../../assets/characters/character_9__Tcheren.png';
+import Carolina from '../../assets/characters/character_10__Carolina.png';
+import Amana from '../../assets/characters/character_11__Amana.png';
+import Watson from '../../assets/characters/character_12__Watson.png';
 import '../../App.css';
 
 class Profile extends Component {
@@ -39,16 +47,32 @@ class Profile extends Component {
   recupTrainer = (profil) => {
     if (!profil.trainer) return '';
     switch (profil.trainer[0]) {
-      case 'Red':
-        return <img className="Presentation" id="Red" src={Red} alt="Red" />;
-      case 'Leaf':
-        return <img className="Presentation" id="Leaf" src={Leaf} alt="Leaf" />;
-      case 'Ludwig':
-        return <img className="Presentation" id="Ludwig" src={Ludwig} alt="Ludwig" />;
-      case 'Ludvina':
-        return <img className="Presentation" id="Ludvina" src={Ludvina} alt="Ludvina" />;
+      case 'Percila':
+        return <img className="Presentation" id="1" src={Percila} alt="Percila" />;
+      case 'Kunz':
+        return <img className="Presentation" id="2" src={Kunz} alt="Kunz" />;
+      case 'Iris':
+        return <img className="Presentation" id="3" src={Iris} alt="Iris" />;
+      case 'Matis':
+        return <img className="Presentation" id="4" src={Matis} alt="Matis" />;
+      case 'Bardane':
+        return <img className="Presentation" id="5" src={Bardane} alt="Bardane" />;
+      case 'Inezia':
+        return <img className="Presentation" id="6" src={Inezia} alt="Inezia" />;
+      case 'Artie':
+        return <img className="Presentation" id="7" src={Artie} alt="Artie" />;
+      case 'Strykna':
+        return <img className="Presentation" id="8" src={Strykna} alt="Strykna" />;
+      case 'Tcheren':
+        return <img className="Presentation" id="9" src={Tcheren} alt="Tcheren" />;
+      case 'Carolina':
+        return <img className="Presentation" id="10" src={Carolina} alt="Carolina" />;
+      case 'Amana':
+        return <img className="Presentation" id="11" src={Amana} alt="Amana" />;
+      case 'Watson':
+        return <img className="Presentation" id="12" src={Watson} alt="Watson" />;
       default:
-        return <img className="Presentation" id="Red" src={Red} alt="Red" />;
+        return <img className="Presentation" id="4" src={Matis} alt="Matis" />;
     }
   }
 
