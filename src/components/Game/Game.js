@@ -17,6 +17,8 @@ class Game extends Component {
       playersPos: [],
       playersInfos: [],
       pokemons: [],
+      bonus: 1,
+      bonus2: 1,
     };
 
     this.asyncKeys = [];
@@ -102,10 +104,37 @@ class Game extends Component {
     }
   }
 
+  bonusGreyScale = (bonus) => {
+    this.setState({
+      bonus,
+
+
+    });
+    setTimeout(() => {
+      this.setState({
+        bonus: 1,
+      });
+    }, 3000);
+  }
+
+  bonusGreyScale2 = (bonus2) => {
+    this.setState({
+
+      bonus2,
+
+    });
+
+    setTimeout(() => {
+      this.setState({
+        bonus2: 1,
+      });
+    }, 3000);
+  }
+
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i += 1) {
-      instances.push(<div className="instanceContainer"><Map controller={i} players={num} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
+      instances.push(<div className="instanceContainer"><Map controller={i} players={num} bonus={this.bonusGreyScale} bonus2={this.bonusGreyScale2} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
     return instances;
   }
@@ -138,11 +167,12 @@ class Game extends Component {
 
   render() {
     const { players } = this.props;
+    const { bonus, bonus2 } = this.state;
     return (
       <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-          <NavLink to="/profil">
+          <NavLink to={`/profil${players > 1 ? `:multi` : ''}`}>
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faUser} />
             </button>
@@ -159,6 +189,8 @@ class Game extends Component {
             <button type="button" className="RoundBtn"> ? </button>
           </NavLink>
         </div>
+        <button type="button" className="RoundBtn Bonus" style={{ filter: `grayscale(${bonus})` }}> C </button>
+        <button type="button" className="RoundBtn Bonus1" style={{ filter: `grayscale(${bonus2})` }}> S </button>
 
         <div className="gameContainer">
           {this.createGameInstances(players || 1)}
