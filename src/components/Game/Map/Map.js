@@ -39,6 +39,7 @@ class Map extends Component {
     this.gamepads = [];
     this.scrollSpeed = 8;
     this.lastScroll = 0;
+    this.catchBonus = 0;
     if (this.debugMode) {
       this.renderCounter = 0;
       this.loopCounter = 0;
@@ -196,12 +197,24 @@ class Map extends Component {
         return;
     }
 
-    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+    if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
       this.scrollSpeed += 1;
       bonus(0);
-    } if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+    } if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
       pokemons[0].speed = 4;
       bonus2(0);
+    }
+    if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+      pokemons[0].speed = 1;
+      bonus2(0);
+    }
+    if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+      this.scrollSpeed = 4;
+      bonus(0);
+    }
+    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+      this.catchBonus = 1;
+      bonus(0);
     }
 
 
@@ -243,10 +256,12 @@ class Map extends Component {
   addNewPokemon = (amount, id) => {
     const { map } = this.state;
     const { pokemons } = this.state;
-    for (let i = 0; i < amount; i += 1) {
-      const poke = new Pokemon(id, this.pokeBase[id - 9001].name, 16, 20, map);
-      poke.init();
-      pokemons.push(poke);
+    if (this.pokeBase) {
+      for (let i = 0; i < amount; i += 1) {
+        const poke = new Pokemon(id, this.pokeBase[id - 9001].name, 16, 20, map);
+        poke.init();
+        pokemons.push(poke);
+      }
     }
 
     this.setState({ pokemons });
@@ -308,7 +323,8 @@ class Map extends Component {
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)
-        && asyncKeys[4] === controls[4]) {
+        && asyncKeys[4] === controls[4] || view[Math.floor(view.length / 2)]
+          [Math.floor(view.length / 2)].includes(poke.id) && this.catchBonus === 1) {
           this.catched = poke.name;
           pokemons = this.catch(poke.id);
           reportPosition({
