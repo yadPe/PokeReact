@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { Component } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 import '../../App.css';
-import { withRouter } from 'react-router-dom';
 
 
 class Recognition extends Component {
@@ -36,10 +36,24 @@ class Recognition extends Component {
   }
 
   render() {
+    const profil = localStorage.getItem('userActive0');
     return (
       <div className="Flex">
         <p>
-          Hi Player 2 !
+          <span className="Yellow">Player 1:</span>
+          <br />
+          {' '}
+          {profil}
+        </p>
+        <div className="changeProfil">
+          <NavLink to="./creation" className="Yellow">
+            {' '}
+            Use another profil.
+          </NavLink>
+        </div>
+        <p>
+          <br />
+          <span className="Yellow">Player 2:</span>
           <br />
           What's your trainer name ?
         </p>
