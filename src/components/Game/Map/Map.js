@@ -41,6 +41,7 @@ class Map extends Component {
     this.gamepads = [];
     this.scrollSpeed = 8;
     this.lastScroll = 0;
+    this.catchBonus = 0;
     if (this.debugMode) {
       this.renderCounter = 0;
       this.loopCounter = 0;
@@ -171,6 +172,8 @@ class Map extends Component {
     let {
       viewY, viewX, characterDirection,
     } = this.state;
+
+    const { bonus, bonus2 } = this.props;
     if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) return;
     switch (direction) {
       case 'up':
@@ -197,15 +200,29 @@ class Map extends Component {
         return;
     }
 
-    // Crash //
-    // if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
-    //   this.scrollSpeed += 1;
-    //   setTimeout(() => { this.scrollSpeed = 0; }, 30000);
-    // }
-    // if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(-1)) {
-    //   pokemons[0].speed = 4;
-    //   setTimeout(() => { pokemons[0].speed = 1; }, 30000);
-    // }
+    if (!this.config.multiplayerMode) {
+      if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(0)) {
+        const randomBonus = Math.floor(Math.random() * 5);
+        if (randomBonus === 0) {
+          this.scrollSpeed += 1;
+          bonus(0);
+        } if (randomBonus === 1) {
+          pokemons[0].speed = 4;
+          bonus2(0);
+        }
+        if (randomBonus === 2) {
+          pokemons[0].speed = 1;
+          bonus2(0);
+        }
+        if (randomBonus === 3) {
+          this.scrollSpeed = 4;
+          bonus(0);
+        }
+        if (randomBonus === 4) {
+          this.catchBonus = 1;
+          bonus(0);
+        }
+      }
 
 
     this.setState({
@@ -302,17 +319,20 @@ class Map extends Component {
       // eslint-disable-next-line array-callback-return
       visiblePokemons.map(poke => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
-        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id) && asyncKeys[4] === controls[4]) {
-          this.catched = poke.name
-          pokemons = this.catch(poke.id)
-          reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
+        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
+          if (asyncKeys[4] === 67 || this.catchBonus === 1) {
 
-          // End game
-          //clearInterval(this.running);
-
-          // save new pokemon to local storage
-          this.userProfile.pokemon.push((poke.id - 9000).toString());
-          localStorage.setItem(this.user, JSON.stringify(this.userProfile));
+            this.catched = poke.name
+            pokemons = this.catch(poke.id)
+            reportPosition({ player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile }, pokemons);
+  
+            // End game
+            //clearInterval(this.running);
+  
+            // save new pokemon to local storage
+            this.userProfile.pokemon.push((poke.id - 9000).toString());
+            localStorage.setItem(this.user, JSON.stringify(this.userProfile));
+          }
         }
       });
     }
