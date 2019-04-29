@@ -1,4 +1,3 @@
-/* eslint-disable no-multi-assign */
 import Easystar from 'easystarjs';
 import { ableToMove, convertToCollideMap } from './utils';
 
@@ -14,8 +13,7 @@ class Character {
     this.playground.width = this.playground.matrix[0].length;
     this.playground.height = this.playground.matrix.length;
     this.direction = this.randomDirection();
-    this.collisionMap = convertToCollideMap(this.playground.matrix);
-    // eslint-disable-next-line new-cap
+    this.collisionMap = convertToCollideMap(this.playground);
     this.aStar = new Easystar.js();
     this.aStar.setGrid(this.collisionMap);
     this.aStar.setAcceptableTiles([0]);
