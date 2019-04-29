@@ -25,27 +25,26 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      profil: {},
+      profils: [],
     };
   }
 
   componentDidMount() {
-    const { history } = this.props;
     const name = localStorage.getItem('userActive0');
-    if (localStorage.getItem('userActive0')) {
-      this.setState({ profil: JSON.parse(localStorage.getItem(name)) }, this.getProfil);
+    const name2 = localStorage.getItem('userActive1');
+    const { profils } = this.state;
+    const { match } = this.props;
+    if (match.params.multiplayer) {
+      profils.push(JSON.parse(localStorage.getItem(name)));
+      profils.push(JSON.parse(localStorage.getItem(name2)));
     } else {
-      history.push('/Creation');
+      profils.push(JSON.parse(localStorage.getItem(name)));
     }
+
+    this.setState({ profils });
   }
 
-  getProfil = () => {
-    this.recupTrainer();
-    this.recupPokemon();
-  }
-
-  recupTrainer() {
-    const { profil } = this.state;
+  recupTrainer = (profil) => {
     if (!profil.trainer) return '';
     switch (profil.trainer[0]) {
       case '1':
@@ -77,8 +76,7 @@ class Profile extends Component {
     }
   }
 
-  recupPokemon() {
-    const { profil } = this.state;
+  recupPokemon = (profil) => {
     if (!profil.pokemon) return '';
     switch (profil.pokemon[0]) {
       case '25':
@@ -95,10 +93,56 @@ class Profile extends Component {
   }
 
   render() {
-    const { profil } = this.state;
+    const { profils } = this.state;
+    const profilInformation = (userProfils) => {
+      const out = [];
+      const template = profil => (
+        <div>
+          <div>
+            <p>
+              <span className="Yellow">
+                You're now logged in as
+              </span>
+              {' '}
+              {profil.name}
+            </p>
+            <div className="changeProfil">
+              <span>
+                I'm not
+              </span>
+              {' '}
+              {profil.name}
+              .
+              {' '}
+              <NavLink to="./" className="Yellow">
+                {' '}
+                Use an other profil.
+              </NavLink>
+            </div>
+          </div>
+          <div>
+            <p>
+              Trainer style:
+              {' '}
+              {this.recupTrainer(profil)}
+            </p>
+          </div>
+          <div>
+            <p>
+              First Pokemon:
+              {' '}
+              {this.recupPokemon(profil)}
+            </p>
+          </div>
+        </div>
+      );
+
+      userProfils.map(profil => out.push(template(profil)));
+      return out;
+    };
+
     return (
       <div className="Background">
-
         <div className="LeftMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
@@ -107,42 +151,8 @@ class Profile extends Component {
           </NavLink>
         </div>
 
-        <div>
-          <p>
-            <span className="Yellow">
-              You're now logged in as
-            </span>
-            {' '}
-            {profil.name}
-          </p>
-          <div className="changeProfil">
-            <span>
-              I'm not
-            </span>
-            {' '}
-            {profil.name}
-              .
-            {' '}
-            <NavLink to="./creation" className="Yellow">
-              {' '}
-                Use another profil.
-            </NavLink>
-          </div>
-        </div>
-        <div>
-          <p>
-            Trainer style:
-            {' '}
-            {this.recupTrainer()}
-          </p>
-        </div>
-        <div>
-          <p>
-            First Pokemon:
-            {' '}
-            {this.recupPokemon()}
-          </p>
-        </div>
+        {profilInformation(profils)}
+
       </div>
     );
   }

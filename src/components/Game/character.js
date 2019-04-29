@@ -24,12 +24,20 @@ class Character {
     return dirs[Math.floor(Math.random() * 4)];
   }
 
-  goto(destX, destY, callback) {
+
+  goto(destX, destY) {
+    this.moving = true;
     this.aStar.findPath(this.x, this.y, destX, destY, (path) => {
       if (path === null) {
-        alert('Path was not found.');
+        // eslint-disable-next-line no-alert
+        this.moving = false;
+        console.log('Path was not found.');
       } else {
-        alert('Path was found. The first Point is ' + path[0].x + ' ' + path[0].y);
+        // eslint-disable-next-line no-alert
+        this.moving = true;
+        this.path = path;
+        console.log(path);
+        console.log(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
       }
     });
   }
@@ -40,12 +48,29 @@ class Pokemon extends Character {
     super(name, x, y, playground);
     this.id = id;
     this.speed = 1;
+    this.catched = false;
   }
+
 
   run() {
     if (!this.lastMove) { this.lastMove = this.lastMove = performance.now(); return; }
-
     if (performance.now() - this.lastMove < 1000 / this.speed) return;
+
+    if (this.moving) {
+      this.aStar.calculate();
+      if (!this.path) return;
+      if (this.path.length > 0) {
+        const step = this.path[0];
+        this.x = step.x;
+        this.y = step.y;
+        this.path.shift();
+        console.log(this.path);
+        this.lastMove = performance.now();
+      } else {
+        this.moving = false;
+      }
+      return;
+    }
 
     if (ableToMove({ x: this.x, y: this.y }, this.direction, 1, this.playground.matrix)) {
       if ((this.direction === 'up') || (this.direction === 'down')) {
@@ -67,8 +92,14 @@ class Pokemon extends Character {
     this.lastMove = performance.now();
   }
 
-  catched() {
-    this.wasCatched = true;
+  catch() {
+    this.catched = true;
+  }
+}
+
+class Player extends Character {
+  constructor(name, y, x) {
+    super(name, y, x);
   }
 }
 
