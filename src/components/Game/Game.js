@@ -169,7 +169,7 @@ class Game extends Component {
       <div className="Background" style={{ display: 'block' }}>
 
         <div className="LeftMenu">
-          <NavLink to="/menu">
+          <NavLink to="/Menu">
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faBars} />
             </button>
@@ -177,7 +177,7 @@ class Game extends Component {
         </div>
 
         <div className="RightMenu">
-          <NavLink to={`/profil${players > 1 ? ':multi' : ''}`}>
+          <NavLink to={`/profil${players > 1 ? ':multi' : '/profil:'}`}>
             <button type="button" className="RoundBtn">
               <FontAwesomeIcon icon={faUser} />
             </button>

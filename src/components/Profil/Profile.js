@@ -96,12 +96,15 @@ class Profile extends Component {
     const { profils } = this.state;
     const profilInformation = (userProfils) => {
       const out = [];
-      const template = profil => (
+      const template = (profil, index) => (
         <div>
           <div>
             <p>
               <span className="Yellow">
-                You're now logged in as
+                {`Player ${index + 1}`}
+,
+                {' '}
+you're now logged in as
               </span>
               {' '}
               {profil.name}
@@ -137,7 +140,7 @@ class Profile extends Component {
         </div>
       );
 
-      userProfils.map(profil => out.push(template(profil)));
+      userProfils.map((profil, index) => out.push(template(profil, index)));
       return out;
     };
 
