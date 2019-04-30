@@ -114,7 +114,7 @@ class Profile extends Component {
               {profil.name}
               .
               {' '}
-              <NavLink to="./" className="Yellow">
+              <NavLink to="./creation" className="Yellow">
                 {' '}
                 Use an other profil.
               </NavLink>
