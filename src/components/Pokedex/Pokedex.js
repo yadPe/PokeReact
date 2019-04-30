@@ -88,10 +88,10 @@ class Pokedex extends Component {
     const { pokemon } = this.state;
     return (
       <div className="Background">
-        <button type="button" className="pokedextitle" onClick={() => this.reloadingPage()}>
+        <p>
           {this.userName}
-          's Pokedex
-        </button>
+          ’s Pokedex
+        </p>
         <div className="LeftMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">

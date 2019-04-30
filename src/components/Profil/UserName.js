@@ -20,7 +20,7 @@ handleChange = (event) => {
 handleSubmit = () => {
   const { sendInput } = this.props;
   const { name } = this.state;
-  if (parseInt(name, 10) || name.length < 2 || localStorage.getItem('userActive0') === name) {
+  if (parseInt(name, 10) || name.length < 2 || localStorage.getItem('userActive0') === name || localStorage.getItem('userActive1') === name) {
     this.setState({ erreur: name });
   } else {
     const input = {};
