@@ -19,9 +19,7 @@ class Recognition extends Component {
     } = this.props;
     const { name } = this.state;
     if (localStorage.getItem('userActive0') === name) {
-      this.setState({
-        erreur: name,
-      });
+      this.setState({ erreur: name });
     } else if (localStorage.getItem(name)) {
       localStorage.setItem('userActive1', name);
       history.push({
@@ -68,7 +66,7 @@ class Recognition extends Component {
           <p>
             <span className="Error">
 This name is not available,
-<br />
+              <br />
             Please, choose another one!
             </span>
           </p>
