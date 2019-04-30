@@ -195,10 +195,10 @@ class Map extends Component {
     if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return;
 
     const {
-      map, viewWidth, viewHeight, view, pokemons,
+      map, viewWidth, viewHeight, pokemons,
     } = this.state;
     let {
-      viewY, viewX, characterDirection, bonusMap,
+      viewY, viewX, characterDirection,
     } = this.state;
 
     if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) { return; }
@@ -227,23 +227,6 @@ class Map extends Component {
         return;
     }
 
-    if (!this.config.multiplayerMode) {
-      if (
-        view[Math.floor(view.length / 2)][
-          Math.floor(view.length / 2)
-        ].includes(2173)
-      ) {
-        bonusMap.length = 0;
-        const randomBonus = Math.floor(Math.random() * 3);
-        const bonus1 = new Bonus(randomBonus);
-
-        bonus1.run();
-        this.setState({
-          bonus: bonus1,
-          bonusMap,
-        });
-      }
-    }
 
     this.userProfile.direction = characterDirection;
 
@@ -253,7 +236,7 @@ class Map extends Component {
         viewX,
         characterDirection,
         pokemons,
-        bonusMap,
+
       },
       () => {
         this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
@@ -283,13 +266,13 @@ class Map extends Component {
 
   addNewBonus = (amount) => {
     const { map } = this.state;
-    let randomPosition = Math.floor(Math.random() * map.length - 5);
+    let randomPosition = Math.floor(Math.random() * map.length - 1);
     const { bonusMap } = this.state;
 
-    if (randomPosition < 8) {
+    if (randomPosition < 10) {
       randomPosition += 5;
     }
-    if (randomPosition > map.length - 5) {
+    if (randomPosition > map.length - 10) {
       randomPosition -= 5;
     }
     if (!map[randomPosition][randomPosition].includes(-1)) {
@@ -299,7 +282,7 @@ class Map extends Component {
       }
       this.setState({ bonusMap });
     } else {
-      randomPosition = Math.floor(Math.random() * map.length - 5);
+      randomPosition = Math.floor(Math.random() * map.length - 1);
     }
   };
 
@@ -354,15 +337,15 @@ class Map extends Component {
     const { asyncKeys, controls, reportPosition } = this.props;
     const pokemonRandom = Math.floor(Math.random() * 151) + 9001;
     const {
-      viewX, viewY, viewWidth, viewHeight, map,
+      viewX, viewY, viewWidth, viewHeight, map, bonus,
     } = this.state;
     let {
       visiblePokemons, view, payerGhosts, pokemons, bonusMap, visibleBonus,
     } = this.state;
     if (this.debugMode) this.loopCounter += 1;
     if (pokemons.length < 1 && this.config.host) { this.addNewPokemon(1, pokemonRandom); }
-    console.log(bonusMap.length);
-    if (bonusMap.length === 0) { this.addNewBonus(1); }
+
+    if (bonusMap.length < 1) { this.addNewBonus(1); }
     view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
 
     if (this.config.multiplayerMode) {
@@ -429,7 +412,21 @@ class Map extends Component {
     if (visibleBonus.length > 0) {
       visibleBonus.map(bonus => view[bonus.y - viewY][bonus.x - viewX].push(2173));
     }
+    if (
+      view[Math.floor(view.length / 2)][
+        Math.floor(view.length / 2)
+      ].includes(2173)
+    ) {
+      bonusMap.length = 0;
+      const randomBonus = Math.floor(Math.random() * 3);
+      const bonus1 = new Bonus(randomBonus);
 
+      bonus1.run();
+      this.setState({
+        bonus: bonus1,
+        bonusMap,
+      });
+    }
     if (visiblePokemons.length > 0) {
       // eslint-disable-next-line array-callback-return
       visiblePokemons.map((poke) => {

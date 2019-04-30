@@ -124,37 +124,11 @@ class Game extends Component {
     }
   }
 
-  bonusGreyScale = (bonus) => {
-    this.setState({
-      bonus,
-
-
-    });
-    setTimeout(() => {
-      this.setState({
-        bonus: 1,
-      });
-    }, 3000);
-  }
-
-  bonusGreyScale2 = (bonus2) => {
-    this.setState({
-
-      bonus2,
-
-    });
-
-    setTimeout(() => {
-      this.setState({
-        bonus2: 1,
-      });
-    }, 3000);
-  }
 
   createGameInstances = (num) => {
     const instances = [];
     for (let i = 0; i < num; i += 1) {
-      instances.push(<div className="instanceContainer"><Map controller={i} players={num} bonus={this.bonusGreyScale} bonus2={this.bonusGreyScale2} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
+      instances.push(<div className="instanceContainer"><Map controller={i} players={num} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
     return instances;
   }
