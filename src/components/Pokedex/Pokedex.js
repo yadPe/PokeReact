@@ -7,6 +7,7 @@ import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
+import NumInput from './Numinput';
 
 
 class Pokedex extends Component {
@@ -24,7 +25,7 @@ class Pokedex extends Component {
   componentWillMount() {
     const { pokemonid } = this.state;
     const { history } = this.props;
-    if (!localStorage.getItem('userActive0')) {
+    if (!localStorage.getItem(this.props.match.params.player ? "userActive1" : "userActive0")) {
       history.push('/');
       return;
     }
@@ -44,7 +45,7 @@ class Pokedex extends Component {
   }
 
   checkCapturedPokemon = () => {
-    this.userName = localStorage.getItem('userActive0');
+    this.userName = localStorage.getItem(this.props.match.params.player ? "userActive1" : "userActive0");
     this.pokemon = JSON.parse(localStorage.getItem(this.userName)).pokemon;
   }
 
@@ -87,10 +88,10 @@ class Pokedex extends Component {
     const { pokemon } = this.state;
     return (
       <div className="Background">
-        <button type="button" className="pokedextitle" onClick={() => this.reloadingPage()}>
+        <p>
           {this.userName}
-          's Pokedex
-        </button>
+          ’s Pokedex
+        </p>
         <div className="LeftMenu">
           <NavLink to="/menu">
             <button type="button" className="RoundBtn">
@@ -115,6 +116,7 @@ class Pokedex extends Component {
 
         <div className="Buttons">
           <button type="button" className="pokedexbuttons" onClick={() => this.previousPokemon()} />
+          <NumInput displayPokemon={this.handleOnClick} />
           <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
         </div>
       </div>
