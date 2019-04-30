@@ -104,7 +104,7 @@ class Profile extends Component {
                 {`Player ${index + 1}`}
 ,
                 {' '}
-you're now loged in as
+you're now logged in as
               </span>
               {' '}
               {profil.name}
