@@ -393,10 +393,10 @@ class Map extends Component {
     }
     if (bonusMap.length > 0 && this.config.host) {
       visibleBonus = bonusMap.filter(
-        bonus => bonus.y >= viewY
-              && bonus.y < viewY + viewHeight
-              && bonus.x >= viewX
-              && bonus.x < viewX + viewWidth,
+        visible => visible.y >= viewY
+              && visible.y < viewY + viewHeight
+              && visible.x >= viewX
+              && visible.x < viewX + viewWidth,
       );
     }
 
@@ -444,6 +444,7 @@ class Map extends Component {
     } else {
       this.catchBonus = false;
     }
+
     if (visiblePokemons.length > 0) {
       // eslint-disable-next-line array-callback-return
       visiblePokemons.map((poke) => {
@@ -453,7 +454,7 @@ class Map extends Component {
             Math.floor(view.length / 2)
           ].includes(poke.id)
         ) {
-          if (asyncKeys === 67 || this.catchBonus) {
+          if (asyncKeys[10] === 67 || this.catchBonus) {
             this.catched = poke.name;
             pokemons = this.catch(poke.id);
             reportPosition(
