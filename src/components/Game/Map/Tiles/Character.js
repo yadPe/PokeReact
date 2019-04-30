@@ -5,7 +5,7 @@ const Player = (props) => {
   const { direction, username } = props;
   return (
     <div className='characterContainer'>
-      <div className='username'>{username}</div>
+      {/* <div className='username'>{username}</div> */}
       <div className={`${direction} character`} />
     </div>
     

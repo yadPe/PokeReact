@@ -87,6 +87,7 @@ class Map extends Component {
     this.user = localStorage.getItem(`userActive${controller}`);
     this.userProfile = JSON.parse(localStorage.getItem(this.user));
     characterDirection = `character_${this.userProfile.trainer[0]}_down0`;
+    this.userProfile.direction = characterDirection;
     this.setState({characterDirection}, () => this.loaded += 1);
   }
 
@@ -239,6 +240,7 @@ class Map extends Component {
       this.scrollSpeed = 8;
     }
 
+    this.userProfile.direction = characterDirection;
 
     this.setState({
       viewY,
@@ -350,7 +352,7 @@ class Map extends Component {
     }
 
     if (payerGhosts.length > 0) {
-      payerGhosts.map(player => view[player.pos.y - viewY][player.pos.x - viewX].push(1174));
+      payerGhosts.map(player => view[player.pos.y - viewY][player.pos.x - viewX].push(player.profile.direction));
     }
 
     if (visiblePokemons.length > 0) {
