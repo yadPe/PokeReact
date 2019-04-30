@@ -7,6 +7,7 @@ import PokeList from './PokeList';
 import DetailView from './DetailView';
 import Pokemon from './Pokemon';
 import Divider from './Divider';
+import NumInput from './Numinput';
 
 
 class Pokedex extends Component {
@@ -115,6 +116,7 @@ class Pokedex extends Component {
 
         <div className="Buttons">
           <button type="button" className="pokedexbuttons" onClick={() => this.previousPokemon()} />
+          <NumInput displayPokemon={this.handleOnClick} />
           <button type="button" className="pokedexbuttons" onClick={() => this.nextPokemon()} />
         </div>
       </div>
