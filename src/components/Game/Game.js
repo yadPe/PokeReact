@@ -63,7 +63,7 @@ class Game extends Component {
   }
 
   loadTrainer = (trainerKeys) => {
-    console.log(trainerKeys[0].substring(2).split('.').shift())
+    console.log(trainerKeys[0].substring(2).split('.').shift());
     document.head.childNodes.forEach((node) => {
       if (node.id === 'trainerSet') {
         node.remove();
@@ -80,7 +80,7 @@ class Game extends Component {
     document.head.appendChild(style);
   }
 
-  loadPokemons = (pokeKeys) => {  
+  loadPokemons = (pokeKeys) => {
     document.head.childNodes.forEach((node) => {
       if (node.id === 'pokeSet') {
         node.remove();

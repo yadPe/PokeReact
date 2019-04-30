@@ -7,12 +7,10 @@ import Capture from '../../Pokedex/Capture';
 import { Pokemon } from '../character';
 import { Bonus } from '../Bonus';
 
-
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 
 const MemorizedAlert = React.memo(Capture);
 const MemorizedRow = React.memo(MapRow);
-
 
 class Map extends Component {
   constructor(props) {
@@ -30,6 +28,8 @@ class Map extends Component {
       payerGhosts: [],
       visiblePokemons: [],
       bonus: [],
+      bonusMap: [],
+      visibleBonus: [],
     };
 
     this.theme = {
@@ -65,11 +65,17 @@ class Map extends Component {
     this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
     // eslint-disable-next-line no-return-assign
-    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson => this.pokeBase = resJson.results).then(() => this.loaded += 1);
-    this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads
-      ? navigator.webkitGetGamepads : []);
+    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151')
+      .then(res => res.json())
+      .then(resJson => (this.pokeBase = resJson.results))
+      .then(() => (this.loaded += 1));
+    this.gamepads = navigator.getGamepads
+      ? navigator.getGamepads()
+      : navigator.webkitGetGamepads
+        ? navigator.webkitGetGamepads
+        : [];
     this.running = setInterval(this.run, 1000 / 30);
-  }
+  };
 
   end = () => {
     clearInterval(this.running);
@@ -77,14 +83,16 @@ class Map extends Component {
     this.running = null;
     this.renderCounter = null;
     this.loaded = null;
-  }
+  };
 
   configInstance = () => {
     this.config = {};
     const { controller, players } = this.props;
     let { characterDirection } = this.state;
     this.gamepad = controller;
-    if (controller === 0) { this.config.host = true; }
+    if (controller === 0) {
+      this.config.host = true;
+    }
     if (players > 1) this.config.multiplayerMode = true;
 
     this.userProfile = {};
@@ -92,17 +100,18 @@ class Map extends Component {
     this.userProfile = JSON.parse(localStorage.getItem(this.user));
     characterDirection = `character_${this.userProfile.trainer[0]}_down0`;
     this.userProfile.direction = characterDirection;
-    this.setState({ characterDirection }, () => this.loaded += 1);
-  }
+    this.setState({ characterDirection }, () => (this.loaded += 1));
+  };
 
   loadMap = async (mapUri) => {
-    await fetch(mapUri).then(res => res.json()).then(resJson => this.setState({
-      map: [...resJson],
-    }));
+    await fetch(mapUri)
+      .then(res => res.json())
+      .then(resJson => this.setState({
+        map: [...resJson],
+      }));
     this.loaded += 1;
 
     // Will move //
-
 
     const {
       viewY, viewX, viewWidth, viewHeight, map,
@@ -112,8 +121,11 @@ class Map extends Component {
   };
 
   checkGamepad = (gamepadId) => {
-    this.gamepads = navigator.getGamepads ? navigator.getGamepads()
-      : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    this.gamepads = navigator.getGamepads
+      ? navigator.getGamepads()
+      : navigator.webkitGetGamepads
+        ? navigator.webkitGetGamepads
+        : [];
     if (!this.gamepads[gamepadId]) {
       return;
     }
@@ -137,7 +149,7 @@ class Map extends Component {
     } else if (gp.axes[1] === -1) {
       this.moveTo('up', step);
     }
-  }
+  };
 
   checkKeyboard = () => {
     let step = 1;
@@ -167,13 +179,17 @@ class Map extends Component {
         }
         if (asyncKeys[i] === controls[5]) {
           if (this.config.host) {
-            this.state.pokemons[0].goto(this.state.viewX + 6, this.state.viewY + 6, true);
+            this.state.pokemons[0].goto(
+              this.state.viewX + 6,
+              this.state.viewY + 6,
+              true,
+            );
           }
           break;
         }
       }
     }
-  }
+  };
 
   moveTo = (direction, step) => {
     if (performance.now() - this.lastScroll < 1000 / this.scrollSpeed) return;
@@ -182,11 +198,10 @@ class Map extends Component {
       map, viewWidth, viewHeight, view, pokemons,
     } = this.state;
     let {
-      viewY, viewX, characterDirection,
+      viewY, viewX, characterDirection, bonusMap,
     } = this.state;
 
-
-    if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) return;
+    if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) { return; }
     switch (direction) {
       case 'up':
         viewY -= step;
@@ -213,42 +228,80 @@ class Map extends Component {
     }
 
     if (!this.config.multiplayerMode) {
-      if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2) - 1].includes(2173)) {
+      if (
+        view[Math.floor(view.length / 2)][
+          Math.floor(view.length / 2)
+        ].includes(2173)
+      ) {
+        bonusMap.length = 0;
         const randomBonus = Math.floor(Math.random() * 3);
         const bonus1 = new Bonus(randomBonus);
+
         bonus1.run();
         this.setState({
           bonus: bonus1,
+          bonusMap,
         });
       }
     }
 
-
     this.userProfile.direction = characterDirection;
 
-    this.setState({
-      viewY,
-      viewX,
-      characterDirection,
-      pokemons,
+    this.setState(
+      {
+        viewY,
+        viewX,
+        characterDirection,
+        pokemons,
+        bonusMap,
+      },
+      () => {
+        this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
+        this.lastScroll = performance.now();
+        const { controller, reportPosition } = this.props;
+        if (this.config.host) {
+          reportPosition(
+            {
+              player: controller,
+              x: viewX + 6,
+              y: viewY + 6,
+              profile: this.userProfile,
+            },
+            pokemons,
+          );
+        } else {
+          reportPosition({
+            player: controller,
+            x: viewX + 6,
+            y: viewY + 6,
+            profile: this.userProfile,
+          });
+        }
+      },
+    );
+  };
 
-    },
-    () => {
-      this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
-      this.lastScroll = performance.now();
-      const { controller, reportPosition } = this.props;
-      if (this.config.host) {
-        reportPosition({
-          player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
-        }, pokemons);
-      } else {
-        reportPosition({
-          player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
-        });
+  addNewBonus = (amount) => {
+    const { map } = this.state;
+    let randomPosition = Math.floor(Math.random() * map.length - 5);
+    const { bonusMap } = this.state;
+
+    if (randomPosition < 8) {
+      randomPosition += 5;
+    }
+    if (randomPosition > map.length - 5) {
+      randomPosition -= 5;
+    }
+    if (!map[randomPosition][randomPosition].includes(-1)) {
+      for (let i = 0; i < amount; i += 1) {
+        const pokeBall = new Bonus(0, randomPosition, randomPosition);
+        bonusMap.push(pokeBall);
       }
-    });
-  }
-
+      this.setState({ bonusMap });
+    } else {
+      randomPosition = Math.floor(Math.random() * map.length - 5);
+    }
+  };
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
     if (offsetX + width > matrix[0].length) return;
@@ -260,23 +313,32 @@ class Map extends Component {
     }
     // eslint-disable-next-line consistent-return
     return subMatrix;
-  }
+  };
 
   addNewPokemon = (amount, id) => {
-    let randomPosition = Math.floor(Math.random() * 30);
     let speed = 1;
     const { map } = this.state;
     const { pokemons } = this.state;
     if (id - 9001 < 120) {
       speed += 2;
     }
-    if (randomPosition < 5) {
-      randomPosition += 5;
-    } if (randomPosition > 30) {
-      randomPosition -= 5;
-    } if (!map[randomPosition][randomPosition].includes(-1)) {
+    let randomPosition = Math.floor(Math.random() * 30);
+    if (!map[randomPosition][randomPosition].includes(-1)) {
       for (let i = 0; i < amount; i += 1) {
-        const poke = new Pokemon(id, this.pokeBase[id - 9001].name, randomPosition, randomPosition, map, speed);
+        if (randomPosition < 5) {
+          randomPosition += 5;
+        }
+        if (randomPosition > 30) {
+          randomPosition -= 5;
+        }
+        const poke = new Pokemon(
+          id,
+          this.pokeBase[id - 9001].name,
+          randomPosition,
+          randomPosition,
+          map,
+          speed,
+        );
         poke.init();
         pokemons.push(poke);
       }
@@ -284,8 +346,7 @@ class Map extends Component {
     } else {
       randomPosition = Math.floor(Math.random() * 30);
     }
-  }
-
+  };
 
   run = () => {
     if (this.loaded < 3) return;
@@ -296,39 +357,64 @@ class Map extends Component {
       viewX, viewY, viewWidth, viewHeight, map,
     } = this.state;
     let {
-      visiblePokemons, view, payerGhosts, pokemons,
+      visiblePokemons, view, payerGhosts, pokemons, bonusMap, visibleBonus,
     } = this.state;
     if (this.debugMode) this.loopCounter += 1;
-    if (pokemons.length < 1 && this.config.host) this.addNewPokemon(1, pokemonRandom);
-
+    if (pokemons.length < 1 && this.config.host) { this.addNewPokemon(1, pokemonRandom); }
+    console.log(bonusMap.length);
+    if (bonusMap.length === 0) { this.addNewBonus(1); }
     view = this.updateViewMap(map, viewX, viewY, viewWidth, viewHeight);
 
     if (this.config.multiplayerMode) {
       // get other players location
       const players = this.props.getPlayerPosition(this.user);
       if (players) {
-        payerGhosts = players.joueurs.filter(player => player.pos.y
-          >= viewY && player.pos.y < viewY + viewHeight && player.pos.x
-          >= viewX && player.pos.x < viewX + viewWidth);
+        payerGhosts = players.joueurs.filter(
+          player => player.pos.y >= viewY
+            && player.pos.y < viewY + viewHeight
+            && player.pos.x >= viewX
+            && player.pos.x < viewX + viewWidth,
+        );
         if (!this.config.host) {
-          visiblePokemons = players.pokemons.filter(poke => poke.y
-            >= viewY && poke.y < viewY + viewHeight && poke.x
-            >= viewX && poke.x < viewX + viewWidth);
+          visiblePokemons = players.pokemons.filter(
+            poke => poke.y >= viewY
+              && poke.y < viewY + viewHeight
+              && poke.x >= viewX
+              && poke.x < viewX + viewWidth,
+          );
         }
         if (this.config.host && players.update) {
           pokemons = players.pokemons;
-          reportPosition({
-            player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
-          }, undefined, true);
+          reportPosition(
+            {
+              player: controller,
+              x: viewX + 6,
+              y: viewY + 6,
+              profile: this.userProfile,
+            },
+            undefined,
+            true,
+          );
         }
       }
     }
 
     if (pokemons.length > 0 && this.config.host) {
       pokemons.map(poke => poke.run());
-      visiblePokemons = pokemons.filter(poke => poke.y
-        >= viewY && poke.y < viewY + viewHeight && poke.x
-        >= viewX && poke.x < viewX + viewWidth);
+      visiblePokemons = pokemons.filter(
+        poke => poke.y >= viewY
+          && poke.y < viewY + viewHeight
+          && poke.x >= viewX
+          && poke.x < viewX + viewWidth,
+      );
+    }
+    if (bonusMap.length > 0 && this.config.host) {
+      visibleBonus = bonusMap.filter(
+        bonus => bonus.y >= viewY
+              && bonus.y < viewY + viewHeight
+              && bonus.x >= viewX
+              && bonus.x < viewX + viewWidth,
+      );
     }
 
     if (pokemons.length > 0) {
@@ -336,20 +422,35 @@ class Map extends Component {
     }
 
     if (payerGhosts.length > 0) {
-      payerGhosts.map(player => view[player.pos.y - viewY][player.pos.x - viewX].push(player.profile.direction));
+      payerGhosts.map(player => view[player.pos.y - viewY][player.pos.x - viewX].push(
+        player.profile.direction,
+      ));
+    }
+    if (visibleBonus.length > 0) {
+      visibleBonus.map(bonus => view[bonus.y - viewY][bonus.x - viewX].push(2173));
     }
 
     if (visiblePokemons.length > 0) {
       // eslint-disable-next-line array-callback-return
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
-        if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
-          if (asyncKeys[4] === controls[4] || this.catchBonus === 1) {
+        if (
+          view[Math.floor(view.length / 2)][
+            Math.floor(view.length / 2)
+          ].includes(poke.id)
+        ) {
+          if (asyncKeys[10] === 67 || this.catchBonus === 1) {
             this.catched = poke.name;
             pokemons = this.catch(poke.id);
-            reportPosition({
-              player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
-            }, pokemons);
+            reportPosition(
+              {
+                player: controller,
+                x: viewX + 6,
+                y: viewY + 6,
+                profile: this.userProfile,
+              },
+              pokemons,
+            );
 
             // End game
             // clearInterval(this.running);
@@ -363,13 +464,16 @@ class Map extends Component {
     }
 
     this.setState({
-      view: [...view], visiblePokemons, payerGhosts, pokemons,
+      view: [...view],
+      visiblePokemons,
+      payerGhosts,
+      pokemons,
     });
 
     const { controller } = this.props;
     this.checkKeyboard();
     this.checkGamepad(controller);
-  }
+  };
 
   catch = (pokeId) => {
     const { pokemons } = this.state;
@@ -381,39 +485,53 @@ class Map extends Component {
     });
 
     return pokemons;
-  }
+  };
 
   debug = () => {
     if (!this.debugMode) return;
     this.renderCounter += 1;
     // eslint-disable-next-line consistent-return
     return (
-      <h3 style={{
-        position: 'fixed', bottom: 10, right: 10, zIndex: 1000,
-      }}
+      <h3
+        style={{
+          position: 'fixed',
+          bottom: 10,
+          right: 10,
+          zIndex: 1000,
+        }}
       >
         {`Render No ${this.renderCounter} Loop No ${this.loopCounter}`}
-
       </h3>
     );
-  }
+  };
 
   render() {
-    const {
-      view, characterDirection,
-    } = this.state;
+    const { view, characterDirection } = this.state;
     const { asyncKeys, controller } = this.props;
     return (
       <div style={this.theme}>
         {this.debugMode ? this.debug() : null}
-        {this.loaded ? view.map((row, i) => (
-          <MemorizedRow data={row} index={i} key={`row-${i + 1}`} />
-        )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
+        {this.loaded ? (
+          view.map((row, i) => (
+            <MemorizedRow data={row} index={i} key={`row-${i + 1}`} />
+          ))
+        ) : (
+          <h1 style={{ margin: '50% auto' }}>LOADING..</h1>
+        )}
 
-        {this.catched ? <MemorizedAlert pokemon={this.catched} player={controller} name={this.user} /> : null}
+        {this.catched ? (
+          <MemorizedAlert
+            pokemon={this.catched}
+            player={controller}
+            name={this.user}
+          />
+        ) : null}
 
-
-        <Player activeKeys={asyncKeys} direction={characterDirection} username={this.user} />
+        <Player
+          activeKeys={asyncKeys}
+          direction={characterDirection}
+          username={this.user}
+        />
       </div>
     );
   }
