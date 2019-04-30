@@ -5,6 +5,8 @@ import Player from './Tiles/Character';
 import { ableToMove } from '../utils';
 import Capture from '../../Pokedex/Capture';
 import { Pokemon } from '../character';
+import { Bonus } from '../Bonus';
+
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 
@@ -27,6 +29,7 @@ class Map extends Component {
       pokemons: [],
       payerGhosts: [],
       visiblePokemons: [],
+      bonus: [],
     };
 
     this.theme = {
@@ -62,7 +65,7 @@ class Map extends Component {
     this.configInstance();
     await this.loadMap(reqMaps('./map1.txt', true));
     // eslint-disable-next-line no-return-assign
-    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson => this.pokeBase = resJson.results).then(() => this.loaded += 1)
+    fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151').then(res => res.json()).then(resJson => this.pokeBase = resJson.results).then(() => this.loaded += 1);
     this.gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads
       ? navigator.webkitGetGamepads : []);
     this.running = setInterval(this.run, 1000 / 30);
@@ -89,7 +92,7 @@ class Map extends Component {
     this.userProfile = JSON.parse(localStorage.getItem(this.user));
     characterDirection = `character_${this.userProfile.trainer[0]}_down0`;
     this.userProfile.direction = characterDirection;
-    this.setState({characterDirection}, () => this.loaded += 1);
+    this.setState({ characterDirection }, () => this.loaded += 1);
   }
 
   loadMap = async (mapUri) => {
@@ -163,9 +166,9 @@ class Map extends Component {
           break;
         }
         if (asyncKeys[i] === controls[5]) {
-          if (this.config.host){
-            this.state.pokemons[0].goto(this.state.viewX + 6, this.state.viewY + 6, true)
-          }       
+          if (this.config.host) {
+            this.state.pokemons[0].goto(this.state.viewX + 6, this.state.viewY + 6, true);
+          }
           break;
         }
       }
@@ -182,7 +185,7 @@ class Map extends Component {
       viewY, viewX, characterDirection,
     } = this.state;
 
-    const { bonus, bonus2 } = this.props;
+
     if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) return;
     switch (direction) {
       case 'up':
@@ -211,35 +214,15 @@ class Map extends Component {
 
     if (!this.config.multiplayerMode) {
       if (view[Math.floor(view.length / 2)][Math.floor(view.length / 2) - 1].includes(2173)) {
-        const randomBonus = Math.floor(Math.random() * 5);
-        console.log(randomBonus);
-        if (randomBonus === 0) {
-          this.scrollSpeed += 1;
-          bonus(0);
-        } if (randomBonus === 1) {
-          pokemons[0].speed = 4;
-          bonus2(0);
-        }
-        if (randomBonus === 2 && pokemons) {
-          pokemons[0].speed = 1;
-          bonus2(0);
-        }
-        if (randomBonus === 3) {
-          this.scrollSpeed = 15;
-          bonus(0);
-        }
-        if (randomBonus === 4) {
-          this.catchBonus = 1;
-          bonus(0);
-        }
+        const randomBonus = Math.floor(Math.random() * 3);
+        const bonus1 = new Bonus(randomBonus);
+        bonus1.run();
+        this.setState({
+          bonus: bonus1,
+        });
       }
     }
-    if (this.lastScroll > this.lastScroll + 3000 && this.scrollSpeed === 4) {
-      this.scrollSpeed = 8;
-    }
-    if (this.lastScroll > this.lastScroll + 3000 && this.scrollSpeed < 8 && this.scrollSpeed > 8) {
-      this.scrollSpeed = 8;
-    }
+
 
     this.userProfile.direction = characterDirection;
 
