@@ -117,7 +117,7 @@ you're now logged in as
               {profil.name}
               .
               {' '}
-              <NavLink to="./" className="Yellow">
+              <NavLink to="./creation" className="Yellow">
                 {' '}
                 Use an other profil.
               </NavLink>

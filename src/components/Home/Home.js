@@ -5,9 +5,9 @@ import logo from '../../images/Logo.png';
 
 const Home = () => (
   <div className="Home">
-    <img src={logo} className="Logo" alt="PokeReact logo" />
+    <img className="Logo" src={logo} alt="PokeReact logo" />
     <NavLink to="/creation">
-      <button type="button" className="Button"> Play now ! </button>
+      <button className="FirstButton" type="button"> Play now ! </button>
     </NavLink>
   </div>
 );
