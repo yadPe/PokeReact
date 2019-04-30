@@ -140,7 +140,8 @@ class Game extends Component {
   }
 
   getPlayersPosition = (data, poke, updated) => {
-    let { pokemons, players } = this.state;
+    let { pokemons } = this.state;
+    const { players } = this.state;
     if (data.player === 0) {
       players[data.player] = { pos: { x: data.x, y: data.y }, profile: data.profile };
       if (poke) pokemons = poke;
