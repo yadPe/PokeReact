@@ -15,7 +15,6 @@ class NumInput extends React.Component {
     e.preventDefault();
     const { id } = this.state;
     this.props.displayPokemon(id);
-    //this.props.function(this.state.pokemonid);
   }
 
   handleChange(e) {
@@ -26,14 +25,14 @@ class NumInput extends React.Component {
   render() {
     const { no } = this.props;
     return (
-      <div>
+      <div className="allInput">
         <input
           type="number"
           className="screen num-input"
           placeholder={no}
           onChange={this.handleChange}
         />
-        <div className="submit" onClick={this.handleClick} />
+        <button className="submit" onClick={this.handleClick} type="button" />
       </div>
     );
   }
