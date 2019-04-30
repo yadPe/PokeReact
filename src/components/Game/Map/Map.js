@@ -337,10 +337,10 @@ class Map extends Component {
     const { asyncKeys, controls, reportPosition } = this.props;
     const pokemonRandom = Math.floor(Math.random() * 151) + 9001;
     const {
-      viewX, viewY, viewWidth, viewHeight, map, bonus,
+      viewX, viewY, viewWidth, viewHeight, map, bonus, bonusMap,
     } = this.state;
     let {
-      visiblePokemons, view, payerGhosts, pokemons, bonusMap, visibleBonus,
+      visiblePokemons, view, payerGhosts, pokemons, visibleBonus,
     } = this.state;
     if (this.debugMode) this.loopCounter += 1;
     if (pokemons.length < 1 && this.config.host) { this.addNewPokemon(1, pokemonRandom); }
@@ -427,6 +427,23 @@ class Map extends Component {
         bonusMap,
       });
     }
+
+
+    if (bonus.speedPokemon && !bonus.slowPokemon) {
+      pokemons.speed = 15;
+    } else {
+      pokemons.speed = 2;
+    }
+    if (bonus.slowPokemon && !bonus.speedPokemon) {
+      pokemons.speed = 1;
+    } else {
+      pokemons.speed = 2;
+    }
+    if (bonus.catchPokemon) {
+      this.catchBonus = true;
+    } else {
+      this.catchBonus = false;
+    }
     if (visiblePokemons.length > 0) {
       // eslint-disable-next-line array-callback-return
       visiblePokemons.map((poke) => {
@@ -436,7 +453,7 @@ class Map extends Component {
             Math.floor(view.length / 2)
           ].includes(poke.id)
         ) {
-          if (asyncKeys[10] === 67 || this.catchBonus === 1) {
+          if (asyncKeys === 67 || this.catchBonus) {
             this.catched = poke.name;
             pokemons = this.catch(poke.id);
             reportPosition(
