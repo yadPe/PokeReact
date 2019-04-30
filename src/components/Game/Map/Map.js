@@ -9,6 +9,7 @@ import { Pokemon } from '../character';
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 
 const MemorizedAlert = React.memo(Capture);
+const MemorizedRow = React.memo(MapRow);
 
 
 class Map extends Component {
@@ -38,7 +39,7 @@ class Map extends Component {
 
     this.loaded = 0;
     this.asyncKeys = [];
-    this.debugMode = true;
+    this.debugMode = false;
     this.gamepads = [];
     this.scrollSpeed = 8;
     this.lastScroll = 0;
@@ -423,7 +424,7 @@ class Map extends Component {
       <div style={this.theme}>
         {this.debugMode ? this.debug() : null}
         {this.loaded ? view.map((row, i) => (
-          <MapRow data={row} index={i} key={`row-${i + 1}`} />
+          <MemorizedRow data={row} index={i} key={`row-${i + 1}`} />
         )) : <h1 style={{ margin: '50% auto' }}>LOADING..</h1>}
 
         {this.catched ? <MemorizedAlert pokemon={this.catched} player={controller} name={this.user} /> : null}
