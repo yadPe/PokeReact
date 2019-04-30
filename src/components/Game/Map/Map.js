@@ -10,6 +10,7 @@ const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 
 const MemorizedAlert = React.memo(Capture);
 
+
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -160,7 +161,9 @@ class Map extends Component {
           break;
         }
         if (asyncKeys[i] === controls[5]) {
-          this.state.pokemons[0].goto(this.state.viewX + 6, this.state.viewY + 6)
+          if (this.config.host){
+            this.state.pokemons[0].goto(this.state.viewX + 6, this.state.viewY + 6, true)
+          }       
           break;
         }
       }
