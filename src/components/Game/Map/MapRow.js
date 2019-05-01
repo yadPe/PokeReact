@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Tile from './Tiles/Tile';
 import Tile3D from './Tiles/Tile3D';
+import { TILE_SIZE } from '../config';
 
 const MemorizedTile = React.memo(Tile);
 const MemorizeTile3D = React.memo(Tile3D);
 
 class MapRow extends Component {
     theme = {
-      height: '64px',
+      height: `${TILE_SIZE}px`,
       margin: 0,
       padding: 0,
     }

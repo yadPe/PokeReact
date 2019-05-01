@@ -5,6 +5,7 @@ import { ableToMove } from '../utils';
 import Capture from '../../Pokedex/Capture';
 import { Pokemon } from '../character';
 import { Bonus } from '../Bonus';
+import { GAME_VIEWPORT_WIDTH, GAME_VIEWPORT_HEIGHT, VIEW_HEIGHT, VIEW_WIDTH } from '../config';
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 
@@ -18,8 +19,8 @@ class Map extends Component {
     this.state = {
       map: [],
       view: [],
-      viewWidth: 13,
-      viewHeight: 13,
+      viewWidth: VIEW_WIDTH,
+      viewHeight: VIEW_HEIGHT,
       viewX: 11,
       viewY: 17,
       characterDirection: 'character',
@@ -32,8 +33,8 @@ class Map extends Component {
     };
 
     this.theme = {
-      width: '832px',
-      height: '832px',
+      width: `${GAME_VIEWPORT_WIDTH}px`,
+      height: `${GAME_VIEWPORT_HEIGHT}px`,
       overflow: 'hidden',
       margin: '0 auto',
       textAlign: 'center',
