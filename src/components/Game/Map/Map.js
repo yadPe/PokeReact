@@ -154,7 +154,7 @@ class Map extends Component {
 
   checkKeyboard = () => {
     let step = 1;
-    const { pokemons, viewX, viewY } = this.props;
+    const { pokemons, viewX, viewY } = this.state;
     const { controls, asyncKeys } = this.props;
     for (let i = 0; i < controls.length; i += 1) {
       if (controls[i] === asyncKeys[i]) {
