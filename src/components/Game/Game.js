@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Game.css';
@@ -15,22 +14,22 @@ class Game extends Component {
     super(props);
     this.state = {
       players: [],
-      playersPos: [],
-      playersInfos: [],
       pokemons: [],
       bonus: 1,
       bonus2: 1,
+      asyncKeys: [],
     };
 
-    this.asyncKeys = [];
     this.controls = [38, 40, 37, 39, 96, 110, 90, 83, 81, 68, 67, 86];
   }
 
   componentDidMount() {
     const { players } = this.props;
+    const { asyncKeys } = this.state;
     for (let i = 0; i < Object.keys(this.controls[0]).length * (players || 1); i += 1) {
-      this.asyncKeys.push(false);
+      asyncKeys.push(false);
     }
+    this.setState({ asyncKeys });
     document.body.addEventListener('keydown', this.keyPressed);
     document.body.addEventListener('keyup', this.keyReleased);
     this.loadTiles(reqTiles.keys());
@@ -63,7 +62,6 @@ class Game extends Component {
   }
 
   loadTrainer = (trainerKeys) => {
-    console.log(trainerKeys[0].substring(2).split('.').shift());
     document.head.childNodes.forEach((node) => {
       if (node.id === 'trainerSet') {
         node.remove();
@@ -101,11 +99,12 @@ class Game extends Component {
   keyPressed = (e) => {
     const keys = e.keyCode;
     const size = this.controls.length;
+    const { asyncKeys } = this.state;
 
     for (let i = 0; i < size; i += 1) {
-      if (this.controls[i] === keys && !this.asyncKeys[i]) {
-        this.asyncKeys[i] = keys;
-        this.setState({ asyncKeys: this.asyncKeys });
+      if (this.controls[i] === keys && !asyncKeys[i]) {
+        asyncKeys[i] = keys;
+        this.setState({ asyncKeys });
         break;
       }
     }
@@ -114,11 +113,12 @@ class Game extends Component {
   keyReleased = (e) => {
     const keys = e.keyCode;
     const size = this.controls.length;
+    const { asyncKeys } = this.state;
 
     for (let i = 0; i < size; i += 1) {
-      if (this.controls[i] === keys && this.asyncKeys[i]) {
-        this.asyncKeys[i] = false;
-        this.setState({ asyncKeys: this.asyncKeys });
+      if (this.controls[i] === keys && asyncKeys[i]) {
+        asyncKeys[i] = false;
+        this.setState({ asyncKeys });
         break;
       }
     }
@@ -127,8 +127,9 @@ class Game extends Component {
 
   createGameInstances = (num) => {
     const instances = [];
+    const { asyncKeys } = this.state;
     for (let i = 0; i < num; i += 1) {
-      instances.push(<div className="instanceContainer"><Map controller={i} players={num} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={this.asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
+      instances.push(<div className="instanceContainer"><Map controller={i} players={num} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
     }
     return instances;
   }

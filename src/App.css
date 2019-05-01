@@ -393,22 +393,17 @@ h1 {
 
 .profil2players { 
   display: flex;
-  flex-direction: row;
  }
 
 #player0{
-  padding-left: 10%;
-  padding-right: 5%;
+  flex: 1;
+  padding: 1rem;
 }
 
 #player1{
   border-left : solid 4px yellow;
-  padding-left: 10%;
-  padding-right: 5%;
+  flex: 1;
+  padding: 1rem;
 }
-
-.profilContainer{
-  margin-left: 4%;
- }
 
   

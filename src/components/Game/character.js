@@ -24,24 +24,17 @@ class Character {
     return dirs[Math.floor(Math.random() * 4)];
   }
 
-
   goto(destX, destY, call) {
     this.moving = true;
     this.aStar.findPath(this.x, this.y, destX, destY, (path) => {
       if (path === null) {
-        // eslint-disable-next-line no-alert
         this.moving = false;
-        // console.log('Path was not found.');
       } else {
-        // eslint-disable-next-line no-alert
         this.moving = true
-        //this.previousSpeed = this.speed;
         if (this.speed < 1.55 && call){
           this.speed = 1.55;
         }
         this.path = path;
-        // console.log(path)
-        // console.log(`Path was found. The first Point is ${path[0].x} ${path[0].y}`);
       }
     });
   }
@@ -54,7 +47,6 @@ class Pokemon extends Character {
     this.speed = speed;
     this.catched = false;
   }
-
 
   run() {
     if (!this.lastMove) { this.lastMove = this.lastMove = performance.now(); return; }
@@ -99,12 +91,6 @@ class Pokemon extends Character {
 
   catch() {
     this.catched = true;
-  }
-}
-
-class Player extends Character {
-  constructor(name, y, x) {
-    super(name, y, x);
   }
 }
 
