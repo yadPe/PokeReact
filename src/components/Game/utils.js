@@ -1,6 +1,3 @@
-/* eslint-disable curly */
-/* eslint-disable nonblock-statement-body-position */
-
 export const ableToMove = (pos, direction, step, playground) => {
   const newPos = { x: pos.x, y: pos.y };
 
@@ -33,10 +30,11 @@ export const convertToCollideMap = (arr) => {
   for (let i = 0; i < arr.length; i += 1) {
     const row = [];
     for (let j = 0; j < arr[i].length; j += 1) {
-      if (arr[i][j].includes(-1))
+      if (arr[i][j].includes(-1)) {
         row.push(1);
-      else
+      } else {
         row.push(0);
+      }
     }
     output.push(row);
   }

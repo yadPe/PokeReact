@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { Component } from 'react';
 import MapRow from './MapRow';
 import Player from './Tiles/Character';
@@ -69,6 +68,7 @@ class Map extends Component {
       .then(res => res.json())
       .then(resJson => (this.pokeBase = resJson.results))
       .then(() => (this.loaded += 1));
+    // eslint-disable-next-line no-nested-ternary
     this.gamepads = navigator.getGamepads
       ? navigator.getGamepads()
       : navigator.webkitGetGamepads
@@ -121,6 +121,7 @@ class Map extends Component {
   };
 
   checkGamepad = (gamepadId) => {
+    // eslint-disable-next-line no-nested-ternary
     this.gamepads = navigator.getGamepads
       ? navigator.getGamepads()
       : navigator.webkitGetGamepads
@@ -153,6 +154,7 @@ class Map extends Component {
 
   checkKeyboard = () => {
     let step = 1;
+    const { pokemons, viewX, viewY } = this.props;
     const { controls, asyncKeys } = this.props;
     for (let i = 0; i < controls.length; i += 1) {
       if (controls[i] === asyncKeys[i]) {
@@ -179,9 +181,9 @@ class Map extends Component {
         }
         if (asyncKeys[i] === controls[5]) {
           if (this.config.host) {
-            this.state.pokemons[0].goto(
-              this.state.viewX + 6,
-              this.state.viewY + 6,
+            pokemons[0].goto(
+              viewX + 6,
+              viewY + 6,
               true,
             );
           }
@@ -334,7 +336,9 @@ class Map extends Component {
   run = () => {
     if (this.loaded < 3) return;
     if (!this.pokeBase) return;
-    const { asyncKeys, controls, reportPosition } = this.props;
+    const {
+      asyncKeys, controls, reportPosition, getPlayerPosition, controller,
+    } = this.props;
     const pokemonRandom = Math.floor(Math.random() * 151) + 9001;
     const {
       viewX, viewY, viewWidth, viewHeight, map, bonus, bonusMap,
@@ -350,7 +354,7 @@ class Map extends Component {
 
     if (this.config.multiplayerMode) {
       // get other players location
-      const players = this.props.getPlayerPosition(this.user);
+      const players = getPlayerPosition(this.user);
       if (players) {
         payerGhosts = players.joueurs.filter(
           player => player.pos.y >= viewY
@@ -368,6 +372,7 @@ class Map extends Component {
           );
         }
         if (this.config.host && players.update) {
+          // eslint-disable-next-line prefer-destructuring
           pokemons = players.pokemons;
           reportPosition(
             {
@@ -394,7 +399,7 @@ class Map extends Component {
       }
 
       if (visibleBonus.length > 0) {
-        visibleBonus.map(bonus => view[bonus.y - viewY][bonus.x - viewX].push(2173));
+        visibleBonus.map(power => view[power.y - viewY][power.x - viewX].push(2173));
       }
 
       if (
@@ -451,7 +456,6 @@ class Map extends Component {
     }
 
     if (visiblePokemons.length > 0) {
-      // eslint-disable-next-line array-callback-return
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
         if (
@@ -474,6 +478,7 @@ class Map extends Component {
             localStorage.setItem(this.user, JSON.stringify(this.userProfile));
           }
         }
+        return undefined;
       });
     }
 
@@ -484,7 +489,6 @@ class Map extends Component {
       pokemons,
     });
 
-    const { controller } = this.props;
     this.checkKeyboard();
     this.checkGamepad(controller);
   };
@@ -492,11 +496,11 @@ class Map extends Component {
   catch = (pokeId) => {
     const { pokemons } = this.state;
 
-    pokemons.map((poke) => {
-      if (poke.id === pokeId) {
-        poke.catched = true;
+    for (let i = 0; i < pokemons.length; i += 1) {
+      if (pokemons[i].id === pokeId) {
+        pokemons[i].catched = true;
       }
-    });
+    }
 
     return pokemons;
   };
@@ -530,8 +534,11 @@ class Map extends Component {
             <MemorizedRow data={row} index={i} key={`row-${i + 1}`} />
           ))
         ) : (
-            <h1 style={{ margin: '50% auto' }}>LOADING..{this.loaded}</h1>
-          )}
+          <h1 style={{ margin: '50% auto' }}>
+          LOADING..
+            {this.loaded}
+          </h1>
+        )}
 
         {this.catched ? (
           <MemorizedAlert
@@ -552,4 +559,3 @@ class Map extends Component {
 }
 
 export default Map;
-// LF
