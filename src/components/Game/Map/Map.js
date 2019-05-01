@@ -358,6 +358,7 @@ class Map extends Component {
             && player.pos.x >= viewX
             && player.pos.x < viewX + viewWidth,
         );
+       
         if (!this.config.host) {
           visiblePokemons = players.pokemons.filter(
             poke => poke.y >= viewY
