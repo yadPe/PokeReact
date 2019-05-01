@@ -1,31 +1,11 @@
 # PokeReact
 
-## Projet 2 lyon-0219-react
+Jeu utilisant [ReactJs](https://reactjs.org), sur le thème pokémon réalisé en 5 semaines à l'occasion du projet No 2  à la Wild Code School de Lyon.
 
-#### Gamepad 
+## Authors
 
-* B = btn 0
-* Y = btn 2
-* A = btn 1
-* X = btn 3
-
-* L = btn 4
-* R = btn 5
-* L2 = btn 6
-* r2 = btn 7
-
-* select = b 8
-* start = b 9
-
-* JoysticL = b 10
-* joysticR = b 11
-
-* up = b12
-* left = b 14
-* right = b 15
-* down  = b 13
-
-* joystick gauche X = axis 0
-* joystick gauche Y = axis 1
-* joystick droite X = axis 2
-* joystick droite Y = axis 3
+* **Benoît Briastre** - [Benbrii](https://github.com/Benbrii)
+* **David BELMONTE** - [Wozzz82](https://github.com/Wozzz82)
+* **Laurent Henriques** - [LaurentHenriques](https://github.com/LaurentHenriques)
+* **Nicolas Cessieux** - [Benbrii](https://github.com/NicolasCessieux)
+* **Yannis Petitot** - [yadPe](https://github.com/yadPe)
