@@ -149,6 +149,10 @@ class Map extends Component {
       this.moveTo('down', step);
     } else if (gp.axes[1] === -1) {
       this.moveTo('up', step);
+    } else if (gp.buttons[1].pressed){
+      this.captureBtn = true;
+    } else {
+      this.captureBtn = false;
     }
   };
 
@@ -463,7 +467,7 @@ class Map extends Component {
             Math.floor(view.length / 2)
           ].includes(poke.id)
         ) {
-          if (asyncKeys[4] === controls[4] || this.catchBonus === 1) {
+          if (asyncKeys[4] === controls[4] || this.catchBonus === 1 || this.captureBtn) {
             this.catched = poke.name;
             pokemons = this.catch(poke.id);
             reportPosition({
