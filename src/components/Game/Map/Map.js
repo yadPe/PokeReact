@@ -204,7 +204,7 @@ class Map extends Component {
       viewY, viewX, characterDirection,
     } = this.state;
 
-    if (!ableToMove({ x: viewX + 6, y: viewY + 6 }, direction, step, map)) { return; }
+    if (!ableToMove({ x: Math.floor(viewX + VIEW_WIDTH / 2), y: Math.floor(viewY + VIEW_HEIGHT / 2) }, direction, step, map)) { return; }
     switch (direction) {
       case 'up':
         viewY -= step;
