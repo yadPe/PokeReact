@@ -358,7 +358,7 @@ class Map extends Component {
             && player.pos.x >= viewX
             && player.pos.x < viewX + viewWidth,
         );
-       
+
         if (!this.config.host) {
           visiblePokemons = players.pokemons.filter(
             poke => poke.y >= viewY
@@ -381,6 +381,53 @@ class Map extends Component {
           );
         }
       }
+    } else { // Enable Bonus system
+      // BONUS //
+
+      if (bonusMap.length > 0 && this.config.host) {
+        visibleBonus = bonusMap.filter(
+          visible => visible.y >= viewY
+            && visible.y < viewY + viewHeight
+            && visible.x >= viewX
+            && visible.x < viewX + viewWidth,
+        );
+      }
+
+      if (visibleBonus.length > 0) {
+        visibleBonus.map(bonus => view[bonus.y - viewY][bonus.x - viewX].push(2173));
+      }
+
+      if (
+        view[Math.floor(view.length / 2)][
+          Math.floor(view.length / 2)
+        ].includes(2173)
+      ) {
+        bonusMap.length = 0;
+        const randomBonus = Math.floor(Math.random() * 3);
+        const bonus1 = new Bonus(randomBonus);
+
+        bonus1.run();
+        this.setState({
+          bonus: bonus1,
+          bonusMap,
+        });
+      }
+
+      if (bonus.speedPokemon && !bonus.slowPokemon) {
+        pokemons.speed = 15;
+      } else {
+        pokemons.speed = 2;
+      }
+      if (bonus.slowPokemon && !bonus.speedPokemon) {
+        pokemons.speed = 1;
+      } else {
+        pokemons.speed = 2;
+      }
+      if (bonus.catchPokemon) {
+        this.catchBonus = true;
+      } else {
+        this.catchBonus = false;
+      }
     }
 
     if (pokemons.length > 0 && this.config.host) {
@@ -390,14 +437,6 @@ class Map extends Component {
           && poke.y < viewY + viewHeight
           && poke.x >= viewX
           && poke.x < viewX + viewWidth,
-      );
-    }
-    if (bonusMap.length > 0 && this.config.host) {
-      visibleBonus = bonusMap.filter(
-        visible => visible.y >= viewY
-              && visible.y < viewY + viewHeight
-              && visible.x >= viewX
-              && visible.x < viewX + viewWidth,
       );
     }
 
@@ -410,41 +449,6 @@ class Map extends Component {
         player.profile.direction,
       ));
     }
-    if (visibleBonus.length > 0) {
-      visibleBonus.map(bonus => view[bonus.y - viewY][bonus.x - viewX].push(2173));
-    }
-    if (
-      view[Math.floor(view.length / 2)][
-        Math.floor(view.length / 2)
-      ].includes(2173)
-    ) {
-      bonusMap.length = 0;
-      const randomBonus = Math.floor(Math.random() * 3);
-      const bonus1 = new Bonus(randomBonus);
-
-      bonus1.run();
-      this.setState({
-        bonus: bonus1,
-        bonusMap,
-      });
-    }
-
-
-    if (bonus.speedPokemon && !bonus.slowPokemon) {
-      pokemons.speed = 15;
-    } else {
-      pokemons.speed = 2;
-    }
-    if (bonus.slowPokemon && !bonus.speedPokemon) {
-      pokemons.speed = 1;
-    } else {
-      pokemons.speed = 2;
-    }
-    if (bonus.catchPokemon) {
-      this.catchBonus = true;
-    } else {
-      this.catchBonus = false;
-    }
 
     if (visiblePokemons.length > 0) {
       // eslint-disable-next-line array-callback-return
@@ -455,18 +459,12 @@ class Map extends Component {
             Math.floor(view.length / 2)
           ].includes(poke.id)
         ) {
-          if (asyncKeys[10] === 67 || this.catchBonus) {
+          if (asyncKeys[4] === controls[4] || this.catchBonus === 1) {
             this.catched = poke.name;
             pokemons = this.catch(poke.id);
-            reportPosition(
-              {
-                player: controller,
-                x: viewX + 6,
-                y: viewY + 6,
-                profile: this.userProfile,
-              },
-              pokemons,
-            );
+            reportPosition({
+              player: controller, x: viewX + 6, y: viewY + 6, profile: this.userProfile,
+            }, pokemons);
 
             // End game
             // clearInterval(this.running);
@@ -532,8 +530,8 @@ class Map extends Component {
             <MemorizedRow data={row} index={i} key={`row-${i + 1}`} />
           ))
         ) : (
-          <h1 style={{ margin: '50% auto' }}>LOADING..</h1>
-        )}
+            <h1 style={{ margin: '50% auto' }}>LOADING..{this.loaded}</h1>
+          )}
 
         {this.catched ? (
           <MemorizedAlert
