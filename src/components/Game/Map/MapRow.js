@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import Tile from './Tiles/Tile';
 import Tile3D from './Tiles/Tile3D';
