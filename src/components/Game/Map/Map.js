@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import '../Game.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
 import MapRow from './MapRow';
 import Player from './Tiles/Character';
 import { ableToMove } from '../utils';
 import Capture from '../../Pokedex/Capture';
 import { Pokemon } from '../character';
 import { Bonus } from '../Bonus';
+
 
 const reqMaps = require.context('../../../assets/maps', true, /\.txt$/);
 
@@ -149,7 +153,7 @@ class Map extends Component {
       this.moveTo('down', step);
     } else if (gp.axes[1] === -1) {
       this.moveTo('up', step);
-    } else if (gp.buttons[1].pressed){
+    } else if (gp.buttons[1].pressed) {
       this.captureBtn = true;
     } else {
       this.captureBtn = false;
@@ -412,7 +416,7 @@ class Map extends Component {
         ].includes(2173)
       ) {
         bonusMap.length = 0;
-        const randomBonus = Math.floor(Math.random() * 3);
+        const randomBonus = 0;
         const bonus1 = new Bonus(randomBonus);
 
         bonus1.run();
@@ -421,22 +425,18 @@ class Map extends Component {
           bonusMap,
         });
       }
-
-      if (bonus.speedPokemon && !bonus.slowPokemon) {
-        pokemons.speed = 15;
-      } else {
-        pokemons.speed = 2;
-      }
-      if (bonus.slowPokemon && !bonus.speedPokemon) {
-        pokemons.speed = 1;
-      } else {
-        pokemons.speed = 2;
-      }
-      if (bonus.catchPokemon) {
-        this.catchBonus = true;
-      } else {
-        this.catchBonus = false;
-      }
+    }
+    const {
+      updateButton,
+    } = this.props;
+    if (bonus.slowPokemon && pokemons[0]) {
+      pokemons[0].speed = 1;
+      this.setState({
+        pokemons,
+      });
+      updateButton(0);
+    } else if (!bonus.slowPokemon && pokemons[0]) {
+      pokemons.speed = 4;
     }
 
     if (pokemons.length > 0 && this.config.host) {
@@ -458,7 +458,7 @@ class Map extends Component {
         player.profile.direction,
       ));
     }
-
+    const { updateButton3 } = this.props;
     if (visiblePokemons.length > 0) {
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
@@ -467,6 +467,8 @@ class Map extends Component {
             Math.floor(view.length / 2)
           ].includes(poke.id)
         ) {
+          updateButton3(0);
+
           if (asyncKeys[4] === controls[4] || this.catchBonus === 1 || this.captureBtn) {
             this.catched = poke.name;
             pokemons = this.catch(poke.id);
@@ -481,10 +483,14 @@ class Map extends Component {
             this.userProfile.pokemon.push((poke.id - 9000).toString());
             localStorage.setItem(this.user, JSON.stringify(this.userProfile));
           }
+        } if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
+          updateButton3(1);
         }
+
         return undefined;
       });
     }
+
 
     this.setState({
       view: [...view],
@@ -529,7 +535,9 @@ class Map extends Component {
 
   render() {
     const { view, characterDirection } = this.state;
-    const { asyncKeys, controller } = this.props;
+    const {
+      asyncKeys, controller, bonus, bonus4,
+    } = this.props;
     return (
       <div style={this.theme}>
         {this.debugMode ? this.debug() : null}
@@ -539,7 +547,7 @@ class Map extends Component {
           ))
         ) : (
           <h1 style={{ margin: '50% auto' }}>
-          LOADING..
+              LOADING..
             {this.loaded}
           </h1>
         )}
@@ -557,6 +565,28 @@ class Map extends Component {
           direction={characterDirection}
           username={this.user}
         />
+
+        {this.config.multiplayerMode ? null
+          : (
+            <div id="bonus" className="BonusMenu">
+  <div className="BonusText">
+              Bonus :
+            </div>
+  <div className="Bonus" style={{ filter: `grayscale(${bonus})` }}>
+              <FontAwesomeIcon icon={faBolt} />
+            </div>
+
+
+  <div className="BonusText">
+              Capture :
+            </div>
+  <div className="Bonus" style={{ filter: `grayscale(${bonus4}) ` }}>
+              0
+            </div>
+</div>
+          )
+        }
+
       </div>
     );
   }
