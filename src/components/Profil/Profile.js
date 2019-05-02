@@ -19,7 +19,7 @@ import Carolina from '../../assets/characters/character_10__Carolina.png';
 import Amana from '../../assets/characters/character_11__Amana.png';
 import Watson from '../../assets/characters/character_12__Watson.png';
 import '../../App.css';
-import './Profile.scss'
+import './Profile.scss';
 
 class Profile extends Component {
   constructor(props) {
@@ -106,30 +106,30 @@ class Profile extends Component {
                 <span className="Yellow">
                   {`Player ${index + 1}`}
                   ,
-                {' '}
+                  {' '}
                   you’re now logged in as
-              </span>
+                </span>
                 {' '}
                 {profil.name}
               </p>
               <div className="changeProfil">
                 <span>
                   I’m not
-              </span>
+                </span>
                 {' '}
                 {profil.name}
                 .
-              {' '}
+                {' '}
                 <NavLink to="./creation" className="Yellow">
                   {' '}
                   Use an other profil.
-              </NavLink>
+                </NavLink>
               </div>
             </div>
             <div>
               <p>
                 Trainer style:
-              <br />
+                <br />
                 {this.recupTrainer(profil)}
               </p>
             </div>
@@ -138,22 +138,36 @@ class Profile extends Component {
                 Pokemons:
               </p>
 
-              <span><p style={{ fontSize: '150%', display: 'inline' }}> First pokemons : {this.recupPokemon(profil)}</p></span>
+              <span>
+                <p style={{ fontSize: '150%', display: 'inline' }}>
+                  {' '}
+First pokemons :
+                  {' '}
+                  {this.recupPokemon(profil)}
+                </p>
+
+              </span>
 
               <div className="stat-levels">
-                <p style={{fontSize: '125%'}}>You captured {uniqPokemon.length} of the 151 Pokemons</p>
+                <p style={{ fontSize: '125%' }}>
+You captured
+                  {' '}
+                  {uniqPokemon.length}
+                  {' '}
+of the 151 Pokemons
+                </p>
                 <div className="stat-1 stat-bar">
-                  <span className="stat-bar-rating" role="stat-bar" style={{ width: `${(uniqPokemon.length / 151) * 100}%` }}></span>
+                  <span className="stat-bar-rating" style={{ width: `${(uniqPokemon.length / 151) * 100}%` }} />
                 </div>
               </div>
               <NavLink to={index > 0 ? '/pokedex:' : '/pokedex'}>
-            <button type="button" className="Button"> Go to Pokedex </button>
-          </NavLink>
+                <button type="button" className="Button"> Go to Pokedex </button>
+              </NavLink>
 
             </div>
           </div>
         );
-      }
+      };
       userProfils.map((profil, index) => out.push(template(profil, index)));
       return out;
     };
