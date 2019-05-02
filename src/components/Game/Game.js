@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Game.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUser, faBars, faAngleDoubleRight, faBolt, faCopyright,
+} from '@fortawesome/free-solid-svg-icons';
 import Map from './Map/Map';
 
 const reqTiles = require.context('../../assets/tiles', true, /\.png$/);
@@ -16,7 +18,7 @@ class Game extends Component {
       players: [],
       pokemons: [],
       bonus: 1,
-      bonus2: 1,
+      bonus4: 1,
       asyncKeys: [],
     };
 
@@ -124,12 +126,51 @@ class Game extends Component {
     }
   }
 
+  updateBonusButton = (bonus) => {
+    this.setState({
+      bonus,
+    });
+    setTimeout(() => {
+      this.setState({
+        bonus: 1,
+      });
+    }, 10000);
+  }
+
+
+  updateBonusButton4 = (bonus4) => {
+    this.setState({
+      bonus4,
+    });
+  }
+
 
   createGameInstances = (num) => {
     const instances = [];
-    const { asyncKeys } = this.state;
+    const { asyncKeys, bonus, bonus4 } = this.state;
     for (let i = 0; i < num; i += 1) {
-      instances.push(<div className="instanceContainer"><Map controller={i} players={num} reportPosition={this.getPlayersPosition} getPlayerPosition={this.sendPlayerPositions} controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} asyncKeys={asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))} /></div>);
+      instances.push(
+
+        <div className="instanceContainer">
+
+
+          <div className="Map">
+            <Map
+              bonus={bonus}
+              bonus4={bonus4}
+              updateButton={this.updateBonusButton}
+              updateButton3={this.updateBonusButton4}
+              controller={i}
+              players={num}
+              reportPosition={this.getPlayersPosition}
+              getPlayerPosition={this.sendPlayerPositions}
+              controls={this.controls.slice(6 * i, this.controls.length * (0.5 * (i + 1)))}
+              asyncKeys={asyncKeys.slice(6 * i, this.controls.length * (0.5 * (i + 1)))}
+            />
+          </div>
+
+        </div>,
+      );
     }
     return instances;
   }
@@ -160,7 +201,6 @@ class Game extends Component {
 
   render() {
     const { players } = this.props;
-    const { bonus, bonus2 } = this.state;
     return (
       <div className="Background" style={{ display: 'block' }}>
 
@@ -182,8 +222,6 @@ class Game extends Component {
             <button type="button" className="RoundBtn"> ? </button>
           </NavLink>
         </div>
-        <button type="button" className="RoundBtn Bonus" style={{ filter: `grayscale(${bonus})` }}> C </button>
-        <button type="button" className="RoundBtn Bonus1" style={{ filter: `grayscale(${bonus2})` }}> S </button>
 
         <div className="gameContainer">
           {this.createGameInstances(players || 1)}

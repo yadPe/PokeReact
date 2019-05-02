@@ -12,19 +12,7 @@ class Bonus {
       this.slowPokemon = true;
       setTimeout(() => {
         this.slowPokemon = false;
-      }, 30000);
-    }
-    if (this.random === 1) {
-      this.speedPokemon = true;
-      setTimeout(() => {
-        this.speedPokemon = false;
-      }, 30000);
-    }
-    if (this.random === 2) {
-      this.catchPokemon = true;
-      setTimeout(() => {
-        this.catchPokemon = false;
-      }, 30000);
+      }, 10000);
     }
   }
 }
