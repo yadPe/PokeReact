@@ -57,7 +57,7 @@ export default class Capture extends React.Component {
 
         <div className="footer">
           <h1 className="textModal">{`${name} catched ${pokemon.charAt(0).toUpperCase() + pokemon.slice(1)}`}</h1>
-          <NavLink to="/pokedex">
+          <NavLink to={player > 0 ? '/pokedex:multi' : '/pokedex'}>
             <button type="button" className="Button"> Go to Pokedex </button>
           </NavLink>
 
