@@ -153,6 +153,10 @@ class Map extends Component {
       this.moveTo('down', step);
     } else if (gp.axes[1] === -1) {
       this.moveTo('up', step);
+    } else if (gp.buttons[1].pressed) {
+      this.captureBtn = true;
+    } else {
+      this.captureBtn = false;
     }
   };
 
@@ -465,7 +469,7 @@ class Map extends Component {
         ) {
           updateButton3(0);
 
-          if (asyncKeys[4] === controls[4] || this.catchBonus === 1) {
+          if (asyncKeys[4] === controls[4] || this.catchBonus === 1 || this.captureBtn) {
             this.catched = poke.name;
             pokemons = this.catch(poke.id);
             reportPosition({
@@ -544,8 +548,8 @@ class Map extends Component {
         ) : (
           <h1 style={{ margin: '50% auto' }}>
               LOADING..
-              {this.loaded}
-            </h1>
+            {this.loaded}
+          </h1>
         )}
 
         {this.catched ? (
@@ -563,22 +567,24 @@ class Map extends Component {
         />
 
         {this.config.multiplayerMode ? null
-          : <div id="bonus" className="BonusMenu">
-            <div className="BonusText">
+          : (
+            <div id="bonus" className="BonusMenu">
+  <div className="BonusText">
               Bonus :
             </div>
-            <div className="Bonus" style={{ filter: `grayscale(${bonus})` }}>
+  <div className="Bonus" style={{ filter: `grayscale(${bonus})` }}>
               <FontAwesomeIcon icon={faBolt} />
             </div>
 
 
-            <div className="BonusText">
+  <div className="BonusText">
               Capture :
             </div>
-            <div className="Bonus" style={{ filter: `grayscale(${bonus4}) ` }}>
+  <div className="Bonus" style={{ filter: `grayscale(${bonus4}) ` }}>
               0
             </div>
-          </div>
+</div>
+          )
         }
 
       </div>
