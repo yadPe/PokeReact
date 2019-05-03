@@ -46,7 +46,7 @@ const Commands = () => (
         <p>Down</p>
       </div>
       <div>
-        <button type="button" className="AnimatedRoundBtn"> C </button>
+        <button type="button" className="AnimatedRoundBtn"> 0 </button>
         <p>Capture</p>
       </div>
     </div>

@@ -66,7 +66,7 @@ class Map extends Component {
 
   init = async () => {
     this.configInstance();
-    await this.loadMap(reqMaps('./map1.txt', true));
+    await this.loadMap(reqMaps('./map2.txt', true));
     // eslint-disable-next-line no-return-assign
     fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151')
       .then(res => res.json())
@@ -276,16 +276,18 @@ class Map extends Component {
 
   addNewBonus = (amount) => {
     const { map } = this.state;
-    let randomPosition = Math.floor(Math.random() * map.length - 1);
+    let randomPosition = Math.floor(Math.random() * 30);
     const { bonusMap } = this.state;
 
-    if (randomPosition < 10) {
-      randomPosition += 5;
-    }
-    if (randomPosition > map.length - 10) {
-      randomPosition -= 5;
-    }
+
     if (!map[randomPosition][randomPosition].includes(-1)) {
+      if (randomPosition < 5) {
+        randomPosition += 5;
+      }
+      if (randomPosition > 30) {
+        randomPosition -= 5;
+      }
+
       for (let i = 0; i < amount; i += 1) {
         const pokeBall = new Bonus(0, randomPosition, randomPosition);
         bonusMap.push(pokeBall);
@@ -294,7 +296,8 @@ class Map extends Component {
     } else {
       randomPosition = Math.floor(Math.random() * map.length - 1);
     }
-  };
+  }
+
 
   updateViewMap = (matrix, offsetX, offsetY, width, height) => {
     if (offsetX + width > matrix[0].length) return;
@@ -354,6 +357,7 @@ class Map extends Component {
     let {
       visiblePokemons, view, payerGhosts, pokemons, visibleBonus,
     } = this.state;
+
     if (this.debugMode) this.loopCounter += 1;
     if (pokemons.length < 1 && this.config.host) { this.addNewPokemon(1, pokemonRandom); }
 
@@ -409,7 +413,7 @@ class Map extends Component {
       if (visibleBonus.length > 0) {
         visibleBonus.map(power => view[power.y - viewY][power.x - viewX].push(2173));
       }
-
+      console.log(view[Math.floor(view.length / 2)]);
       if (
         view[Math.floor(view.length / 2)][
           Math.floor(view.length / 2)
@@ -459,6 +463,10 @@ class Map extends Component {
       ));
     }
     const { updateButton3 } = this.props;
+    if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(visiblePokemons.id)) {
+      updateButton3(1);
+    }
+
     if (visiblePokemons.length > 0) {
       visiblePokemons.map((poke) => {
         view[poke.y - viewY][poke.x - viewX].push(poke.id);
@@ -483,10 +491,7 @@ class Map extends Component {
             this.userProfile.pokemon.push((poke.id - 9000).toString());
             localStorage.setItem(this.user, JSON.stringify(this.userProfile));
           }
-        } if (!view[Math.floor(view.length / 2)][Math.floor(view.length / 2)].includes(poke.id)) {
-          updateButton3(1);
         }
-
         return undefined;
       });
     }
@@ -569,21 +574,21 @@ class Map extends Component {
         {this.config.multiplayerMode ? null
           : (
             <div id="bonus" className="BonusMenu">
-  <div className="BonusText">
+              <div className="BonusText">
               Bonus :
-            </div>
-  <div className="Bonus" style={{ filter: `grayscale(${bonus})` }}>
-              <FontAwesomeIcon icon={faBolt} />
-            </div>
+              </div>
+              <div className="Bonus" style={{ filter: `grayscale(${bonus})` }}>
+                <FontAwesomeIcon icon={faBolt} />
+              </div>
 
 
-  <div className="BonusText">
+              <div className="BonusText">
               Capture :
-            </div>
-  <div className="Bonus" style={{ filter: `grayscale(${bonus4}) ` }}>
+              </div>
+              <div className="Bonus" style={{ filter: `grayscale(${bonus4}) ` }}>
               0
+              </div>
             </div>
-</div>
           )
         }
 
