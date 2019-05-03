@@ -126,15 +126,20 @@ class Game extends Component {
     }
   }
 
-  updateBonusButton = (bonus) => {
-    this.setState({
-      bonus,
-    });
-    setTimeout(() => {
+  updateBonusButton = (bonus1) => {
+    let { bonus } = this.state;
+
+    if (bonus === 1) {
+      bonus = bonus1;
       this.setState({
-        bonus: 1,
+        bonus,
       });
-    }, 10000);
+      setTimeout(() => {
+        this.setState({
+          bonus: 1,
+        });
+      }, 10000);
+    }
   }
 
 
