@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/lyon-0219-react-PokeReact/precache-manifest.21a6fe3802fb70cb783d4ab7e99be919.js"
+  "/lyon-0219-react-PokeReact/precache-manifest.3eb75ff2ce80c57832e0d8ba9abc29c8.js"
 );
 
 workbox.clientsClaim();
