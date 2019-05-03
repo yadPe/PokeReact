@@ -66,7 +66,7 @@ class Map extends Component {
 
   init = async () => {
     this.configInstance();
-    await this.loadMap(reqMaps('./map2.txt', true));
+    await this.loadMap(reqMaps('./map1.txt', true));
     // eslint-disable-next-line no-return-assign
     fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=151')
       .then(res => res.json())
@@ -294,7 +294,7 @@ class Map extends Component {
       }
       this.setState({ bonusMap });
     } else {
-      randomPosition = Math.floor(Math.random() * map.length - 1);
+      randomPosition = Math.floor(Math.random() * 30);
     }
   }
 
@@ -413,7 +413,7 @@ class Map extends Component {
       if (visibleBonus.length > 0) {
         visibleBonus.map(power => view[power.y - viewY][power.x - viewX].push(2173));
       }
-      console.log(view[Math.floor(view.length / 2)]);
+      console.log(Math.floor(view.length / 2));
       if (
         view[Math.floor(view.length / 2)][
           Math.floor(view.length / 2)
