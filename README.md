@@ -11,5 +11,5 @@ Jeu utilisant [ReactJs](https://reactjs.org), sur le thème pokémon réalisé e
 * **Benoît Briastre** - [Benbrii](https://github.com/Benbrii)
 * **David BELMONTE** - [Wozzz82](https://github.com/Wozzz82)
 * **Laurent Henriques** - [LaurentHenriques](https://github.com/LaurentHenriques)
-* **Nicolas Cessieux** - [Benbrii](https://github.com/NicolasCessieux)
+* **Nicolas Cessieux** - [NicolasCessieux](https://github.com/NicolasCessieux)
 * **Yannis Petitot** - [yadPe](https://github.com/yadPe)
