@@ -1,7 +1,6 @@
 # PokeReact
-![alt text][logo]
 
-[logo]: https://cdn.discordapp.com/attachments/414474227710820352/589416897192132608/unknown.png "Logo Title Text 2"
+[<img src="https://cdn.discordapp.com/attachments/414474227710820352/589416897192132608/unknown.png">](http://wildcodeschool.github.io/lyon-0219-react-PokeReact)
 
 Jeu utilisant [ReactJs](https://reactjs.org), sur le thème pokémon réalisé en 5 semaines à l'occasion du projet No 2  à la Wild Code School de Lyon.
 
